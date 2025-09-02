@@ -1,0 +1,3 @@
+{"timestamp":"2025-01-15T00:00:00Z","role":"user","task_id":"TASK-YYYYMMDD-XXX","content":"用户输入内容","attachments":[]}
+{"timestamp":"2025-01-15T00:00:01Z","role":"agent","task_id":"TASK-YYYYMMDD-XXX","content":"Agent响应内容","commit_id":""}
+{"timestamp":"2025-01-15T00:00:02Z","role":"tool","task_id":"TASK-YYYYMMDD-XXX","content":"工具执行结果"}
