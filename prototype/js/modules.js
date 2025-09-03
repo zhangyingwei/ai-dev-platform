@@ -304,19 +304,148 @@ function getRequirementManagementContent() {
     `;
 }
 
-// AI插件管理模块内容
-function getAIPluginsContent() {
+// AI Agent数据结构和示例
+const aiAgents = [
+    {
+        id: 'gemini-cli',
+        name: 'Gemini CLI',
+        description: 'Google Gemini命令行工具，支持代码生成和智能分析，擅长处理复杂的编程任务和自然语言理解',
+        icon: '🤖',
+        status: 'active',
+        version: '1.2.0',
+        capabilities: ['代码生成', '智能分析', '自然语言处理', '多模态理解'],
+        config: {
+            enabled: true,
+            apiKey: 'demo-gemini-key-***',
+            model: 'gemini-pro',
+            maxTokens: 4096
+        },
+        examples: {
+            useCase: '智能代码生成和分析',
+            samplePrompt: '请帮我生成一个用户注册的API接口，包含邮箱验证和密码加密',
+            sampleResponse: '已生成包含输入验证、密码哈希和错误处理的完整API代码',
+            performance: {
+                responseTime: '1.2s',
+                accuracy: '94%',
+                dailyUsage: 156
+            }
+        }
+    },
+    {
+        id: 'claude-code',
+        name: 'Claude Code',
+        description: 'Anthropic Claude代码助手，专注于代码质量和安全性，提供深度的代码审查和优化建议',
+        icon: '🧠',
+        status: 'active',
+        version: '2.1.0',
+        capabilities: ['代码生成', '代码审查', '安全分析', '重构建议'],
+        config: {
+            enabled: true,
+            apiKey: 'demo-claude-key-***',
+            model: 'claude-3-sonnet',
+            temperature: 0.1
+        },
+        examples: {
+            useCase: '代码质量审查和安全分析',
+            samplePrompt: '请审查这段代码的安全性和性能问题',
+            sampleResponse: '发现3个潜在安全漏洞和2个性能优化点，已提供修复建议',
+            performance: {
+                responseTime: '0.8s',
+                accuracy: '97%',
+                dailyUsage: 203
+            }
+        }
+    },
+    {
+        id: 'augment-code',
+        name: 'Augment Code',
+        description: '全栈开发助手，提供上下文感知的代码生成，深度理解项目结构和代码关系',
+        icon: '⚡',
+        status: 'active',
+        version: '2.3.0',
+        capabilities: ['全栈开发', '上下文感知', '代码重构', '架构设计'],
+        config: {
+            enabled: true,
+            apiKey: 'demo-augment-key-***',
+            contextWindow: 'large',
+            autoRefactor: true
+        },
+        examples: {
+            useCase: '全栈应用开发和架构设计',
+            samplePrompt: '基于现有数据库模型生成完整的CRUD API',
+            sampleResponse: '已生成前后端完整代码，包含数据验证、错误处理和测试用例',
+            performance: {
+                responseTime: '1.5s',
+                accuracy: '92%',
+                dailyUsage: 89
+            }
+        }
+    },
+    {
+        id: 'codex',
+        name: 'Codex',
+        description: 'OpenAI Codex代码生成模型，支持多种编程语言，擅长代码补全和函数生成',
+        icon: '🔮',
+        status: 'inactive',
+        version: '1.0.0',
+        capabilities: ['代码生成', '代码补全', '多语言支持', '函数生成'],
+        config: {
+            enabled: false,
+            apiKey: '',
+            model: 'code-davinci-002',
+            maxTokens: 2048
+        },
+        examples: {
+            useCase: '快速代码补全和函数生成',
+            samplePrompt: '// 创建一个计算斐波那契数列的函数',
+            sampleResponse: '已生成优化的递归和迭代两种实现方式',
+            performance: {
+                responseTime: '0.6s',
+                accuracy: '89%',
+                dailyUsage: 0
+            }
+        }
+    },
+    {
+        id: 'cursor',
+        name: 'Cursor',
+        description: 'AI驱动的代码编辑器，提供智能代码补全和重构，支持实时协作开发',
+        icon: '📝',
+        status: 'error',
+        version: '3.0.1',
+        capabilities: ['智能补全', '代码重构', '实时协作', '代码预测'],
+        config: {
+            enabled: false,
+            apiKey: '',
+            endpoint: 'https://api.cursor.sh',
+            features: ['autocomplete', 'refactor']
+        },
+        examples: {
+            useCase: '实时代码编辑和智能补全',
+            samplePrompt: '在编辑器中输入函数名，自动补全函数体',
+            sampleResponse: '连接错误：无法访问Cursor API服务',
+            performance: {
+                responseTime: 'N/A',
+                accuracy: 'N/A',
+                dailyUsage: 0
+            }
+        }
+    }
+];
+
+// AI Agent管理模块内容
+function getAIAgentContent() {
     return `
         <div class="space-y-6">
             <!-- 页面标题 -->
             <div class="flex items-center justify-between">
-                <h1 class="text-xl font-bold">AI插件管理</h1>
+                <h1 class="text-xl font-bold">AI Agent 管理</h1>
                 <div class="flex space-x-2">
-                    <button class="px-3 py-1.5 bg-primary text-primary-foreground rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
-                        安装插件
+                    <button class="px-3 py-1.5 bg-primary text-primary-foreground rounded-md hover:bg-gray-800 transition-colors text-sm font-medium" onclick="window.aiAgentManager.importConfig()">
+                        导入配置
                     </button>
-                    <button class="px-3 py-1.5 border border-border rounded-md hover:bg-accent transition-colors text-sm font-medium">
-                        插件市场
+                    <button class="px-3 py-1.5 border border-border rounded-md hover:bg-accent transition-colors text-sm font-medium" onclick="window.aiAgentManager.exportConfig()">
+                        导出配置
                     </button>
                 </div>
             </div>
@@ -324,92 +453,36 @@ function getAIPluginsContent() {
             <!-- 标签页 -->
             <div class="border-b border-border">
                 <nav class="flex space-x-6">
-                    <button class="py-1.5 px-1 border-b-2 border-primary text-primary text-sm font-medium">已安装插件</button>
-                    <button class="py-1.5 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground text-sm">插件市场</button>
-                    <button class="py-1.5 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground text-sm">插件配置</button>
+                    <button class="py-1.5 px-1 border-b-2 border-primary text-primary text-sm font-medium">AI Agent 列表</button>
+                    <button class="py-1.5 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground text-sm">全局配置</button>
                     <button class="py-1.5 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground text-sm">使用统计</button>
+                    <button class="py-1.5 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground text-sm">性能监控</button>
                 </nav>
             </div>
 
-            <!-- 已安装插件列表 -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                <div class="bg-card border border-border rounded-lg p-4 card-hover">
-                    <div class="flex items-start justify-between mb-3">
-                        <div class="flex items-center space-x-2">
-                            <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                                <span class="text-primary-foreground font-bold text-sm">C</span>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold text-sm">Claude Code Assistant</h3>
-                                <p class="text-xs text-muted-foreground">v2.1.0</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-1">
-                            <div class="w-1.5 h-1.5 bg-success rounded-full"></div>
-                            <span class="text-xs text-success">运行中</span>
-                        </div>
-                    </div>
-                    <p class="text-xs text-muted-foreground mb-3">Anthropic官方代码生成助手，支持多种编程语言的智能代码生成和优化。</p>
-                    <div class="flex items-center justify-between">
-                        <div class="flex space-x-1.5">
-                            <button class="px-2 py-1 bg-muted text-muted-foreground text-xs rounded hover:bg-accent">配置</button>
-                            <button class="px-2 py-1 bg-muted text-muted-foreground text-xs rounded hover:bg-accent">统计</button>
-                        </div>
-                        <button class="text-destructive text-xs hover:underline">停用</button>
-                    </div>
-                </div>
+            <!-- AI Agent 卡片列表 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="ai-agent-cards">
+                <!-- 卡片将通过JavaScript动态生成 -->
+            </div>
 
-                <div class="bg-card border border-border rounded-lg p-4 card-hover">
-                    <div class="flex items-start justify-between mb-3">
-                        <div class="flex items-center space-x-2">
-                            <div class="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
-                                <span class="text-muted-foreground font-bold text-sm">G</span>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold text-sm">Gemini Code Assistant</h3>
-                                <p class="text-xs text-muted-foreground">v1.8.5</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-1">
-                            <div class="w-1.5 h-1.5 bg-success rounded-full"></div>
-                            <span class="text-xs text-success">运行中</span>
-                        </div>
-                    </div>
-                    <p class="text-xs text-muted-foreground mb-3">Google Gemini驱动的代码助手，擅长代码分析和重构建议。</p>
-                    <div class="flex items-center justify-between">
-                        <div class="flex space-x-1.5">
-                            <button class="px-2 py-1 bg-muted text-muted-foreground text-xs rounded hover:bg-accent">配置</button>
-                            <button class="px-2 py-1 bg-muted text-muted-foreground text-xs rounded hover:bg-accent">统计</button>
-                        </div>
-                        <button class="text-destructive text-xs hover:underline">停用</button>
-                    </div>
+            <!-- 加载状态 -->
+            <div id="loading-indicator" class="hidden flex items-center justify-center py-12">
+                <div class="flex items-center space-x-2 text-muted-foreground">
+                    <div class="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+                    <span class="text-sm">正在加载 AI Agent...</span>
                 </div>
+            </div>
 
-                <div class="bg-card border border-border rounded-lg p-4 card-hover">
-                    <div class="flex items-start justify-between mb-3">
-                        <div class="flex items-center space-x-2">
-                            <div class="w-10 h-10 bg-muted rounded-lg flex items-center justify-center">
-                                <span class="text-muted-foreground font-bold text-sm">GH</span>
-                            </div>
-                            <div>
-                                <h3 class="font-semibold text-sm">GitHub Copilot</h3>
-                                <p class="text-xs text-muted-foreground">v1.156.0</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-1">
-                            <div class="w-1.5 h-1.5 bg-destructive rounded-full"></div>
-                            <span class="text-xs text-destructive">已停用</span>
-                        </div>
-                    </div>
-                    <p class="text-xs text-muted-foreground mb-3">GitHub官方AI编程助手，基于OpenAI Codex模型。</p>
-                    <div class="flex items-center justify-between">
-                        <div class="flex space-x-1.5">
-                            <button class="px-2 py-1 bg-muted text-muted-foreground text-xs rounded hover:bg-accent">配置</button>
-                            <button class="px-2 py-1 bg-muted text-muted-foreground text-xs rounded hover:bg-accent">统计</button>
-                        </div>
-                        <button class="text-success text-xs hover:underline">启用</button>
-                    </div>
+            <!-- 空状态 -->
+            <div id="empty-state" class="hidden text-center py-12">
+                <div class="w-16 h-16 mx-auto mb-4 bg-muted rounded-full flex items-center justify-center">
+                    <svg class="w-8 h-8 text-muted-foreground" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
                 </div>
+                <h3 class="text-lg font-medium mb-2">暂无 AI Agent</h3>
+                <p class="text-muted-foreground text-sm">请添加或配置 AI Agent 以开始使用</p>
+            </div>
             </div>
 
             <!-- 使用统计 -->
@@ -1581,14 +1654,1078 @@ export default PhoneLogin;</code></pre>
     `;
 }
 
+// AI Agent管理器
+class AIAgentManager {
+    constructor() {
+        this.agents = [...aiAgents];
+        this.loadConfig();
+        this.cleanupBackups();
+    }
+
+    // 生成AI Agent卡片HTML
+    generateAgentCard(agent) {
+        const statusConfig = {
+            'active': { color: 'bg-success', text: '运行中', textColor: 'text-success' },
+            'inactive': { color: 'bg-muted', text: '未启用', textColor: 'text-muted-foreground' },
+            'error': { color: 'bg-destructive', text: '异常', textColor: 'text-destructive' }
+        };
+
+        const status = statusConfig[agent.status];
+        const capabilities = agent.capabilities.slice(0, 3).map(cap =>
+            `<span class="px-1.5 py-0.5 bg-muted text-muted-foreground text-xs rounded">${cap}</span>`
+        ).join('');
+
+        return `
+            <div class="group bg-card border border-border rounded-lg p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-2 hover:border-primary/20 cursor-pointer relative overflow-hidden"
+                 data-agent-id="${agent.id}"
+                 onmouseenter="this.style.transform = 'translateY(-8px)'; this.style.boxShadow = '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'"
+                 onmouseleave="this.style.transform = 'translateY(0)'; this.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)'">
+
+                <!-- 背景装饰 -->
+                <div class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-primary/5 to-transparent rounded-full transform translate-x-8 -translate-y-8 group-hover:scale-150 transition-transform duration-500"></div>
+
+                <div class="relative z-10">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-gradient-to-br from-primary to-gray-600 rounded-lg flex items-center justify-center text-2xl shadow-md group-hover:shadow-lg transition-shadow duration-300">
+                                ${agent.icon}
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-base group-hover:text-primary transition-colors duration-200">${agent.name}</h3>
+                                <p class="text-sm text-muted-foreground">v${agent.version}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-2 h-2 ${status.color} rounded-full animate-pulse"></div>
+                            <span class="text-sm ${status.textColor} font-medium">${status.text}</span>
+                        </div>
+                    </div>
+
+                    <p class="text-sm text-muted-foreground mb-4 line-clamp-2 group-hover:text-foreground transition-colors duration-200">${agent.description}</p>
+
+                    <!-- 示例信息 -->
+                    <div class="bg-muted/30 rounded-lg p-3 mb-4 text-xs">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-medium text-foreground">使用示例</span>
+                            <span class="text-muted-foreground">${agent.examples.useCase}</span>
+                        </div>
+                        <div class="space-y-1">
+                            <div class="flex justify-between">
+                                <span class="text-muted-foreground">响应时间:</span>
+                                <span class="font-medium">${agent.examples.performance.responseTime}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-muted-foreground">准确率:</span>
+                                <span class="font-medium">${agent.examples.performance.accuracy}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-muted-foreground">今日使用:</span>
+                                <span class="font-medium">${agent.examples.performance.dailyUsage} 次</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap gap-1 mb-4">
+                        ${capabilities}
+                    </div>
+
+                    <div class="flex items-center justify-between">
+                        <div class="flex space-x-2">
+                            <button class="px-3 py-1.5 bg-primary text-primary-foreground text-sm rounded-md hover:bg-gray-800 hover:scale-105 transition-all duration-200 shadow-sm hover:shadow-md"
+                                    onclick="event.stopPropagation(); window.aiAgentManager.openConfig('${agent.id}')"
+                                    title="配置 ${agent.name}">
+                                <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+                                </svg>
+                                配置
+                            </button>
+                            <button class="px-3 py-1.5 border border-border text-sm rounded-md hover:bg-accent hover:scale-105 transition-all duration-200 shadow-sm hover:shadow-md"
+                                    onclick="event.stopPropagation(); window.aiAgentManager.showStats('${agent.id}')"
+                                    title="查看 ${agent.name} 统计">
+                                <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
+                                </svg>
+                                统计
+                            </button>
+                        </div>
+                        <button class="text-sm ${agent.status === 'active' ? 'text-destructive hover:text-red-600' : 'text-success hover:text-green-600'} font-medium transition-all duration-200 hover:scale-105 px-2 py-1 rounded hover:bg-opacity-10 ${agent.status === 'active' ? 'hover:bg-red-500' : 'hover:bg-green-500'}"
+                                onclick="event.stopPropagation(); window.aiAgentManager.toggleAgent('${agent.id}')"
+                                title="${agent.status === 'active' ? '停用' : '启用'} ${agent.name}">
+                            ${agent.status === 'active' ? '停用' : '启用'}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // 渲染所有AI Agent卡片
+    renderAgents() {
+        const container = document.getElementById('ai-agent-cards');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const emptyState = document.getElementById('empty-state');
+
+        if (!container) return;
+
+        // 显示加载状态
+        if (loadingIndicator) {
+            loadingIndicator.classList.remove('hidden');
+        }
+        if (emptyState) {
+            emptyState.classList.add('hidden');
+        }
+
+        // 模拟加载延迟以显示加载动画
+        setTimeout(() => {
+            if (this.agents.length === 0) {
+                // 显示空状态
+                container.innerHTML = '';
+                if (emptyState) {
+                    emptyState.classList.remove('hidden');
+                }
+            } else {
+                // 渲染卡片
+                container.innerHTML = this.agents.map(agent => this.generateAgentCard(agent)).join('');
+                if (emptyState) {
+                    emptyState.classList.add('hidden');
+                }
+
+                // 添加卡片入场动画
+                this.animateCardsIn();
+            }
+
+            // 隐藏加载状态
+            if (loadingIndicator) {
+                loadingIndicator.classList.add('hidden');
+            }
+        }, 300);
+    }
+
+    // 卡片入场动画
+    animateCardsIn() {
+        const cards = document.querySelectorAll('[data-agent-id]');
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+
+            setTimeout(() => {
+                card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, index * 100);
+        });
+    }
+
+    // 切换Agent状态
+    toggleAgent(agentId) {
+        const agent = this.agents.find(a => a.id === agentId);
+        if (!agent) return;
+
+        if (agent.status === 'active') {
+            agent.status = 'inactive';
+            agent.config.enabled = false;
+        } else {
+            agent.status = 'active';
+            agent.config.enabled = true;
+        }
+
+        this.saveConfig();
+        this.renderAgents();
+        this.showNotification(`${agent.name} 已${agent.status === 'active' ? '启用' : '停用'}`);
+    }
+
+    // 打开配置弹窗
+    openConfig(agentId) {
+        const agent = this.agents.find(a => a.id === agentId);
+        if (!agent) return;
+
+        this.showConfigModal(agent);
+    }
+
+    // 显示配置弹窗
+    showConfigModal(agent) {
+        const modalHtml = this.generateConfigModal(agent);
+
+        // 创建模态框容器
+        const modalContainer = document.createElement('div');
+        modalContainer.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+        modalContainer.innerHTML = modalHtml;
+
+        document.body.appendChild(modalContainer);
+
+        // 绑定事件
+        this.bindConfigModalEvents(modalContainer, agent);
+
+        // 阻止背景滚动
+        document.body.style.overflow = 'hidden';
+    }
+
+    // 生成配置弹窗HTML
+    generateConfigModal(agent) {
+        const configFields = this.generateConfigFields(agent);
+
+        return `
+            <div class="bg-card border border-border rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+                <div class="flex items-center justify-between p-6 border-b border-border">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-gradient-to-br from-primary to-gray-600 rounded-lg flex items-center justify-center text-xl">
+                            ${agent.icon}
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-semibold">${agent.name} 配置</h2>
+                            <p class="text-sm text-muted-foreground">v${agent.version}</p>
+                        </div>
+                    </div>
+                    <button class="text-muted-foreground hover:text-foreground p-2" onclick="window.aiAgentManager.closeConfigModal()">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <form id="agent-config-form" class="p-6 space-y-6">
+                    <!-- 基础配置 -->
+                    <div>
+                        <h3 class="text-lg font-medium mb-4">基础配置</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <label class="text-sm font-medium">启用状态</label>
+                                    <p class="text-xs text-muted-foreground">控制此AI Agent是否可用</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer" name="enabled" ${agent.config.enabled ? 'checked' : ''}>
+                                    <div class="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 特定配置 -->
+                    <div>
+                        <h3 class="text-lg font-medium mb-4">Agent 配置</h3>
+                        <div class="space-y-4">
+                            ${configFields}
+                        </div>
+                    </div>
+
+                    <!-- 能力展示 -->
+                    <div>
+                        <h3 class="text-lg font-medium mb-4">支持能力</h3>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            ${agent.capabilities.map(cap =>
+                                `<span class="px-3 py-1 bg-muted text-muted-foreground text-sm rounded-full">${cap}</span>`
+                            ).join('')}
+                        </div>
+                    </div>
+
+                    <!-- 使用示例 -->
+                    <div>
+                        <h3 class="text-lg font-medium mb-4">使用示例</h3>
+                        <div class="bg-muted/50 rounded-lg p-4 space-y-3">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">应用场景</label>
+                                <p class="text-sm text-muted-foreground">${agent.examples.useCase}</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">示例输入</label>
+                                <p class="text-sm text-muted-foreground bg-background border border-border rounded p-2 font-mono">${agent.examples.samplePrompt}</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">示例输出</label>
+                                <p class="text-sm text-muted-foreground bg-background border border-border rounded p-2">${agent.examples.sampleResponse}</p>
+                            </div>
+                            <div class="grid grid-cols-3 gap-4 pt-2 border-t border-border">
+                                <div class="text-center">
+                                    <div class="text-lg font-semibold text-primary">${agent.examples.performance.responseTime}</div>
+                                    <div class="text-xs text-muted-foreground">响应时间</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-lg font-semibold text-success">${agent.examples.performance.accuracy}</div>
+                                    <div class="text-xs text-muted-foreground">准确率</div>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-lg font-semibold text-warning">${agent.examples.performance.dailyUsage}</div>
+                                    <div class="text-xs text-muted-foreground">今日使用</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="flex items-center justify-between p-6 border-t border-border bg-muted/30">
+                    <div class="flex space-x-2">
+                        <button type="button" class="px-4 py-2 text-sm border border-border rounded-md hover:bg-accent transition-colors" onclick="window.aiAgentManager.testConnection('${agent.id}')">
+                            测试连接
+                        </button>
+                        <button type="button" class="px-4 py-2 text-sm border border-border rounded-md hover:bg-accent transition-colors" onclick="window.aiAgentManager.resetConfig('${agent.id}')">
+                            重置配置
+                        </button>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button type="button" class="px-4 py-2 text-sm border border-border rounded-md hover:bg-accent transition-colors" onclick="window.aiAgentManager.closeConfigModal()">
+                            取消
+                        </button>
+                        <button type="button" class="px-4 py-2 text-sm bg-primary text-primary-foreground rounded-md hover:bg-gray-800 transition-colors" onclick="window.aiAgentManager.saveConfig('${agent.id}')">
+                            保存配置
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // 生成特定Agent的配置字段
+    generateConfigFields(agent) {
+        const config = agent.config;
+        let fields = '';
+
+        switch (agent.id) {
+            case 'gemini-cli':
+                fields = `
+                    <div>
+                        <label class="block text-sm font-medium mb-2">API 密钥</label>
+                        <input type="password" name="apiKey" value="${config.apiKey || ''}"
+                               class="w-full px-3 py-2 border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                               placeholder="输入 Gemini API 密钥">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">模型版本</label>
+                        <select name="model" class="w-full px-3 py-2 border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option value="gemini-pro" ${config.model === 'gemini-pro' ? 'selected' : ''}>Gemini Pro</option>
+                            <option value="gemini-pro-vision" ${config.model === 'gemini-pro-vision' ? 'selected' : ''}>Gemini Pro Vision</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">最大令牌数</label>
+                        <input type="number" name="maxTokens" value="${config.maxTokens || 4096}"
+                               class="w-full px-3 py-2 border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                               min="1" max="8192">
+                    </div>
+                `;
+                break;
+
+            case 'claude-code':
+                fields = `
+                    <div>
+                        <label class="block text-sm font-medium mb-2">API 密钥</label>
+                        <input type="password" name="apiKey" value="${config.apiKey || ''}"
+                               class="w-full px-3 py-2 border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                               placeholder="输入 Claude API 密钥">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">模型版本</label>
+                        <select name="model" class="w-full px-3 py-2 border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option value="claude-3-sonnet" ${config.model === 'claude-3-sonnet' ? 'selected' : ''}>Claude 3 Sonnet</option>
+                            <option value="claude-3-opus" ${config.model === 'claude-3-opus' ? 'selected' : ''}>Claude 3 Opus</option>
+                            <option value="claude-3-haiku" ${config.model === 'claude-3-haiku' ? 'selected' : ''}>Claude 3 Haiku</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">温度设置</label>
+                        <input type="range" name="temperature" value="${config.temperature || 0.1}"
+                               class="w-full" min="0" max="1" step="0.1"
+                               oninput="this.nextElementSibling.textContent = this.value">
+                        <span class="text-sm text-muted-foreground">${config.temperature || 0.1}</span>
+                    </div>
+                `;
+                break;
+
+            case 'augment-code':
+                fields = `
+                    <div>
+                        <label class="block text-sm font-medium mb-2">API 密钥</label>
+                        <input type="password" name="apiKey" value="${config.apiKey || ''}"
+                               class="w-full px-3 py-2 border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                               placeholder="输入 Augment Code API 密钥">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">上下文窗口</label>
+                        <select name="contextWindow" class="w-full px-3 py-2 border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option value="small" ${config.contextWindow === 'small' ? 'selected' : ''}>小 (4K)</option>
+                            <option value="medium" ${config.contextWindow === 'medium' ? 'selected' : ''}>中 (16K)</option>
+                            <option value="large" ${config.contextWindow === 'large' ? 'selected' : ''}>大 (128K)</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <label class="text-sm font-medium">自动重构</label>
+                            <p class="text-xs text-muted-foreground">启用智能代码重构建议</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer" name="autoRefactor" ${config.autoRefactor ? 'checked' : ''}>
+                            <div class="w-11 h-6 bg-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                        </label>
+                    </div>
+                `;
+                break;
+
+            case 'codex':
+                fields = `
+                    <div>
+                        <label class="block text-sm font-medium mb-2">API 密钥</label>
+                        <input type="password" name="apiKey" value="${config.apiKey || ''}"
+                               class="w-full px-3 py-2 border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                               placeholder="输入 OpenAI API 密钥">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">模型版本</label>
+                        <select name="model" class="w-full px-3 py-2 border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option value="code-davinci-002" ${config.model === 'code-davinci-002' ? 'selected' : ''}>Code Davinci 002</option>
+                            <option value="code-cushman-001" ${config.model === 'code-cushman-001' ? 'selected' : ''}>Code Cushman 001</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">最大令牌数</label>
+                        <input type="number" name="maxTokens" value="${config.maxTokens || 2048}"
+                               class="w-full px-3 py-2 border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                               min="1" max="4096">
+                    </div>
+                `;
+                break;
+
+            case 'cursor':
+                fields = `
+                    <div>
+                        <label class="block text-sm font-medium mb-2">API 密钥</label>
+                        <input type="password" name="apiKey" value="${config.apiKey || ''}"
+                               class="w-full px-3 py-2 border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                               placeholder="输入 Cursor API 密钥">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">API 端点</label>
+                        <input type="url" name="endpoint" value="${config.endpoint || 'https://api.cursor.sh'}"
+                               class="w-full px-3 py-2 border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                               placeholder="https://api.cursor.sh">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">启用功能</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" name="features" value="autocomplete"
+                                       ${config.features?.includes('autocomplete') ? 'checked' : ''}
+                                       class="rounded border-border">
+                                <span class="text-sm">自动补全</span>
+                            </label>
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" name="features" value="refactor"
+                                       ${config.features?.includes('refactor') ? 'checked' : ''}
+                                       class="rounded border-border">
+                                <span class="text-sm">代码重构</span>
+                            </label>
+                        </div>
+                    </div>
+                `;
+                break;
+
+            default:
+                fields = `
+                    <div>
+                        <label class="block text-sm font-medium mb-2">API 密钥</label>
+                        <input type="password" name="apiKey" value="${config.apiKey || ''}"
+                               class="w-full px-3 py-2 border border-border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                               placeholder="输入 API 密钥">
+                    </div>
+                `;
+        }
+
+        return fields;
+    }
+
+    // 绑定配置弹窗事件
+    bindConfigModalEvents(modalContainer, agent) {
+        // 点击背景关闭
+        modalContainer.addEventListener('click', (e) => {
+            if (e.target === modalContainer) {
+                this.closeConfigModal();
+            }
+        });
+
+        // ESC键关闭
+        const escHandler = (e) => {
+            if (e.key === 'Escape') {
+                this.closeConfigModal();
+                document.removeEventListener('keydown', escHandler);
+            }
+        };
+        document.addEventListener('keydown', escHandler);
+    }
+
+    // 关闭配置弹窗
+    closeConfigModal() {
+        const modal = document.querySelector('.fixed.inset-0.bg-black.bg-opacity-50');
+        if (modal) {
+            document.body.removeChild(modal);
+            document.body.style.overflow = '';
+        }
+    }
+
+    // 保存配置
+    saveConfig(agentId) {
+        const agent = this.agents.find(a => a.id === agentId);
+        if (!agent) return;
+
+        const form = document.getElementById('agent-config-form');
+        if (!form) return;
+
+        const formData = new FormData(form);
+        const newConfig = { ...agent.config };
+
+        // 基础配置
+        newConfig.enabled = formData.get('enabled') === 'on';
+
+        // 特定配置
+        switch (agentId) {
+            case 'gemini-cli':
+                newConfig.apiKey = formData.get('apiKey') || '';
+                newConfig.model = formData.get('model') || 'gemini-pro';
+                newConfig.maxTokens = parseInt(formData.get('maxTokens')) || 4096;
+                break;
+
+            case 'claude-code':
+                newConfig.apiKey = formData.get('apiKey') || '';
+                newConfig.model = formData.get('model') || 'claude-3-sonnet';
+                newConfig.temperature = parseFloat(formData.get('temperature')) || 0.1;
+                break;
+
+            case 'augment-code':
+                newConfig.apiKey = formData.get('apiKey') || '';
+                newConfig.contextWindow = formData.get('contextWindow') || 'large';
+                newConfig.autoRefactor = formData.get('autoRefactor') === 'on';
+                break;
+
+            case 'codex':
+                newConfig.apiKey = formData.get('apiKey') || '';
+                newConfig.model = formData.get('model') || 'code-davinci-002';
+                newConfig.maxTokens = parseInt(formData.get('maxTokens')) || 2048;
+                break;
+
+            case 'cursor':
+                newConfig.apiKey = formData.get('apiKey') || '';
+                newConfig.endpoint = formData.get('endpoint') || 'https://api.cursor.sh';
+                newConfig.features = formData.getAll('features');
+                break;
+        }
+
+        // 验证配置
+        const validation = this.validateConfig(agentId, newConfig);
+        if (!validation.valid) {
+            this.showNotification(validation.message, 'error');
+            return;
+        }
+
+        // 更新配置
+        agent.config = newConfig;
+        agent.status = newConfig.enabled ? 'active' : 'inactive';
+
+        // 保存到localStorage
+        this.saveConfig();
+
+        // 重新渲染卡片
+        this.renderAgents();
+
+        // 关闭弹窗
+        this.closeConfigModal();
+
+        this.showNotification(`${agent.name} 配置已保存`);
+    }
+
+    // 验证配置
+    validateConfig(agentId, config) {
+        // API密钥验证
+        if (!config.apiKey || config.apiKey.trim() === '') {
+            return { valid: false, message: 'API 密钥不能为空' };
+        }
+
+        // 特定验证
+        switch (agentId) {
+            case 'gemini-cli':
+                if (config.maxTokens < 1 || config.maxTokens > 8192) {
+                    return { valid: false, message: '最大令牌数必须在 1-8192 之间' };
+                }
+                break;
+
+            case 'claude-code':
+                if (config.temperature < 0 || config.temperature > 1) {
+                    return { valid: false, message: '温度设置必须在 0-1 之间' };
+                }
+                break;
+
+            case 'codex':
+                if (config.maxTokens < 1 || config.maxTokens > 4096) {
+                    return { valid: false, message: '最大令牌数必须在 1-4096 之间' };
+                }
+                break;
+
+            case 'cursor':
+                try {
+                    new URL(config.endpoint);
+                } catch {
+                    return { valid: false, message: 'API 端点格式不正确' };
+                }
+                break;
+        }
+
+        return { valid: true };
+    }
+
+    // 测试连接
+    testConnection(agentId) {
+        const agent = this.agents.find(a => a.id === agentId);
+        if (!agent) return;
+
+        // 模拟连接测试
+        this.showNotification(`正在测试 ${agent.name} 连接...`);
+
+        setTimeout(() => {
+            const success = Math.random() > 0.3; // 70% 成功率
+            if (success) {
+                this.showNotification(`${agent.name} 连接测试成功`);
+            } else {
+                this.showNotification(`${agent.name} 连接测试失败，请检查配置`, 'error');
+            }
+        }, 2000);
+    }
+
+    // 重置配置
+    resetConfig(agentId) {
+        const agent = this.agents.find(a => a.id === agentId);
+        if (!agent) return;
+
+        if (confirm(`确定要重置 ${agent.name} 的配置吗？此操作不可撤销。`)) {
+            // 重置为默认配置
+            const defaultAgent = aiAgents.find(a => a.id === agentId);
+            if (defaultAgent) {
+                agent.config = { ...defaultAgent.config };
+                agent.status = defaultAgent.status;
+
+                this.saveConfig();
+                this.closeConfigModal();
+                this.renderAgents();
+
+                this.showNotification(`${agent.name} 配置已重置`);
+            }
+        }
+    }
+
+    // 显示统计信息
+    showStats(agentId) {
+        const agent = this.agents.find(a => a.id === agentId);
+        if (!agent) return;
+
+        this.showStatsModal(agent);
+    }
+
+    // 显示统计信息弹窗
+    showStatsModal(agent) {
+        const modalHtml = `
+            <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div class="bg-card border border-border rounded-lg shadow-xl max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+                    <div class="flex items-center justify-between p-6 border-b border-border">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-gradient-to-br from-primary to-gray-600 rounded-lg flex items-center justify-center text-xl">
+                                ${agent.icon}
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-semibold">${agent.name} 使用统计</h2>
+                                <p class="text-sm text-muted-foreground">v${agent.version}</p>
+                            </div>
+                        </div>
+                        <button class="text-muted-foreground hover:text-foreground p-2" onclick="this.closest('.fixed').remove(); document.body.style.overflow = ''">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="p-6 space-y-6">
+                        <!-- 性能指标 -->
+                        <div>
+                            <h3 class="text-lg font-medium mb-4">性能指标</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="bg-muted/30 rounded-lg p-4 text-center">
+                                    <div class="text-2xl font-bold text-primary mb-1">${agent.examples.performance.responseTime}</div>
+                                    <div class="text-sm text-muted-foreground">平均响应时间</div>
+                                </div>
+                                <div class="bg-muted/30 rounded-lg p-4 text-center">
+                                    <div class="text-2xl font-bold text-success mb-1">${agent.examples.performance.accuracy}</div>
+                                    <div class="text-sm text-muted-foreground">准确率</div>
+                                </div>
+                                <div class="bg-muted/30 rounded-lg p-4 text-center">
+                                    <div class="text-2xl font-bold text-warning mb-1">${agent.examples.performance.dailyUsage}</div>
+                                    <div class="text-sm text-muted-foreground">今日使用次数</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 使用示例 -->
+                        <div>
+                            <h3 class="text-lg font-medium mb-4">典型使用场景</h3>
+                            <div class="bg-muted/30 rounded-lg p-4">
+                                <div class="mb-3">
+                                    <label class="block text-sm font-medium mb-2">应用场景</label>
+                                    <p class="text-sm text-muted-foreground">${agent.examples.useCase}</p>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="block text-sm font-medium mb-2">示例输入</label>
+                                    <div class="bg-background border border-border rounded p-3 font-mono text-sm">
+                                        ${agent.examples.samplePrompt}
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-2">示例输出</label>
+                                    <div class="bg-background border border-border rounded p-3 text-sm">
+                                        ${agent.examples.sampleResponse}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 支持能力 -->
+                        <div>
+                            <h3 class="text-lg font-medium mb-4">核心能力</h3>
+                            <div class="grid grid-cols-2 gap-3">
+                                ${agent.capabilities.map(cap => `
+                                    <div class="flex items-center space-x-2 p-2 bg-muted/30 rounded">
+                                        <div class="w-2 h-2 bg-success rounded-full"></div>
+                                        <span class="text-sm">${cap}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <!-- 配置信息 -->
+                        <div>
+                            <h3 class="text-lg font-medium mb-4">当前配置</h3>
+                            <div class="bg-muted/30 rounded-lg p-4">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                                    <div>
+                                        <span class="text-muted-foreground">状态:</span>
+                                        <span class="ml-2 font-medium ${agent.status === 'active' ? 'text-success' : agent.status === 'error' ? 'text-destructive' : 'text-muted-foreground'}">${
+                                            agent.status === 'active' ? '运行中' :
+                                            agent.status === 'error' ? '异常' : '未启用'
+                                        }</span>
+                                    </div>
+                                    <div>
+                                        <span class="text-muted-foreground">API密钥:</span>
+                                        <span class="ml-2 font-medium">${agent.config.apiKey ? '已配置' : '未配置'}</span>
+                                    </div>
+                                    ${agent.config.model ? `
+                                        <div>
+                                            <span class="text-muted-foreground">模型:</span>
+                                            <span class="ml-2 font-medium">${agent.config.model}</span>
+                                        </div>
+                                    ` : ''}
+                                    ${agent.config.maxTokens ? `
+                                        <div>
+                                            <span class="text-muted-foreground">最大令牌:</span>
+                                            <span class="ml-2 font-medium">${agent.config.maxTokens}</span>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end p-6 border-t border-border bg-muted/30">
+                        <button class="px-4 py-2 text-sm bg-primary text-primary-foreground rounded-md hover:bg-gray-800 transition-colors"
+                                onclick="window.aiAgentManager.openConfig('${agent.id}'); this.closest('.fixed').remove(); document.body.style.overflow = ''">
+                            配置 Agent
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        const modalContainer = document.createElement('div');
+        modalContainer.innerHTML = modalHtml;
+        document.body.appendChild(modalContainer.firstElementChild);
+        document.body.style.overflow = 'hidden';
+    }
+
+    // 导出配置
+    exportConfig() {
+        const config = {
+            version: '1.0.0',
+            timestamp: new Date().toISOString(),
+            agents: this.agents.map(agent => ({
+                id: agent.id,
+                enabled: agent.config.enabled,
+                config: agent.config
+            }))
+        };
+
+        const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `ai-agents-config-${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+
+        this.showNotification('配置已导出');
+    }
+
+    // 导入配置
+    importConfig() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        input.onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const config = JSON.parse(e.target.result);
+                    this.applyConfig(config);
+                    this.showNotification('配置导入成功');
+                } catch (error) {
+                    this.showNotification('配置文件格式错误', 'error');
+                }
+            };
+            reader.readAsText(file);
+        };
+        input.click();
+    }
+
+    // 应用配置
+    applyConfig(config) {
+        if (!config.agents) return;
+
+        config.agents.forEach(importedAgent => {
+            const agent = this.agents.find(a => a.id === importedAgent.id);
+            if (agent) {
+                agent.config = { ...agent.config, ...importedAgent.config };
+                agent.status = importedAgent.enabled ? 'active' : 'inactive';
+            }
+        });
+
+        this.saveConfig();
+        this.renderAgents();
+    }
+
+    // 保存配置到localStorage
+    saveConfig() {
+        const config = {
+            version: '1.0.0',
+            timestamp: new Date().toISOString(),
+            agents: this.agents.map(agent => ({
+                id: agent.id,
+                status: agent.status,
+                config: agent.config
+            }))
+        };
+
+        // 保存当前配置
+        localStorage.setItem('ai-agents-config', JSON.stringify(config));
+
+        // 创建备份（保留最近5个备份）
+        this.createBackup(config);
+    }
+
+    // 创建配置备份
+    createBackup(config) {
+        const backups = this.getBackups();
+
+        // 添加新备份
+        backups.unshift({
+            ...config,
+            backupId: Date.now(),
+            backupName: `自动备份 ${new Date().toLocaleString()}`
+        });
+
+        // 只保留最近5个备份
+        const recentBackups = backups.slice(0, 5);
+
+        localStorage.setItem('ai-agents-backups', JSON.stringify(recentBackups));
+    }
+
+    // 获取所有备份
+    getBackups() {
+        const saved = localStorage.getItem('ai-agents-backups');
+        return saved ? JSON.parse(saved) : [];
+    }
+
+    // 恢复备份
+    restoreBackup(backupId) {
+        const backups = this.getBackups();
+        const backup = backups.find(b => b.backupId === backupId);
+
+        if (!backup) {
+            this.showNotification('备份不存在', 'error');
+            return;
+        }
+
+        if (confirm(`确定要恢复到 "${backup.backupName}" 吗？当前配置将被覆盖。`)) {
+            this.applyConfig(backup);
+            this.showNotification('配置已恢复');
+        }
+    }
+
+    // 清理过期备份
+    cleanupBackups() {
+        const backups = this.getBackups();
+        const oneWeekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
+
+        const validBackups = backups.filter(backup =>
+            backup.backupId > oneWeekAgo
+        );
+
+        localStorage.setItem('ai-agents-backups', JSON.stringify(validBackups));
+    }
+
+    // 从localStorage加载配置
+    loadConfig() {
+        const saved = localStorage.getItem('ai-agents-config');
+        if (!saved) return;
+
+        try {
+            const config = JSON.parse(saved);
+            config.agents.forEach(savedAgent => {
+                const agent = this.agents.find(a => a.id === savedAgent.id);
+                if (agent) {
+                    agent.status = savedAgent.status;
+                    agent.config = { ...agent.config, ...savedAgent.config };
+                }
+            });
+        } catch (error) {
+            console.error('Failed to load config:', error);
+        }
+    }
+
+    // 显示通知
+    showNotification(message, type = 'success') {
+        // 移除现有通知
+        const existingNotifications = document.querySelectorAll('.ai-agent-notification');
+        existingNotifications.forEach(notification => {
+            notification.remove();
+        });
+
+        // 创建通知元素
+        const notification = document.createElement('div');
+        const iconMap = {
+            'success': `<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>`,
+            'error': `<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+            </svg>`,
+            'info': `<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+            </svg>`
+        };
+
+        const colorMap = {
+            'success': 'bg-green-500 border-green-400',
+            'error': 'bg-red-500 border-red-400',
+            'info': 'bg-blue-500 border-blue-400'
+        };
+
+        notification.className = `ai-agent-notification fixed top-4 right-4 px-4 py-3 rounded-lg text-white text-sm font-medium z-50 shadow-lg border-l-4 ${colorMap[type]} transform translate-x-full transition-all duration-300 ease-out`;
+
+        notification.innerHTML = `
+            <div class="flex items-center space-x-2">
+                ${iconMap[type] || iconMap['info']}
+                <span>${message}</span>
+                <button class="ml-2 text-white/80 hover:text-white transition-colors" onclick="this.parentElement.parentElement.remove()">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+            </div>
+        `;
+
+        document.body.appendChild(notification);
+
+        // 入场动画
+        setTimeout(() => {
+            notification.style.transform = 'translateX(0)';
+        }, 100);
+
+        // 自动移除
+        setTimeout(() => {
+            notification.style.transform = 'translateX(full)';
+            notification.style.opacity = '0';
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 300);
+        }, type === 'error' ? 5000 : 3000);
+    }
+}
+
 // 导出模块内容函数
 window.moduleContent = {
     getRequirementManagementContent,
     getDevelopmentManagementContent,
-    getAIPluginsContent,
+    getAIAgentContent,
     getDevelopmentContent,
     getProjectsContent,
     getMonitoringContent,
     getResourcesContent,
     getSystemContent
 };
+
+// 初始化AI Agent管理器
+window.aiAgentManager = new AIAgentManager();
+
+// 开发模式下的测试功能
+if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+    window.testAIAgentManager = {
+        // 测试所有功能
+        runAllTests() {
+            console.log('🧪 开始测试 AI Agent 管理器...');
+
+            // 测试渲染
+            console.log('✅ 测试渲染功能');
+            window.aiAgentManager.renderAgents();
+
+            // 测试通知
+            console.log('✅ 测试通知系统');
+            window.aiAgentManager.showNotification('测试成功通知', 'success');
+            setTimeout(() => {
+                window.aiAgentManager.showNotification('测试错误通知', 'error');
+            }, 1000);
+            setTimeout(() => {
+                window.aiAgentManager.showNotification('测试信息通知', 'info');
+            }, 2000);
+
+            // 测试配置保存和加载
+            console.log('✅ 测试配置保存和加载');
+            const originalConfig = JSON.stringify(window.aiAgentManager.agents);
+            window.aiAgentManager.saveConfig();
+            window.aiAgentManager.loadConfig();
+            const loadedConfig = JSON.stringify(window.aiAgentManager.agents);
+            console.log('配置保存/加载:', originalConfig === loadedConfig ? '✅ 成功' : '❌ 失败');
+
+            // 测试备份功能
+            console.log('✅ 测试备份功能');
+            const backups = window.aiAgentManager.getBackups();
+            console.log('备份数量:', backups.length);
+
+            console.log('🎉 所有测试完成！');
+        },
+
+        // 重置所有数据
+        resetAllData() {
+            if (confirm('确定要重置所有 AI Agent 数据吗？此操作不可撤销。')) {
+                localStorage.removeItem('ai-agents-config');
+                localStorage.removeItem('ai-agents-backups');
+                window.location.reload();
+            }
+        },
+
+        // 模拟错误
+        simulateError() {
+            window.aiAgentManager.showNotification('这是一个模拟错误', 'error');
+        }
+    };
+
+    console.log('🔧 开发模式已启用，可使用以下测试命令：');
+    console.log('- window.testAIAgentManager.runAllTests() - 运行所有测试');
+    console.log('- window.testAIAgentManager.resetAllData() - 重置所有数据');
+    console.log('- window.testAIAgentManager.simulateError() - 模拟错误');
+}

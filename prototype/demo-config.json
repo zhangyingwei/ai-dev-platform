@@ -1,0 +1,96 @@
+{
+  "version": "1.0.0",
+  "exportTime": "2025-01-21T10:30:00.000Z",
+  "agents": {
+    "augment-code": {
+      "id": "augment-code",
+      "name": "Augment Code",
+      "description": "智能代码助手，提供代码生成和优化建议",
+      "icon": "🚀",
+      "iconBg": "from-primary to-gray-800",
+      "enabled": true,
+      "apiKey": "YXVnbWVudC1hcGkta2V5LTEyMzQ1",
+      "customParams": {
+        "temperature": 0.8,
+        "max_tokens": 2000,
+        "model": "augment-v2"
+      },
+      "lastUpdated": 1705838200000
+    },
+    "claude-code": {
+      "id": "claude-code",
+      "name": "Claude Code",
+      "description": "Anthropic Claude 代码分析和重构工具",
+      "icon": "🤖",
+      "iconBg": "from-orange-500 to-red-600",
+      "enabled": true,
+      "apiKey": "Y2xhdWRlLWFwaS1rZXktdGVzdA==",
+      "customParams": {
+        "model": "claude-3-opus",
+        "temperature": 0.3,
+        "max_tokens": 4000
+      },
+      "lastUpdated": 1705838200000
+    },
+    "gemini-cli": {
+      "id": "gemini-cli",
+      "name": "Gemini CLI",
+      "description": "Google Gemini 命令行集成工具",
+      "icon": "💎",
+      "iconBg": "from-blue-500 to-purple-600",
+      "enabled": true,
+      "apiKey": "Z2VtaW5pLWFwaS1rZXktZGVtbw==",
+      "customParams": {
+        "model": "gemini-pro",
+        "safety_settings": "high",
+        "temperature": 0.6
+      },
+      "lastUpdated": 1705838200000
+    },
+    "cursor": {
+      "id": "cursor",
+      "name": "Cursor",
+      "description": "AI 驱动的代码编辑器集成",
+      "icon": "⚡",
+      "iconBg": "from-yellow-500 to-orange-600",
+      "enabled": false,
+      "apiKey": "",
+      "customParams": {
+        "auto_complete": true,
+        "suggestions": "enhanced",
+        "theme": "dark"
+      },
+      "lastUpdated": 1705838200000
+    },
+    "codex": {
+      "id": "codex",
+      "name": "Codex",
+      "description": "OpenAI Codex 代码生成引擎",
+      "icon": "🧠",
+      "iconBg": "from-green-500 to-teal-600",
+      "enabled": false,
+      "apiKey": "",
+      "customParams": {
+        "engine": "code-davinci-003",
+        "temperature": 0.2,
+        "max_tokens": 1500
+      },
+      "lastUpdated": 1705838200000
+    },
+    "github-copilot": {
+      "id": "github-copilot",
+      "name": "GitHub Copilot",
+      "description": "GitHub 官方 AI 编程助手",
+      "icon": "🐙",
+      "iconBg": "from-gray-700 to-black",
+      "enabled": true,
+      "apiKey": "Z2l0aHViLWNvcGlsb3QtdG9rZW4=",
+      "customParams": {
+        "suggestions": "auto",
+        "language_support": "all",
+        "completion_style": "inline"
+      },
+      "lastUpdated": 1705838200000
+    }
+  }
+}

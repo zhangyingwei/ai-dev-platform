@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Agent 管理测试页面</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#000000',
+                        'primary-foreground': '#ffffff',
+                        secondary: '#f8f9fa',
+                        'secondary-foreground': '#1f2937',
+                        background: '#ffffff',
+                        card: '#ffffff',
+                        popover: '#ffffff',
+                        muted: '#f1f5f9',
+                        'muted-foreground': '#64748b',
+                        accent: '#f8fafc',
+                        'accent-foreground': '#0f172a',
+                        foreground: '#0f172a',
+                        border: '#e2e8f0',
+                        input: '#e2e8f0',
+                        ring: '#94a3b8',
+                        destructive: '#ef4444',
+                        'destructive-foreground': '#ffffff',
+                        success: '#10b981',
+                        warning: '#f59e0b'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .card-hover {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="bg-background text-foreground">
+    <div class="min-h-screen">
+        <!-- 顶部导航 -->
+        <header class="bg-card border-b border-border px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                        <span class="text-primary-foreground font-bold text-sm">AI</span>
+                    </div>
+                    <h1 class="text-xl font-bold">AI Agent 管理测试</h1>
+                </div>
+                <div class="flex space-x-2">
+                    <button onclick="window.testAIAgentManager?.runAllTests()" 
+                            class="px-3 py-1.5 bg-primary text-primary-foreground rounded-md hover:bg-gray-800 transition-colors text-sm font-medium">
+                        运行测试
+                    </button>
+                    <button onclick="window.testAIAgentManager?.resetAllData()" 
+                            class="px-3 py-1.5 border border-border rounded-md hover:bg-accent transition-colors text-sm font-medium">
+                        重置数据
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- 主内容 -->
+        <main class="p-6">
+            <div class="max-w-7xl mx-auto">
+                <!-- 功能说明 -->
+                <div class="bg-card border border-border rounded-lg p-6 mb-6">
+                    <h2 class="text-lg font-semibold mb-4">功能测试说明</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div>
+                            <h3 class="font-medium mb-2">✅ 已实现功能</h3>
+                            <ul class="space-y-1 text-muted-foreground">
+                                <li>• AI Agent 卡片展示</li>
+                                <li>• 响应式网格布局</li>
+                                <li>• 悬停动画效果</li>
+                                <li>• 配置弹窗</li>
+                                <li>• 数据持久化</li>
+                                <li>• 导入/导出配置</li>
+                                <li>• 通知系统</li>
+                                <li>• 状态管理</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="font-medium mb-2">🎯 支持的 AI Agent</h3>
+                            <ul class="space-y-1 text-muted-foreground">
+                                <li>• Gemini CLI</li>
+                                <li>• Claude Code</li>
+                                <li>• Augment Code</li>
+                                <li>• Codex</li>
+                                <li>• Cursor</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Agent 管理内容 -->
+                <div id="main-content">
+                    <!-- 内容将通过 JavaScript 加载 -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 加载脚本 -->
+    <script src="js/modules.js"></script>
+    <script>
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 加载 AI Agent 管理内容
+            if (window.moduleContent && window.moduleContent.getAIAgentContent) {
+                const content = window.moduleContent.getAIAgentContent();
+                document.getElementById('main-content').innerHTML = content;
+                
+                // 初始化功能
+                if (window.aiAgentManager) {
+                    setTimeout(() => {
+                        window.aiAgentManager.renderAgents();
+                    }, 100);
+                }
+            }
+            
+            // 显示欢迎消息
+            setTimeout(() => {
+                if (window.aiAgentManager) {
+                    window.aiAgentManager.showNotification('AI Agent 管理系统已就绪', 'success');
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html>

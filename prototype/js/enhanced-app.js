@@ -182,8 +182,8 @@ class AIDevPlatform {
             case '工作台':
                 moduleName = 'workspace';
                 break;
-            case 'AI插件管理':
-                moduleName = 'ai-plugins';
+            case 'AI Agent 管理':
+                moduleName = 'ai-agents';
                 break;
             case '开发流程':
                 moduleName = 'development';
@@ -254,8 +254,8 @@ class AIDevPlatform {
         switch (moduleName) {
             case 'workspace':
                 return this.getWorkspaceContent();
-            case 'ai-plugins':
-                return window.moduleContent ? window.moduleContent.getAIPluginsContent() : this.getPlaceholderContent('AI插件管理');
+            case 'ai-agents':
+                return window.moduleContent ? window.moduleContent.getAIAgentContent() : this.getPlaceholderContent('AI Agent 管理');
             case 'development':
                 return window.moduleContent ? window.moduleContent.getDevelopmentContent() : this.getPlaceholderContent('开发流程');
             case 'projects':
@@ -296,8 +296,8 @@ class AIDevPlatform {
             case 'workspace':
                 this.initWorkspaceFeatures();
                 break;
-            case 'ai-plugins':
-                this.initAIPluginsFeatures();
+            case 'ai-agents':
+                this.initAIAgentFeatures();
                 break;
             case 'development':
                 this.initDevelopmentFeatures();
@@ -327,29 +327,11 @@ class AIDevPlatform {
         });
     }
 
-    initAIPluginsFeatures() {
-        // AI插件启用/停用交互
-        document.querySelectorAll('button[class*="text-destructive"], button[class*="text-success"]').forEach(button => {
-            button.addEventListener('click', (e) => {
-                const isEnable = e.target.textContent === '启用';
-                const statusIndicator = e.target.closest('.bg-card').querySelector('.w-2.h-2');
-                const statusText = statusIndicator.nextElementSibling;
-                
-                if (isEnable) {
-                    statusIndicator.className = 'w-2 h-2 bg-success rounded-full';
-                    statusText.textContent = '运行中';
-                    statusText.className = 'text-xs text-success';
-                    e.target.textContent = '停用';
-                    e.target.className = 'text-destructive text-sm hover:underline';
-                } else {
-                    statusIndicator.className = 'w-2 h-2 bg-destructive rounded-full';
-                    statusText.textContent = '已停用';
-                    statusText.className = 'text-xs text-destructive';
-                    e.target.textContent = '启用';
-                    e.target.className = 'text-success text-sm hover:underline';
-                }
-            });
-        });
+    initAIAgentFeatures() {
+        // 渲染AI Agent卡片
+        if (window.aiAgentManager) {
+            window.aiAgentManager.renderAgents();
+        }
     }
 
     initDevelopmentFeatures() {

@@ -91,8 +91,8 @@ class AIDevPlatform {
             case '工作台':
                 moduleName = 'workspace';
                 break;
-            case 'AI插件管理':
-                moduleName = 'ai-plugins';
+            case 'AI Agent 管理':
+                moduleName = 'ai-agents';
                 break;
             case '开发流程':
                 moduleName = 'development';
@@ -134,7 +134,7 @@ class AIDevPlatform {
             'workspace': '工作台',
             'requirement-management': '需求管理',
             'development-management': '开发管理',
-            'ai-plugins': 'AI插件管理',
+            'ai-agents': 'AI Agent 管理',
             'development': '开发流程',
             'projects': '项目管理',
             'monitoring': '运维监控',
@@ -160,8 +160,8 @@ class AIDevPlatform {
                 return window.moduleContent.getRequirementManagementContent();
             case 'development-management':
                 return window.moduleContent.getDevelopmentManagementContent();
-            case 'ai-plugins':
-                return window.moduleContent.getAIPluginsContent();
+            case 'ai-agents':
+                return window.moduleContent.getAIAgentContent();
             case 'development':
                 return window.moduleContent.getDevelopmentContent();
             case 'projects':
@@ -362,8 +362,8 @@ class AIDevPlatform {
             case 'development-management':
                 this.initDevelopmentManagementFeatures();
                 break;
-            case 'ai-plugins':
-                this.initAIPluginsFeatures();
+            case 'ai-agents':
+                this.initAIAgentFeatures();
                 break;
             // 其他模块的初始化将在后续添加
         }
@@ -541,27 +541,15 @@ class AIDevPlatform {
         }
     }
 
-    // AI插件管理模块功能初始化
-    initAIPluginsFeatures() {
+    // AI Agent管理模块功能初始化
+    initAIAgentFeatures() {
+        // 渲染AI Agent卡片
+        if (window.aiAgentManager) {
+            window.aiAgentManager.renderAgents();
+        }
+
         // 标签页切换
         this.initTabSwitching();
-
-        // 插件操作按钮
-        document.querySelectorAll('[data-plugin-action]').forEach(btn => {
-            btn.addEventListener('click', () => this.handlePluginAction(btn));
-        });
-
-        // 安装插件按钮
-        const installBtn = document.querySelector('[data-action="install-plugin"]');
-        if (installBtn) {
-            installBtn.addEventListener('click', () => this.showPluginMarket());
-        }
-
-        // 插件市场按钮
-        const marketBtn = document.querySelector('[data-action="plugin-market"]');
-        if (marketBtn) {
-            marketBtn.addEventListener('click', () => this.showPluginMarket());
-        }
     }
 
     initWorkspaceFeatures() {
@@ -2111,7 +2099,7 @@ function loadModule(moduleName, clickedElement) {
             const moduleNavMap = {
                 'requirement-management': '需求管理',
                 'development-management': '开发管理',
-                'ai-plugins': 'AI插件管理'
+                'ai-agents': 'AI Agent 管理'
             };
 
             const targetText = moduleNavMap[moduleName];
