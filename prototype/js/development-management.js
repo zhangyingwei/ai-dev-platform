@@ -33,6 +33,12 @@ class DevelopmentManagement {
 
         // 研发任务功能
         this.bindDevTasksFeatures();
+
+        // 项目问题管理功能
+        this.bindProjectIssuesFeatures();
+
+        // 项目筛选功能
+        this.initProjectFiltering();
     }
 
     initTabSwitching() {
@@ -2432,6 +2438,195 @@ export default Header;`,
 
 
 
+    // 项目筛选功能
+    initProjectFiltering() {
+        // 初始化项目数据
+        this.projects = {
+            'ai-platform': { name: 'AI开发平台', color: 'bg-purple-100 text-purple-800', icon: '🤖' },
+            'payment-system': { name: '支付系统', color: 'bg-green-100 text-green-800', icon: '💳' },
+            'mobile-app': { name: '移动应用', color: 'bg-blue-100 text-blue-800', icon: '📱' },
+            'data-analytics': { name: '数据分析平台', color: 'bg-purple-100 text-purple-800', icon: '📊' }
+        };
+    }
+
+    filterRequirementsByProject() {
+        const selectedProject = document.getElementById('project-filter').value;
+        const requirementElements = document.querySelectorAll('[data-tab-content="dev-tasks"] .border.border-border.rounded-lg, [data-tab-content="dev-tasks"] .border.border-destructive.rounded-lg');
+
+        requirementElements.forEach(element => {
+            if (!selectedProject) {
+                element.style.display = 'block';
+            } else {
+                const projectBadge = element.querySelector('.px-2.py-1');
+                const projectText = projectBadge ? projectBadge.textContent.trim() : '';
+                const projectMatch = this.getProjectKeyByName(projectText);
+
+                if (projectMatch === selectedProject) {
+                    element.style.display = 'block';
+                } else {
+                    element.style.display = 'none';
+                }
+            }
+        });
+
+        this.showNotification(selectedProject ? `已筛选${this.projects[selectedProject].name}的需求` : '显示所有项目需求', 'info');
+    }
+
+    getProjectKeyByName(displayName) {
+        for (const [key, project] of Object.entries(this.projects)) {
+            if (displayName.includes(project.name) || displayName.includes(project.icon)) {
+                return key;
+            }
+        }
+        return null;
+    }
+
+    // 项目问题管理功能
+    bindProjectIssuesFeatures() {
+        // 绑定问题管理相关事件
+        this.initIssueManagement();
+    }
+
+    initIssueManagement() {
+        // 初始化问题数据
+        this.issues = [
+            {
+                id: 'issue-001',
+                title: '支付接口调用失败',
+                project: 'payment-system',
+                priority: 'high',
+                status: 'in-progress',
+                assignee: '张开发',
+                createdAt: '2024-01-21 09:30',
+                description: '微信支付接口在生产环境中出现间歇性调用失败，错误代码：SYSTEMERROR',
+                relatedTask: '支付模块开发任务 > 微信支付集成'
+            },
+            {
+                id: 'issue-002',
+                title: '移动端布局兼容性问题',
+                project: 'mobile-app',
+                priority: 'medium',
+                status: 'open',
+                assignee: '李前端',
+                createdAt: '2024-01-20 16:45',
+                description: '在iOS Safari浏览器中，部分页面元素显示异常，需要优化CSS兼容性',
+                relatedTask: '前端模块开发任务 > 响应式布局优化'
+            },
+            {
+                id: 'issue-003',
+                title: '数据库连接超时',
+                project: 'data-analytics',
+                priority: 'low',
+                status: 'resolved',
+                assignee: '王后端',
+                createdAt: '2024-01-19 14:20',
+                description: '优化数据库连接池配置，解决了连接超时问题',
+                solution: '调整连接池最大连接数从20增加到50，设置连接超时时间为30秒'
+            }
+        ];
+    }
+
+    filterIssuesByProject() {
+        const selectedProject = document.getElementById('issue-project-filter').value;
+        const issueElements = document.querySelectorAll('[data-tab-content="project-issues"] .border.border-border.rounded-lg, [data-tab-content="project-issues"] .border.border-destructive.rounded-lg');
+
+        issueElements.forEach(element => {
+            if (!selectedProject) {
+                element.style.display = 'block';
+            } else {
+                const projectBadge = element.querySelector('.px-2.py-1');
+                const projectText = projectBadge ? projectBadge.textContent.trim() : '';
+                const projectMatch = this.getProjectKeyByName(projectText);
+
+                if (projectMatch === selectedProject) {
+                    element.style.display = 'block';
+                } else {
+                    element.style.display = 'none';
+                }
+            }
+        });
+
+        this.showNotification(selectedProject ? `已筛选${this.projects[selectedProject].name}的问题` : '显示所有项目问题', 'info');
+    }
+
+    createNewRequirement() {
+        // 创建新需求的模态框
+        const modal = this.createRequirementModal();
+        document.body.appendChild(modal);
+        modal.classList.remove('hidden');
+    }
+
+    createRequirementModal() {
+        const modal = document.createElement('div');
+        modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+        modal.innerHTML = `
+            <div class="bg-card border border-border rounded-lg p-6 w-full max-w-2xl mx-4">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold">新建项目需求</h3>
+                    <button onclick="this.closest('.fixed').remove()" class="text-muted-foreground hover:text-foreground">✕</button>
+                </div>
+
+                <form class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">需求标题</label>
+                        <input type="text" class="w-full px-3 py-2 border border-border rounded-md" placeholder="请输入需求标题">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">所属项目</label>
+                            <select class="w-full px-3 py-2 border border-border rounded-md">
+                                <option value="">选择项目</option>
+                                <option value="ai-platform">AI开发平台</option>
+                                <option value="payment-system">支付系统</option>
+                                <option value="mobile-app">移动应用</option>
+                                <option value="data-analytics">数据分析平台</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-2">优先级</label>
+                            <select class="w-full px-3 py-2 border border-border rounded-md">
+                                <option value="low">🟢 低优先级</option>
+                                <option value="medium">🟡 中优先级</option>
+                                <option value="high">🔴 高优先级</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">预估工时</label>
+                            <input type="text" class="w-full px-3 py-2 border border-border rounded-md" placeholder="如：3天">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-medium mb-2">负责人</label>
+                            <select class="w-full px-3 py-2 border border-border rounded-md">
+                                <option value="">选择负责人</option>
+                                <option value="zhang">张开发</option>
+                                <option value="li">李前端</option>
+                                <option value="wang">王后端</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium mb-2">需求描述</label>
+                        <textarea class="w-full px-3 py-2 border border-border rounded-md h-24" placeholder="请详细描述需求内容和验收标准..."></textarea>
+                    </div>
+
+                    <div class="flex justify-end space-x-3">
+                        <button type="button" onclick="this.closest('.fixed').remove()" class="px-4 py-2 border border-border rounded-md hover:bg-accent">取消</button>
+                        <button type="submit" class="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-gray-800">创建需求</button>
+                    </div>
+                </form>
+            </div>
+        `;
+
+        return modal;
+    }
+
     // 显示通知
     showNotification(message, type = 'info') {
         const notification = document.createElement('div');
@@ -2441,7 +2636,7 @@ export default Header;`,
             'warning': 'bg-warning text-warning-foreground',
             'info': 'bg-primary text-primary-foreground'
         };
-        
+
         notification.className = `fixed top-4 right-4 px-4 py-3 rounded-lg shadow-lg z-50 ${typeClasses[type]} fade-in`;
         notification.innerHTML = `
             <div class="flex items-center space-x-2">
@@ -2449,9 +2644,9 @@ export default Header;`,
                 <button class="ml-2 text-current opacity-70 hover:opacity-100" onclick="this.parentElement.parentElement.remove()">✕</button>
             </div>
         `;
-        
+
         document.body.appendChild(notification);
-        
+
         // 自动消失
         setTimeout(() => {
             if (notification.parentElement) {
@@ -2465,3 +2660,40 @@ export default Header;`,
 document.addEventListener('DOMContentLoaded', () => {
     window.developmentManagement = new DevelopmentManagement();
 });
+
+// 全局函数，供HTML调用
+function filterRequirementsByProject() {
+    if (window.developmentManagement) {
+        window.developmentManagement.filterRequirementsByProject();
+    }
+}
+
+function createNewRequirement() {
+    if (window.developmentManagement) {
+        window.developmentManagement.createNewRequirement();
+    }
+}
+
+function updateSelectedCount() {
+    if (window.developmentManagement) {
+        window.developmentManagement.updateSelectedCount();
+    }
+}
+
+function selectAllRequirements() {
+    if (window.developmentManagement) {
+        window.developmentManagement.selectAllRequirements();
+    }
+}
+
+function clearAllRequirements() {
+    if (window.developmentManagement) {
+        window.developmentManagement.clearAllRequirements();
+    }
+}
+
+function startDevelopment() {
+    if (window.developmentManagement) {
+        window.developmentManagement.startDevelopment();
+    }
+}

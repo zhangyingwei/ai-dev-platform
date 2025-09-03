@@ -115,6 +115,25 @@
             --input: 217.2 32.6% 17.5%;
             --ring: 212.7 26.8% 83.9%;
         }
+
+        /* 二级菜单样式 */
+        .nav-toggle {
+            cursor: pointer;
+        }
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .submenu.expanded {
+            max-height: 200px;
+        }
+        .chevron-icon {
+            transition: transform 0.2s ease-out;
+        }
+        .chevron-icon.rotated {
+            transform: rotate(90deg);
+        }
     </style>
 </head>
 <body class="bg-background text-foreground">
@@ -189,15 +208,57 @@
                     </div>
                     <span class="text-sm font-medium">监控运维</span>
                 </a>
-                <a href="resource-management.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
-                    <div class="w-4 h-4 flex items-center justify-center">
-                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z" clip-rule="evenodd"/>
-                            <path d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V9a1 1 0 00-1-1h-1v-1z"/>
+                <!-- 开发资源管理 - 二级菜单 -->
+                <div class="nav-group">
+                    <button class="nav-item nav-toggle flex items-center justify-between w-full px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground" data-target="resource-submenu">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-4 h-4 flex items-center justify-center">
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z" clip-rule="evenodd"/>
+                                    <path d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V9a1 1 0 00-1-1h-1v-1z"/>
+                                </svg>
+                            </div>
+                            <span class="text-sm font-medium">开发资源管理</span>
+                        </div>
+                        <svg class="w-4 h-4 transition-transform duration-200 chevron-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
                         </svg>
+                    </button>
+                    <div id="resource-submenu" class="submenu hidden ml-6 mt-1 space-y-1">
+                        <a href="database-management.html" class="nav-item flex items-center space-x-2 px-2 py-1.5 rounded-md hover:bg-accent hover:text-accent-foreground text-sm">
+                            <div class="w-3 h-3 flex items-center justify-center">
+                                <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 16a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/>
+                                </svg>
+                            </div>
+                            <span class="font-medium">数据库管理</span>
+                        </a>
+                        <a href="application-management.html" class="nav-item flex items-center space-x-2 px-2 py-1.5 rounded-md hover:bg-accent hover:text-accent-foreground text-sm">
+                            <div class="w-3 h-3 flex items-center justify-center">
+                                <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zm2 0v8h12V6H4z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <span class="font-medium">应用服务管理</span>
+                        </a>
+                        <a href="code-management.html" class="nav-item flex items-center space-x-2 px-2 py-1.5 rounded-md hover:bg-accent hover:text-accent-foreground text-sm">
+                            <div class="w-3 h-3 flex items-center justify-center">
+                                <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <span class="font-medium">代码管理</span>
+                        </a>
+                        <a href="server-management.html" class="nav-item flex items-center space-x-2 px-2 py-1.5 rounded-md hover:bg-accent hover:text-accent-foreground text-sm">
+                            <div class="w-3 h-3 flex items-center justify-center">
+                                <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <span class="font-medium">服务器管理</span>
+                        </a>
                     </div>
-                    <span class="text-sm font-medium">开发资源管理</span>
-                </a>
+                </div>
                 <a href="system-management.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
                     <div class="w-4 h-4 flex items-center justify-center">
                         <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
@@ -248,7 +309,7 @@
                     <nav class="border-b border-border">
                         <div class="flex space-x-8">
                             <button class="py-2 px-1 border-b-2 border-primary text-primary font-medium text-sm" data-tab="dev-tasks">
-                                研发任务
+                                项目需求
                             </button>
                             <button class="py-2 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground text-sm" data-tab="development-tasks">
                                 开发任务
@@ -256,192 +317,183 @@
                         </div>
                     </nav>
 
-                    <!-- 研发任务界面 -->
+                    <!-- 项目需求界面 -->
                     <div class="bg-card border border-border rounded-lg p-4" data-tab-content="dev-tasks">
                         <div class="flex items-center justify-between mb-4">
-                            <h2 class="text-lg font-semibold">我的研发任务</h2>
-                            <div class="flex items-center space-x-2">
-                                <span class="text-sm text-muted-foreground">当前负责人: 张开发</span>
+                            <h2 class="text-lg font-semibold">项目需求管理</h2>
+                            <div class="flex items-center space-x-3">
+                                <!-- 项目筛选 -->
+                                <div class="flex items-center space-x-2">
+                                    <label class="text-sm text-muted-foreground">项目:</label>
+                                    <select id="project-filter" class="px-3 py-1.5 border border-border rounded text-sm bg-background" onchange="filterRequirementsByProject()">
+                                        <option value="">全部项目</option>
+                                        <option value="ai-platform">AI开发平台</option>
+                                        <option value="payment-system">支付系统</option>
+                                        <option value="mobile-app">移动应用</option>
+                                        <option value="data-analytics">数据分析平台</option>
+                                    </select>
+                                </div>
+                                <button class="px-3 py-1.5 bg-primary text-primary-foreground rounded text-sm hover:bg-gray-800" onclick="createNewRequirement()">
+                                    新建需求
+                                </button>
                             </div>
                         </div>
 
-                        <!-- 任务统计 -->
+                        <!-- 需求统计 -->
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                             <div class="text-center p-3 bg-muted rounded-lg">
-                                <div class="text-2xl font-bold text-primary">3</div>
-                                <div class="text-xs text-muted-foreground">总任务数</div>
+                                <div class="text-2xl font-bold text-primary">8</div>
+                                <div class="text-xs text-muted-foreground">总需求数</div>
                             </div>
                             <div class="text-center p-3 bg-muted rounded-lg">
-                                <div class="text-2xl font-bold text-warning">1</div>
-                                <div class="text-xs text-muted-foreground">进行中</div>
+                                <div class="text-2xl font-bold text-warning">3</div>
+                                <div class="text-xs text-muted-foreground">开发中</div>
                             </div>
                             <div class="text-center p-3 bg-muted rounded-lg">
-                                <div class="text-2xl font-bold text-success">2</div>
+                                <div class="text-2xl font-bold text-muted-foreground">2</div>
+                                <div class="text-xs text-muted-foreground">待开发</div>
+                            </div>
+                            <div class="text-center p-3 bg-muted rounded-lg">
+                                <div class="text-2xl font-bold text-success">3</div>
                                 <div class="text-xs text-muted-foreground">已完成</div>
                             </div>
-                            <div class="text-center p-3 bg-muted rounded-lg">
-                                <div class="text-2xl font-bold text-muted-foreground">15天</div>
-                                <div class="text-xs text-muted-foreground">总工时</div>
-                            </div>
                         </div>
 
-                        <!-- 批量操作区域 -->
-                        <div class="bg-muted rounded-lg p-4 mb-4">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center space-x-3">
-                                    <span class="text-sm font-medium">批量操作:</span>
-                                    <span class="text-xs text-muted-foreground" id="selected-requirements-count">已选择 0 个需求</span>
-                                </div>
-                                <div class="flex space-x-2">
-                                    <button class="px-3 py-1.5 border border-border rounded text-sm hover:bg-accent" onclick="selectAllRequirements()">
-                                        全选
-                                    </button>
-                                    <button class="px-3 py-1.5 border border-border rounded text-sm hover:bg-accent" onclick="clearAllRequirements()">
-                                        清空
-                                    </button>
-                                    <button class="px-3 py-1.5 bg-primary text-primary-foreground rounded text-sm hover:bg-gray-800" id="start-development-btn" onclick="startDevelopment()" disabled>
-                                        开始开发
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- 任务列表 -->
+                        <!-- 需求列表 -->
                         <div class="space-y-4">
-                            <!-- 进行中的任务 -->
-                            <div class="border border-border rounded-lg p-4">
+                            <!-- 高优先级需求 -->
+                            <div class="border border-destructive rounded-lg p-4 bg-red-50">
                                 <div class="flex items-center justify-between mb-3">
                                     <div class="flex items-center space-x-3">
-                                        <h3 class="font-medium text-base">前端模块开发任务</h3>
-                                        <span class="px-2 py-1 bg-warning text-warning-foreground text-xs rounded">进行中</span>
-                                        <span class="px-2 py-1 bg-muted text-muted-foreground text-xs rounded">🟡 中优先级</span>
+                                        <h3 class="font-medium text-base">微信支付集成</h3>
+                                        <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">💳 支付系统</span>
+                                        <span class="px-2 py-1 bg-destructive text-destructive-foreground text-xs rounded">🔴 高优先级</span>
+                                        <span class="px-2 py-1 bg-warning text-warning-foreground text-xs rounded">开发中</span>
                                     </div>
                                     <div class="text-xs text-muted-foreground">
-                                        截止时间: 2024-01-25
+                                        创建时间: 2024-01-21 09:30
                                     </div>
                                 </div>
-                                <p class="text-sm text-muted-foreground mb-3">负责前端模块的响应式布局和移动端交互优化</p>
+                                <p class="text-sm text-muted-foreground mb-3">集成微信支付SDK，实现支付、退款功能，支持多种支付场景</p>
 
-                                <!-- 包含的研发需求 -->
-                                <div class="space-y-2 mb-3">
-                                    <h4 class="text-sm font-medium">包含需求:</h4>
-                                    <div class="space-y-1">
-                                        <div class="flex items-center justify-between p-2 bg-muted rounded">
-                                            <div class="flex items-center space-x-2">
-                                                <input type="checkbox" class="requirement-checkbox" data-requirement-id="req-frontend-1" data-requirement-name="响应式布局优化" data-workload="2天" onchange="updateSelectedCount()">
-                                                <span class="text-sm">响应式布局优化</span>
-                                            </div>
-                                            <div class="flex items-center space-x-2">
-                                                <span class="px-2 py-1 bg-success text-success-foreground text-xs rounded">已完成</span>
-                                                <span class="text-xs text-muted-foreground">2天</span>
-                                            </div>
-                                        </div>
-                                        <div class="flex items-center justify-between p-2 bg-muted rounded">
-                                            <div class="flex items-center space-x-2">
-                                                <input type="checkbox" class="requirement-checkbox" data-requirement-id="req-frontend-2" data-requirement-name="移动端交互优化" data-workload="3天" onchange="updateSelectedCount()">
-                                                <span class="text-sm">移动端交互优化</span>
-                                            </div>
-                                            <div class="flex items-center space-x-2">
-                                                <span class="px-2 py-1 bg-warning text-warning-foreground text-xs rounded">进行中</span>
-                                                <span class="text-xs text-muted-foreground">3天</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- 进度条 -->
+                                <!-- 需求详情 -->
                                 <div class="mb-3">
-                                    <div class="flex justify-between text-xs text-muted-foreground mb-1">
-                                        <span>整体进度</span>
-                                        <span>60%</span>
-                                    </div>
-                                    <div class="w-full bg-muted rounded-full h-2">
-                                        <div class="bg-primary h-2 rounded-full" style="width: 60%"></div>
-                                    </div>
+                                    <span class="text-xs text-muted-foreground">预估工时:</span>
+                                    <span class="text-sm ml-2">3天</span>
+                                    <span class="text-xs text-muted-foreground ml-4">负责人:</span>
+                                    <span class="text-sm ml-2">张开发</span>
                                 </div>
 
                                 <!-- 操作按钮 -->
-                                <div class="flex space-x-2">
-                                    <button class="px-3 py-1.5 bg-primary text-primary-foreground rounded text-sm hover:bg-gray-800">
-                                        更新进度
-                                    </button>
-                                    <button class="px-3 py-1.5 border border-border rounded text-sm hover:bg-accent">
-                                        查看详情
-                                    </button>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-xs text-muted-foreground">进度:</span>
+                                        <div class="w-24 bg-muted rounded-full h-2">
+                                            <div class="bg-warning h-2 rounded-full" style="width: 60%"></div>
+                                        </div>
+                                        <span class="text-xs">60%</span>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button class="px-3 py-1.5 border border-border rounded text-sm hover:bg-accent">
+                                            查看详情
+                                        </button>
+                                        <button class="px-3 py-1.5 bg-primary text-primary-foreground rounded text-sm hover:bg-gray-800">
+                                            更新进度
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- 待开发的任务 -->
+                            <!-- 中优先级需求 -->
                             <div class="border border-border rounded-lg p-4">
                                 <div class="flex items-center justify-between mb-3">
                                     <div class="flex items-center space-x-3">
-                                        <h3 class="font-medium text-base">支付模块开发任务</h3>
+                                        <h3 class="font-medium text-base">响应式布局优化</h3>
+                                        <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">📱 移动应用</span>
+                                        <span class="px-2 py-1 bg-warning text-warning-foreground text-xs rounded">🟡 中优先级</span>
                                         <span class="px-2 py-1 bg-muted text-muted-foreground text-xs rounded">待开发</span>
-                                        <span class="px-2 py-1 bg-muted text-muted-foreground text-xs rounded">🔴 高优先级</span>
                                     </div>
                                     <div class="text-xs text-muted-foreground">
-                                        分配时间: 2024-01-20
+                                        创建时间: 2024-01-20 16:45
                                     </div>
                                 </div>
-                                <p class="text-sm text-muted-foreground mb-3">负责微信支付和支付宝支付的集成开发</p>
+                                <p class="text-sm text-muted-foreground mb-3">优化页面布局，适配移动端屏幕，提升用户体验</p>
 
-                                <!-- 包含的研发需求 -->
-                                <div class="space-y-2 mb-3">
-                                    <h4 class="text-sm font-medium">包含需求:</h4>
-                                    <div class="space-y-1">
-                                        <div class="flex items-center justify-between p-2 bg-muted rounded">
-                                            <div class="flex items-center space-x-2">
-                                                <input type="checkbox" class="requirement-checkbox" data-requirement-id="req-payment-1" data-requirement-name="微信支付集成" data-workload="3天" onchange="updateSelectedCount()">
-                                                <span class="text-sm">微信支付集成</span>
-                                            </div>
-                                            <div class="flex items-center space-x-2">
-                                                <span class="px-2 py-1 bg-muted text-muted-foreground text-xs rounded">待开发</span>
-                                                <span class="text-xs text-muted-foreground">3天</span>
-                                            </div>
-                                        </div>
-                                        <div class="flex items-center justify-between p-2 bg-muted rounded">
-                                            <div class="flex items-center space-x-2">
-                                                <input type="checkbox" class="requirement-checkbox" data-requirement-id="req-payment-2" data-requirement-name="支付宝支付集成" data-workload="3天" onchange="updateSelectedCount()">
-                                                <span class="text-sm">支付宝支付集成</span>
-                                            </div>
-                                            <div class="flex items-center space-x-2">
-                                                <span class="px-2 py-1 bg-muted text-muted-foreground text-xs rounded">待开发</span>
-                                                <span class="text-xs text-muted-foreground">3天</span>
-                                            </div>
-                                        </div>
-                                        <div class="flex items-center justify-between p-2 bg-muted rounded">
-                                            <div class="flex items-center space-x-2">
-                                                <input type="checkbox" class="requirement-checkbox" data-requirement-id="req-payment-3" data-requirement-name="银联支付集成" data-workload="4天" onchange="updateSelectedCount()">
-                                                <span class="text-sm">银联支付集成</span>
-                                            </div>
-                                            <div class="flex items-center space-x-2">
-                                                <span class="px-2 py-1 bg-muted text-muted-foreground text-xs rounded">待开发</span>
-                                                <span class="text-xs text-muted-foreground">4天</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- 进度条 -->
+                                <!-- 需求详情 -->
                                 <div class="mb-3">
-                                    <div class="flex justify-between text-xs text-muted-foreground mb-1">
-                                        <span>整体进度</span>
-                                        <span>0%</span>
-                                    </div>
-                                    <div class="w-full bg-muted rounded-full h-2">
-                                        <div class="bg-muted h-2 rounded-full" style="width: 0%"></div>
-                                    </div>
+                                    <span class="text-xs text-muted-foreground">预估工时:</span>
+                                    <span class="text-sm ml-2">2天</span>
+                                    <span class="text-xs text-muted-foreground ml-4">负责人:</span>
+                                    <span class="text-sm ml-2">李前端</span>
                                 </div>
 
                                 <!-- 操作按钮 -->
-                                <div class="flex space-x-2">
-                                    <button class="px-3 py-1.5 border border-border rounded text-sm hover:bg-accent">
-                                        查看详情
-                                    </button>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-xs text-muted-foreground">进度:</span>
+                                        <div class="w-24 bg-muted rounded-full h-2">
+                                            <div class="bg-muted h-2 rounded-full" style="width: 0%"></div>
+                                        </div>
+                                        <span class="text-xs">0%</span>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button class="px-3 py-1.5 border border-border rounded text-sm hover:bg-accent">
+                                            查看详情
+                                        </button>
+                                        <button class="px-3 py-1.5 bg-primary text-primary-foreground rounded text-sm hover:bg-gray-800">
+                                            开始开发
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
+
+                            <!-- 已完成需求 -->
+                            <div class="border border-border rounded-lg p-4 bg-green-50">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center space-x-3">
+                                        <h3 class="font-medium text-base">数据库连接池优化</h3>
+                                        <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">📊 数据分析平台</span>
+                                        <span class="px-2 py-1 bg-muted text-muted-foreground text-xs rounded">🟢 低优先级</span>
+                                        <span class="px-2 py-1 bg-success text-success-foreground text-xs rounded">已完成</span>
+                                    </div>
+                                    <div class="text-xs text-muted-foreground">
+                                        完成时间: 2024-01-19 14:20
+                                    </div>
+                                </div>
+                                <p class="text-sm text-muted-foreground mb-3">优化数据库连接池配置，提升系统性能和稳定性</p>
+
+                                <!-- 完成详情 -->
+                                <div class="mb-3">
+                                    <span class="text-xs text-muted-foreground">实际工时:</span>
+                                    <span class="text-sm ml-2">1.5天</span>
+                                    <span class="text-xs text-muted-foreground ml-4">完成人:</span>
+                                    <span class="text-sm ml-2">王后端</span>
+                                </div>
+
+                                <!-- 操作按钮 -->
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-xs text-muted-foreground">进度:</span>
+                                        <div class="w-24 bg-muted rounded-full h-2">
+                                            <div class="bg-success h-2 rounded-full" style="width: 100%"></div>
+                                        </div>
+                                        <span class="text-xs">100%</span>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button class="px-3 py-1.5 border border-border rounded text-sm hover:bg-accent">
+                                            查看详情
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
                         </div>
                     </div>
+
+
+
 
                     <!-- 开发任务界面 -->
                     <div class="hidden" data-tab-content="development-tasks">
@@ -1228,6 +1280,31 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // 二级菜单交互功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 处理二级菜单展开/收起
+            const navToggles = document.querySelectorAll('.nav-toggle');
+
+            navToggles.forEach(toggle => {
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    const targetId = this.dataset.target;
+                    const submenu = document.getElementById(targetId);
+                    const chevron = this.querySelector('.chevron-icon');
+
+                    if (submenu) {
+                        // 切换展开状态
+                        submenu.classList.toggle('expanded');
+                        submenu.classList.toggle('hidden');
+                        chevron.classList.toggle('rotated');
+                    }
+                });
+            });
+        });
+    </script>
 
     <!-- 引入Monaco Editor -->
     <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
