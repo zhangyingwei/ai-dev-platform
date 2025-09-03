@@ -119,7 +119,7 @@ class AIAgentManager {
      */
     init() {
         this.bindEvents();
-        this.updateAgentCards();
+        this.renderAgentCards();
     }
 
     /**
@@ -183,6 +183,40 @@ class AIAgentManager {
 
         document.getElementById('import-file-input').addEventListener('change', (e) => {
             this.handleImportFile(e);
+        });
+
+        // 新增 Agent 功能
+        document.getElementById('add-agent').addEventListener('click', () => {
+            this.openAddAgentModal();
+        });
+
+        document.getElementById('close-add-modal').addEventListener('click', () => {
+            this.closeAddAgentModal();
+        });
+
+        document.getElementById('cancel-add').addEventListener('click', () => {
+            this.closeAddAgentModal();
+        });
+
+        // 点击新增模态背景关闭
+        document.getElementById('add-agent-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'add-agent-modal') {
+                this.closeAddAgentModal();
+            }
+        });
+
+        // 新增表单提交
+        document.getElementById('add-agent-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.createNewAgent();
+        });
+
+        // 图标预设按钮
+        document.querySelectorAll('.icon-preset').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const icon = e.target.dataset.icon;
+                document.getElementById('new-agent-icon').value = icon;
+            });
         });
     }
 
@@ -299,7 +333,7 @@ class AIAgentManager {
             this.saveConfig();
 
             // 更新界面
-            this.updateAgentCards();
+            this.renderAgentCards();
 
             // 显示成功提示
             this.showToast('配置已保存', 'success');
@@ -460,7 +494,7 @@ class AIAgentManager {
 
                 // 保存并更新界面
                 this.saveConfig();
-                this.updateAgentCards();
+                this.renderAgentCards();
                 
                 this.showToast('配置导入成功', 'success');
 
@@ -536,6 +570,213 @@ class AIAgentManager {
             return atob(encryptedKey);
         } catch (error) {
             return '';
+        }
+    }
+
+    /**
+     * 打开新增 Agent 模态弹窗
+     */
+    openAddAgentModal() {
+        // 重置表单
+        document.getElementById('add-agent-form').reset();
+        document.getElementById('new-agent-icon').value = '🤖';
+
+        // 显示模态弹窗
+        document.getElementById('add-agent-modal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    /**
+     * 关闭新增 Agent 模态弹窗
+     */
+    closeAddAgentModal() {
+        document.getElementById('add-agent-modal').classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+
+    /**
+     * 创建新的 Agent
+     */
+    createNewAgent() {
+        try {
+            // 获取表单数据
+            const name = document.getElementById('new-agent-name').value.trim();
+            const description = document.getElementById('new-agent-description').value.trim();
+            const icon = document.getElementById('new-agent-icon').value.trim() || '🤖';
+            const iconBg = document.getElementById('new-agent-icon-bg').value;
+            const enabled = document.getElementById('new-agent-enabled').checked;
+
+            // 验证必填字段
+            if (!name || !description) {
+                this.showToast('请填写所有必填字段', 'warning');
+                return;
+            }
+
+            // 生成唯一ID
+            const agentId = this.generateAgentId(name);
+
+            // 检查ID是否已存在
+            if (this.agents[agentId]) {
+                this.showToast('Agent 名称已存在，请使用不同的名称', 'warning');
+                return;
+            }
+
+            // 创建新的 Agent 配置
+            const newAgent = {
+                id: agentId,
+                name: name,
+                description: description,
+                icon: icon,
+                iconBg: iconBg,
+                enabled: enabled,
+                apiKey: '',
+                customParams: {
+                    temperature: 0.7,
+                    max_tokens: 1000
+                },
+                lastUpdated: Date.now(),
+                isCustom: true // 标记为自定义Agent
+            };
+
+            // 添加到agents列表
+            this.agents[agentId] = newAgent;
+
+            // 保存配置
+            this.saveConfig();
+
+            // 重新渲染界面
+            this.renderAgentCards();
+
+            // 显示成功提示
+            this.showToast(`Agent "${name}" 创建成功`, 'success');
+
+            // 关闭模态弹窗
+            this.closeAddAgentModal();
+
+        } catch (error) {
+            console.error('创建 Agent 失败:', error);
+            this.showToast('创建 Agent 失败，请重试', 'error');
+        }
+    }
+
+    /**
+     * 生成 Agent ID
+     */
+    generateAgentId(name) {
+        // 将名称转换为小写，替换空格和特殊字符为连字符
+        return name.toLowerCase()
+                  .replace(/[^a-z0-9\u4e00-\u9fa5]/g, '-')
+                  .replace(/-+/g, '-')
+                  .replace(/^-|-$/g, '');
+    }
+
+    /**
+     * 重新渲染所有 Agent 卡片
+     */
+    renderAgentCards() {
+        const grid = document.getElementById('agents-grid');
+        grid.innerHTML = '';
+
+        Object.values(this.agents).forEach(agent => {
+            const card = this.createAgentCard(agent);
+            grid.appendChild(card);
+        });
+
+        // 重新绑定事件
+        this.bindCardEvents();
+    }
+
+    /**
+     * 创建 Agent 卡片元素
+     */
+    createAgentCard(agent) {
+        const card = document.createElement('div');
+        card.className = 'agent-card bg-card border border-border rounded-lg p-4 card-hover';
+        card.dataset.agentId = agent.id;
+
+        // 确定状态样式
+        let statusClass, statusText;
+        if (agent.enabled && agent.apiKey) {
+            statusClass = 'px-2 py-1 bg-success text-success-foreground text-xs rounded-full font-medium';
+            statusText = '已启用';
+        } else if (!agent.enabled) {
+            statusClass = 'px-2 py-1 bg-destructive text-destructive-foreground text-xs rounded-full font-medium';
+            statusText = '已禁用';
+        } else {
+            statusClass = 'px-2 py-1 bg-muted text-muted-foreground text-xs rounded-full font-medium';
+            statusText = '未配置';
+        }
+
+        card.innerHTML = `
+            <div class="flex items-start justify-between mb-3">
+                <div class="w-12 h-12 bg-gradient-to-br ${agent.iconBg} rounded-lg flex items-center justify-center shadow-sm">
+                    <span class="text-xl">${agent.icon}</span>
+                </div>
+                <div class="status-indicator">
+                    <span class="${statusClass}">${statusText}</span>
+                </div>
+            </div>
+            <h3 class="text-lg font-semibold mb-2 text-foreground">${agent.name}</h3>
+            <p class="text-muted-foreground text-sm mb-4 line-clamp-2">${agent.description}</p>
+            <div class="flex justify-between items-center">
+                <div class="flex space-x-2">
+                    ${agent.isCustom ? `
+                        <button class="delete-btn px-2 py-1 bg-destructive hover:bg-red-600 text-destructive-foreground rounded text-xs font-medium transition-colors" title="删除">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" clip-rule="evenodd"/>
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                    ` : ''}
+                </div>
+                <button class="config-btn px-3 py-1.5 bg-primary hover:bg-gray-800 text-primary-foreground rounded-md text-sm font-medium transition-all transform hover:-translate-y-1 hover:shadow-md">
+                    配置
+                </button>
+            </div>
+        `;
+
+        return card;
+    }
+
+    /**
+     * 重新绑定卡片事件
+     */
+    bindCardEvents() {
+        // 配置按钮事件
+        document.querySelectorAll('.config-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const agentCard = e.target.closest('.agent-card');
+                const agentId = agentCard.dataset.agentId;
+                this.openConfigModal(agentId);
+            });
+        });
+
+        // 删除按钮事件
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const agentCard = e.target.closest('.agent-card');
+                const agentId = agentCard.dataset.agentId;
+                this.deleteAgent(agentId);
+            });
+        });
+    }
+
+    /**
+     * 删除自定义 Agent
+     */
+    deleteAgent(agentId) {
+        const agent = this.agents[agentId];
+        if (!agent || !agent.isCustom) {
+            this.showToast('只能删除自定义 Agent', 'warning');
+            return;
+        }
+
+        if (confirm(`确定要删除 "${agent.name}" 吗？此操作不可撤销。`)) {
+            delete this.agents[agentId];
+            this.saveConfig();
+            this.renderAgentCards();
+            this.showToast(`Agent "${agent.name}" 已删除`, 'success');
         }
     }
 
