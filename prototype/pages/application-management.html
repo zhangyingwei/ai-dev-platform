@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>应用服务管理 - AI开发平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        // 主色调 - 黑白极简风格
+                        primary: '#000000',
+                        'primary-foreground': '#ffffff',
+                        secondary: '#f8f9fa',
+                        'secondary-foreground': '#1f2937',
+                        background: '#ffffff',
+                        card: '#ffffff',
+                        popover: '#ffffff',
+                        muted: '#f1f5f9',
+                        'muted-foreground': '#64748b',
+                        accent: '#f8fafc',
+                        'accent-foreground': '#0f172a',
+                        foreground: '#0f172a',
+                        border: '#e2e8f0',
+                        input: '#e2e8f0',
+                        ring: '#94a3b8',
+                        success: '#16a34a',
+                        'success-foreground': '#ffffff',
+                        warning: '#ea580c',
+                        'warning-foreground': '#ffffff',
+                        destructive: '#dc2626',
+                        'destructive-foreground': '#ffffff'
+                    },
+                    fontFamily: {
+                        'sans': ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif']
+                    },
+                    fontSize: {
+                        'xs': '10px',
+                        'sm': '12px',
+                        'base': '14px',
+                        'lg': '16px'
+                    },
+                    borderRadius: {
+                        'sm': '2px',
+                        'base': '6px',
+                        'lg': '8px'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .nav-item {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .nav-item:hover {
+            transform: translateX(2px);
+        }
+        .card-hover {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* 二级菜单样式 */
+        .nav-toggle {
+            cursor: pointer;
+        }
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .submenu.expanded {
+            max-height: 200px;
+        }
+        .chevron-icon {
+            transition: transform 0.2s ease-out;
+        }
+        .chevron-icon.rotated {
+            transform: rotate(90deg);
+        }
+
+        /* 状态指示器 */
+        .status-running { @apply bg-success text-success-foreground; }
+        .status-stopped { @apply bg-destructive text-destructive-foreground; }
+        .status-error { @apply bg-warning text-warning-foreground; }
+        .status-unknown { @apply bg-muted text-muted-foreground; }
+
+        /* Tab 样式 */
+        .tab-active {
+            @apply border-b-2 border-primary text-primary;
+        }
+        .tab-inactive {
+            @apply text-muted-foreground hover:text-foreground;
+        }
+    </style>
+</head>
+<body class="bg-background text-foreground">
+    <div class="flex h-screen">
+        <!-- 侧边栏 -->
+        <div class="w-64 bg-card border-r border-border flex flex-col">
+            <!-- Logo -->
+            <div class="p-4 border-b border-border">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                        <span class="text-primary-foreground font-bold text-sm">AI</span>
+                    </div>
+                    <span class="font-semibold text-lg">开发平台</span>
+                </div>
+            </div>
+
+            <!-- 导航菜单 -->
+            <nav class="flex-1 p-3 space-y-1">
+                <div class="mb-3">
+                    <p class="text-xs font-medium text-muted-foreground uppercase tracking-wider px-2 py-1">主要功能</p>
+                </div>
+                <a href="../index.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium">工作台</span>
+                </a>
+                <a href="requirement-management.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium">需求管理</span>
+                </a>
+                <a href="development-management.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium">开发管理</span>
+                </a>
+                <a href="ai-plugins.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium">AI Agent 管理</span>
+                </a>
+
+                <div class="mt-4 mb-3">
+                    <p class="text-xs font-medium text-muted-foreground uppercase tracking-wider px-2 py-1">管理功能</p>
+                </div>
+                <a href="project-management.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+                            <path fill-rule="evenodd" d="M4 5a2 2 0 012-2v1a2 2 0 00-2 2v6a2 2 0 002 2h8a2 2 0 002-2V6a2 2 0 00-2-2V3a2 2 0 012-2v1a2 2 0 00-2 2H6a2 2 0 00-2 2z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium">项目管理</span>
+                </a>
+                <a href="monitoring.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium">监控运维</span>
+                </a>
+                
+                <!-- 开发资源管理 - 二级菜单 -->
+                <div class="nav-group">
+                    <button class="nav-item nav-toggle flex items-center justify-between w-full px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground" data-target="resource-submenu">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-4 h-4 flex items-center justify-center">
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z" clip-rule="evenodd"/>
+                                    <path d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V9a1 1 0 00-1-1h-1v-1z"/>
+                                </svg>
+                            </div>
+                            <span class="text-sm font-medium">开发资源管理</span>
+                        </div>
+                        <svg class="w-4 h-4 transition-transform duration-200 chevron-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                    </button>
+                    <div id="resource-submenu" class="submenu hidden ml-6 mt-1 space-y-1">
+                        <a href="database-management.html" class="nav-item flex items-center space-x-2 px-2 py-1.5 rounded-md hover:bg-accent hover:text-accent-foreground text-sm">
+                            <div class="w-3 h-3 flex items-center justify-center">
+                                <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 16a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/>
+                                </svg>
+                            </div>
+                            <span class="font-medium">数据库管理</span>
+                        </a>
+                        <a href="application-management.html" class="nav-item active flex items-center space-x-2 px-2 py-1.5 rounded-md bg-accent text-accent-foreground text-sm">
+                            <div class="w-3 h-3 flex items-center justify-center">
+                                <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zm2 0v8h12V6H4z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <span class="font-medium">应用服务管理</span>
+                        </a>
+                        <a href="code-management.html" class="nav-item flex items-center space-x-2 px-2 py-1.5 rounded-md hover:bg-accent hover:text-accent-foreground text-sm">
+                            <div class="w-3 h-3 flex items-center justify-center">
+                                <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <span class="font-medium">代码管理</span>
+                        </a>
+                        <a href="server-management.html" class="nav-item flex items-center space-x-2 px-2 py-1.5 rounded-md hover:bg-accent hover:text-accent-foreground text-sm">
+                            <div class="w-3 h-3 flex items-center justify-center">
+                                <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <span class="font-medium">服务器管理</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <a href="system-management.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium">系统管理</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- 主内容区域 -->
+        <div class="flex-1 flex flex-col">
+            <!-- 顶部导航栏 -->
+            <header class="bg-card border-b border-border px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2 text-sm text-muted-foreground">
+                        <span>首页</span>
+                        <span>/</span>
+                        <span>开发资源管理</span>
+                        <span>/</span>
+                        <span class="text-foreground">应用服务管理</span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button class="p-2 hover:bg-accent rounded-md">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                        <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                            <span class="text-primary-foreground text-sm font-semibold">张</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 页面内容 -->
+            <main class="flex-1 overflow-auto p-6">
+                <div class="max-w-7xl mx-auto">
+                    <!-- 页面头部 -->
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h1 class="text-xl font-bold text-foreground mb-2">应用服务管理</h1>
+                            <p class="text-sm text-muted-foreground">Docker集群管理和应用部署平台</p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <button id="deploy-app" class="px-4 py-2 bg-success hover:bg-green-600 text-success-foreground rounded-lg text-sm font-medium transition-colors">
+                                <svg class="w-4 h-4 inline mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+                                </svg>
+                                部署应用
+                            </button>
+                            <button id="add-node" class="px-4 py-2 bg-primary hover:bg-gray-800 text-primary-foreground rounded-lg text-sm font-medium transition-colors">
+                                <svg class="w-4 h-4 inline mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                添加节点
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Tab 导航 -->
+                    <div class="border-b border-border mb-6">
+                        <nav class="flex space-x-8">
+                            <button class="tab-button tab-active py-2 px-1 text-sm font-medium transition-colors" data-tab="cluster">
+                                集群管理
+                            </button>
+                            <button class="tab-button tab-inactive py-2 px-1 text-sm font-medium transition-colors" data-tab="applications">
+                                应用管理
+                            </button>
+                            <button class="tab-button tab-inactive py-2 px-1 text-sm font-medium transition-colors" data-tab="containers">
+                                容器管理
+                            </button>
+                            <button class="tab-button tab-inactive py-2 px-1 text-sm font-medium transition-colors" data-tab="templates">
+                                应用模板
+                            </button>
+                        </nav>
+                    </div>
+
+                    <!-- Tab 内容 -->
+                    <div id="tab-content">
+                        <!-- 集群管理 Tab -->
+                        <div id="cluster-tab" class="tab-content">
+                            <!-- 集群概览 -->
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                                <div class="bg-card border border-border rounded-lg p-4">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm text-muted-foreground">总节点数</p>
+                                            <p class="text-lg font-bold">5</p>
+                                        </div>
+                                        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                            <span class="text-xl">🖥️</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-card border border-border rounded-lg p-4">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm text-muted-foreground">运行中</p>
+                                            <p class="text-lg font-bold text-success">4</p>
+                                        </div>
+                                        <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                            <span class="text-xl">✅</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-card border border-border rounded-lg p-4">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm text-muted-foreground">离线节点</p>
+                                            <p class="text-lg font-bold text-destructive">1</p>
+                                        </div>
+                                        <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                                            <span class="text-xl">❌</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-card border border-border rounded-lg p-4">
+                                    <div class="flex items-center justify-between">
+                                        <div>
+                                            <p class="text-sm text-muted-foreground">总容器数</p>
+                                            <p class="text-lg font-bold">23</p>
+                                        </div>
+                                        <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                                            <span class="text-xl">📦</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 节点列表 -->
+                            <div class="bg-card border border-border rounded-lg">
+                                <div class="p-4 border-b border-border">
+                                    <h2 class="text-lg font-semibold">集群节点</h2>
+                                </div>
+                                <div class="overflow-x-auto">
+                                    <table class="w-full">
+                                        <thead class="bg-muted">
+                                            <tr>
+                                                <th class="px-4 py-3 text-left text-sm font-medium text-muted-foreground">节点名称</th>
+                                                <th class="px-4 py-3 text-left text-sm font-medium text-muted-foreground">IP地址</th>
+                                                <th class="px-4 py-3 text-left text-sm font-medium text-muted-foreground">角色</th>
+                                                <th class="px-4 py-3 text-left text-sm font-medium text-muted-foreground">状态</th>
+                                                <th class="px-4 py-3 text-left text-sm font-medium text-muted-foreground">CPU</th>
+                                                <th class="px-4 py-3 text-left text-sm font-medium text-muted-foreground">内存</th>
+                                                <th class="px-4 py-3 text-left text-sm font-medium text-muted-foreground">容器数</th>
+                                                <th class="px-4 py-3 text-left text-sm font-medium text-muted-foreground">操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-border">
+                                            <tr class="hover:bg-muted/50">
+                                                <td class="px-4 py-3">
+                                                    <div class="flex items-center space-x-3">
+                                                        <span class="text-lg">🖥️</span>
+                                                        <div>
+                                                            <p class="font-medium">master-node-01</p>
+                                                            <p class="text-sm text-muted-foreground">主节点</p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="px-4 py-3 text-sm font-mono">192.168.1.100</td>
+                                                <td class="px-4 py-3 text-sm">Manager</td>
+                                                <td class="px-4 py-3">
+                                                    <span class="px-2 py-1 bg-success text-success-foreground text-xs rounded-full">运行中</span>
+                                                </td>
+                                                <td class="px-4 py-3 text-sm">35%</td>
+                                                <td class="px-4 py-3 text-sm">45%</td>
+                                                <td class="px-4 py-3 text-sm">8</td>
+                                                <td class="px-4 py-3">
+                                                    <div class="flex items-center space-x-2">
+                                                        <button class="px-2 py-1 bg-primary hover:bg-gray-800 text-primary-foreground rounded text-xs">监控</button>
+                                                        <button class="px-2 py-1 bg-muted hover:bg-accent border border-border rounded text-xs">配置</button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // 应用服务管理系统
+        class ApplicationManager {
+            constructor() {
+                this.currentTab = 'cluster';
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.loadTabContent();
+            }
+
+            bindEvents() {
+                // Tab 切换
+                document.querySelectorAll('.tab-button').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const tab = e.target.dataset.tab;
+                        this.switchTab(tab);
+                    });
+                });
+
+                // 二级菜单功能
+                const navToggles = document.querySelectorAll('.nav-toggle');
+                navToggles.forEach(toggle => {
+                    toggle.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const targetId = this.dataset.target;
+                        const submenu = document.getElementById(targetId);
+                        const chevron = this.querySelector('.chevron-icon');
+                        
+                        if (submenu) {
+                            submenu.classList.toggle('expanded');
+                            submenu.classList.toggle('hidden');
+                            chevron.classList.toggle('rotated');
+                        }
+                    });
+                });
+            }
+
+            switchTab(tab) {
+                // 更新 tab 按钮状态
+                document.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('tab-active');
+                    btn.classList.add('tab-inactive');
+                });
+                
+                document.querySelector(`[data-tab="${tab}"]`).classList.remove('tab-inactive');
+                document.querySelector(`[data-tab="${tab}"]`).classList.add('tab-active');
+
+                this.currentTab = tab;
+                this.loadTabContent();
+            }
+
+            loadTabContent() {
+                const content = document.getElementById('tab-content');
+                
+                switch(this.currentTab) {
+                    case 'cluster':
+                        // 集群管理内容已经在HTML中
+                        break;
+                    case 'applications':
+                        this.loadApplicationsTab();
+                        break;
+                    case 'containers':
+                        this.loadContainersTab();
+                        break;
+                    case 'templates':
+                        this.loadTemplatesTab();
+                        break;
+                }
+            }
+
+            loadApplicationsTab() {
+                const content = document.getElementById('tab-content');
+                content.innerHTML = `
+                    <div id="applications-tab" class="tab-content">
+                        <!-- 应用统计 -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">总应用数</p>
+                                        <p class="text-lg font-bold">12</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">📱</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">运行中</p>
+                                        <p class="text-lg font-bold text-success">9</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">🟢</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">已停止</p>
+                                        <p class="text-lg font-bold text-warning">2</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">🟡</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">异常应用</p>
+                                        <p class="text-lg font-bold text-destructive">1</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">🔴</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 应用列表 -->
+                        <div class="bg-card border border-border rounded-lg">
+                            <div class="p-4 border-b border-border">
+                                <div class="flex items-center justify-between">
+                                    <h2 class="text-lg font-semibold">应用列表</h2>
+                                    <div class="flex items-center space-x-3">
+                                        <input type="text" placeholder="搜索应用..." class="px-3 py-1.5 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                                        <select class="px-3 py-1.5 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                                            <option>全部状态</option>
+                                            <option>运行中</option>
+                                            <option>已停止</option>
+                                            <option>异常</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+                                <div class="bg-muted/30 border border-border rounded-lg p-4 card-hover">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <div class="flex items-center space-x-3">
+                                            <span class="text-2xl">🐬</span>
+                                            <div>
+                                                <h3 class="font-semibold">MySQL 集群</h3>
+                                                <p class="text-sm text-muted-foreground">数据库服务</p>
+                                            </div>
+                                        </div>
+                                        <span class="px-2 py-1 bg-success text-success-foreground text-xs rounded-full">运行中</span>
+                                    </div>
+                                    <div class="space-y-2 text-sm">
+                                        <div class="flex justify-between">
+                                            <span class="text-muted-foreground">版本:</span>
+                                            <span>8.0.35</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-muted-foreground">实例数:</span>
+                                            <span>3</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-muted-foreground">CPU:</span>
+                                            <span>45%</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-2 mt-4">
+                                        <button class="flex-1 px-3 py-1.5 bg-primary hover:bg-gray-800 text-primary-foreground rounded text-xs">管理</button>
+                                        <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">日志</button>
+                                        <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">监控</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            loadContainersTab() {
+                const content = document.getElementById('tab-content');
+                content.innerHTML = `
+                    <div id="containers-tab" class="tab-content">
+                        <!-- 容器统计 -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">总容器数</p>
+                                        <p class="text-lg font-bold">23</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">📦</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">运行中</p>
+                                        <p class="text-lg font-bold text-success">18</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">▶️</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">已停止</p>
+                                        <p class="text-lg font-bold text-muted-foreground">4</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">⏹️</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">异常容器</p>
+                                        <p class="text-lg font-bold text-destructive">1</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">⚠️</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 容器列表 -->
+                        <div class="bg-card border border-border rounded-lg">
+                            <div class="p-4 border-b border-border">
+                                <div class="flex items-center justify-between">
+                                    <h2 class="text-lg font-semibold">容器列表</h2>
+                                    <div class="flex items-center space-x-3">
+                                        <input type="text" placeholder="搜索容器..." class="px-3 py-1.5 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                                        <select class="px-3 py-1.5 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                                            <option>全部节点</option>
+                                            <option>master-node-01</option>
+                                            <option>worker-node-01</option>
+                                            <option>worker-node-02</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead class="bg-muted">
+                                        <tr>
+                                            <th class="px-4 py-3 text-left text-sm font-medium text-muted-foreground">容器名称</th>
+                                            <th class="px-4 py-3 text-left text-sm font-medium text-muted-foreground">镜像</th>
+                                            <th class="px-4 py-3 text-left text-sm font-medium text-muted-foreground">状态</th>
+                                            <th class="px-4 py-3 text-left text-sm font-medium text-muted-foreground">节点</th>
+                                            <th class="px-4 py-3 text-left text-sm font-medium text-muted-foreground">CPU</th>
+                                            <th class="px-4 py-3 text-left text-sm font-medium text-muted-foreground">内存</th>
+                                            <th class="px-4 py-3 text-left text-sm font-medium text-muted-foreground">端口</th>
+                                            <th class="px-4 py-3 text-left text-sm font-medium text-muted-foreground">操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-border">
+                                        <tr class="hover:bg-muted/50">
+                                            <td class="px-4 py-3">
+                                                <div class="flex items-center space-x-3">
+                                                    <span class="text-lg">🐬</span>
+                                                    <div>
+                                                        <p class="font-medium">mysql-master</p>
+                                                        <p class="text-sm text-muted-foreground">mysql-cluster</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="px-4 py-3 text-sm font-mono">mysql:8.0.35</td>
+                                            <td class="px-4 py-3">
+                                                <span class="px-2 py-1 bg-success text-success-foreground text-xs rounded-full">运行中</span>
+                                            </td>
+                                            <td class="px-4 py-3 text-sm">master-node-01</td>
+                                            <td class="px-4 py-3 text-sm">25%</td>
+                                            <td class="px-4 py-3 text-sm">512MB</td>
+                                            <td class="px-4 py-3 text-sm">3306</td>
+                                            <td class="px-4 py-3">
+                                                <div class="flex items-center space-x-2">
+                                                    <button class="px-2 py-1 bg-primary hover:bg-gray-800 text-primary-foreground rounded text-xs">日志</button>
+                                                    <button class="px-2 py-1 bg-muted hover:bg-accent border border-border rounded text-xs">终端</button>
+                                                    <button class="px-2 py-1 bg-destructive hover:bg-red-600 text-destructive-foreground rounded text-xs">停止</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            loadTemplatesTab() {
+                const content = document.getElementById('tab-content');
+                content.innerHTML = `
+                    <div id="templates-tab" class="tab-content">
+                        <!-- 模板分类 -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">数据库模板</p>
+                                        <p class="text-lg font-bold">8</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">🗄️</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">Web应用</p>
+                                        <p class="text-lg font-bold">12</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">🌐</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">微服务</p>
+                                        <p class="text-lg font-bold">6</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">⚙️</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">监控工具</p>
+                                        <p class="text-lg font-bold">4</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">📊</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 应用模板库 -->
+                        <div class="bg-card border border-border rounded-lg">
+                            <div class="p-4 border-b border-border">
+                                <div class="flex items-center justify-between">
+                                    <h2 class="text-lg font-semibold">应用模板库</h2>
+                                    <div class="flex items-center space-x-3">
+                                        <input type="text" placeholder="搜索模板..." class="px-3 py-1.5 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                                        <select class="px-3 py-1.5 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                                            <option>全部分类</option>
+                                            <option>数据库</option>
+                                            <option>Web应用</option>
+                                            <option>微服务</option>
+                                            <option>监控工具</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4">
+                                <div class="bg-muted/30 border border-border rounded-lg p-4 card-hover">
+                                    <div class="flex items-center space-x-3 mb-3">
+                                        <span class="text-2xl">🐬</span>
+                                        <div>
+                                            <h3 class="font-semibold">MySQL 8.0</h3>
+                                            <p class="text-sm text-muted-foreground">关系型数据库</p>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-muted-foreground mb-3">高性能的开源关系型数据库管理系统，支持主从复制和集群部署。</p>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-xs text-muted-foreground">v8.0.35</span>
+                                        <button class="px-3 py-1.5 bg-primary hover:bg-gray-800 text-primary-foreground rounded text-xs">部署</button>
+                                    </div>
+                                </div>
+                                <div class="bg-muted/30 border border-border rounded-lg p-4 card-hover">
+                                    <div class="flex items-center space-x-3 mb-3">
+                                        <span class="text-2xl">🔴</span>
+                                        <div>
+                                            <h3 class="font-semibold">Redis 7.0</h3>
+                                            <p class="text-sm text-muted-foreground">内存数据库</p>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-muted-foreground mb-3">高性能的键值存储数据库，支持多种数据结构和持久化。</p>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-xs text-muted-foreground">v7.2.3</span>
+                                        <button class="px-3 py-1.5 bg-primary hover:bg-gray-800 text-primary-foreground rounded text-xs">部署</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // 初始化应用管理器
+        document.addEventListener('DOMContentLoaded', () => {
+            window.applicationManager = new ApplicationManager();
+
+            // 根据当前页面自动展开相应的二级菜单
+            const currentPath = window.location.pathname;
+            const resourcePages = [
+                'database-management.html',
+                'application-management.html',
+                'code-management.html',
+                'server-management.html'
+            ];
+
+            const isResourcePage = resourcePages.some(page => currentPath.includes(page));
+            if (isResourcePage) {
+                const resourceSubmenu = document.getElementById('resource-submenu');
+                const resourceChevron = document.querySelector('[data-target="resource-submenu"] .chevron-icon');
+
+                if (resourceSubmenu && resourceChevron) {
+                    resourceSubmenu.classList.add('expanded');
+                    resourceSubmenu.classList.remove('hidden');
+                    resourceChevron.classList.add('rotated');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

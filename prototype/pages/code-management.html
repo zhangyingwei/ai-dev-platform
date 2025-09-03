@@ -1,0 +1,2024 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>代码管理 - AI开发平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        // 主色调 - 黑白极简风格
+                        primary: '#000000',
+                        'primary-foreground': '#ffffff',
+                        secondary: '#f8f9fa',
+                        'secondary-foreground': '#1f2937',
+                        background: '#ffffff',
+                        card: '#ffffff',
+                        popover: '#ffffff',
+                        muted: '#f1f5f9',
+                        'muted-foreground': '#64748b',
+                        accent: '#f8fafc',
+                        'accent-foreground': '#0f172a',
+                        foreground: '#0f172a',
+                        border: '#e2e8f0',
+                        input: '#e2e8f0',
+                        ring: '#94a3b8',
+                        success: '#16a34a',
+                        'success-foreground': '#ffffff',
+                        warning: '#ea580c',
+                        'warning-foreground': '#ffffff',
+                        destructive: '#dc2626',
+                        'destructive-foreground': '#ffffff'
+                    },
+                    fontFamily: {
+                        'sans': ['-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
+                        'mono': ['SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', 'Courier New', 'monospace']
+                    },
+                    fontSize: {
+                        'xs': '10px',
+                        'sm': '12px',
+                        'base': '14px',
+                        'lg': '16px'
+                    },
+                    borderRadius: {
+                        'sm': '2px',
+                        'base': '6px',
+                        'lg': '8px'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .nav-item {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .nav-item:hover {
+            transform: translateX(2px);
+        }
+        .card-hover {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        /* 二级菜单样式 */
+        .nav-toggle {
+            cursor: pointer;
+        }
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .submenu.expanded {
+            max-height: 200px;
+        }
+        .chevron-icon {
+            transition: transform 0.2s ease-out;
+        }
+        .chevron-icon.rotated {
+            transform: rotate(90deg);
+        }
+
+        /* 代码样式 */
+        .code-block {
+            @apply bg-muted font-mono text-sm p-4 rounded-lg overflow-x-auto;
+        }
+        .file-tree {
+            @apply text-sm;
+        }
+        .file-tree .folder {
+            @apply cursor-pointer hover:bg-accent px-2 py-1 rounded;
+        }
+        .file-tree .file {
+            @apply cursor-pointer hover:bg-accent px-2 py-1 rounded text-muted-foreground;
+        }
+
+        /* 状态标签 */
+        .status-public { @apply bg-success text-success-foreground; }
+        .status-private { @apply bg-warning text-warning-foreground; }
+        .status-archived { @apply bg-muted text-muted-foreground; }
+
+        /* Tab 样式 */
+        .tab-active {
+            @apply border-b-2 border-primary text-primary;
+        }
+        .tab-inactive {
+            @apply text-muted-foreground hover:text-foreground;
+        }
+    </style>
+</head>
+<body class="bg-background text-foreground">
+    <div class="flex h-screen">
+        <!-- 侧边栏 -->
+        <div class="w-64 bg-card border-r border-border flex flex-col">
+            <!-- Logo -->
+            <div class="p-4 border-b border-border">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                        <span class="text-primary-foreground font-bold text-sm">AI</span>
+                    </div>
+                    <span class="font-semibold text-lg">开发平台</span>
+                </div>
+            </div>
+
+            <!-- 导航菜单 -->
+            <nav class="flex-1 p-3 space-y-1">
+                <div class="mb-3">
+                    <p class="text-xs font-medium text-muted-foreground uppercase tracking-wider px-2 py-1">主要功能</p>
+                </div>
+                <a href="../index.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium">工作台</span>
+                </a>
+                <a href="requirement-management.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium">需求管理</span>
+                </a>
+                <a href="development-management.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium">开发管理</span>
+                </a>
+                <a href="ai-plugins.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium">AI Agent 管理</span>
+                </a>
+
+                <div class="mt-4 mb-3">
+                    <p class="text-xs font-medium text-muted-foreground uppercase tracking-wider px-2 py-1">管理功能</p>
+                </div>
+                <a href="project-management.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+                            <path fill-rule="evenodd" d="M4 5a2 2 0 012-2v1a2 2 0 00-2 2v6a2 2 0 002 2h8a2 2 0 002-2V6a2 2 0 00-2-2V3a2 2 0 012-2v1a2 2 0 00-2 2H6a2 2 0 00-2 2z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium">项目管理</span>
+                </a>
+                <a href="monitoring.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium">监控运维</span>
+                </a>
+                
+                <!-- 开发资源管理 - 二级菜单 -->
+                <div class="nav-group">
+                    <button class="nav-item nav-toggle flex items-center justify-between w-full px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground" data-target="resource-submenu">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-4 h-4 flex items-center justify-center">
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z" clip-rule="evenodd"/>
+                                    <path d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V9a1 1 0 00-1-1h-1v-1z"/>
+                                </svg>
+                            </div>
+                            <span class="text-sm font-medium">开发资源管理</span>
+                        </div>
+                        <svg class="w-4 h-4 transition-transform duration-200 chevron-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                    </button>
+                    <div id="resource-submenu" class="submenu hidden ml-6 mt-1 space-y-1">
+                        <a href="database-management.html" class="nav-item flex items-center space-x-2 px-2 py-1.5 rounded-md hover:bg-accent hover:text-accent-foreground text-sm">
+                            <div class="w-3 h-3 flex items-center justify-center">
+                                <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 16a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/>
+                                </svg>
+                            </div>
+                            <span class="font-medium">数据库管理</span>
+                        </a>
+                        <a href="application-management.html" class="nav-item flex items-center space-x-2 px-2 py-1.5 rounded-md hover:bg-accent hover:text-accent-foreground text-sm">
+                            <div class="w-3 h-3 flex items-center justify-center">
+                                <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zm2 0v8h12V6H4z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <span class="font-medium">应用服务管理</span>
+                        </a>
+                        <a href="code-management.html" class="nav-item active flex items-center space-x-2 px-2 py-1.5 rounded-md bg-accent text-accent-foreground text-sm">
+                            <div class="w-3 h-3 flex items-center justify-center">
+                                <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <span class="font-medium">代码管理</span>
+                        </a>
+                        <a href="server-management.html" class="nav-item flex items-center space-x-2 px-2 py-1.5 rounded-md hover:bg-accent hover:text-accent-foreground text-sm">
+                            <div class="w-3 h-3 flex items-center justify-center">
+                                <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <span class="font-medium">服务器管理</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <a href="system-management.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium">系统管理</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- 主内容区域 -->
+        <div class="flex-1 flex flex-col">
+            <!-- 顶部导航栏 -->
+            <header class="bg-card border-b border-border px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2 text-sm text-muted-foreground">
+                        <span>首页</span>
+                        <span>/</span>
+                        <span>开发资源管理</span>
+                        <span>/</span>
+                        <span class="text-foreground">代码管理</span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button class="p-2 hover:bg-accent rounded-md">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                        <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                            <span class="text-primary-foreground text-sm font-semibold">张</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 页面内容 -->
+            <main class="flex-1 overflow-auto p-6">
+                <div class="max-w-7xl mx-auto">
+                    <!-- 页面头部 -->
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h1 class="text-xl font-bold text-foreground mb-2">代码管理</h1>
+                            <p class="text-sm text-muted-foreground">Git仓库托管和版本控制服务</p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <button id="create-repo" class="px-4 py-2 bg-success hover:bg-green-600 text-success-foreground rounded-lg text-sm font-medium transition-colors">
+                                <svg class="w-4 h-4 inline mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
+                                </svg>
+                                新建仓库
+                            </button>
+                            <button id="import-repo" class="px-4 py-2 bg-primary hover:bg-gray-800 text-primary-foreground rounded-lg text-sm font-medium transition-colors">
+                                <svg class="w-4 h-4 inline mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                </svg>
+                                导入仓库
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 仓库统计 -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-card border border-border rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-muted-foreground">总仓库数</p>
+                                    <p class="text-lg font-bold">15</p>
+                                </div>
+                                <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                    <span class="text-xl">📁</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-card border border-border rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-muted-foreground">公开仓库</p>
+                                    <p class="text-lg font-bold">8</p>
+                                </div>
+                                <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                    <span class="text-xl">🌐</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-card border border-border rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-muted-foreground">私有仓库</p>
+                                    <p class="text-lg font-bold">7</p>
+                                </div>
+                                <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                                    <span class="text-xl">🔒</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-card border border-border rounded-lg p-4">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm text-muted-foreground">今日提交</p>
+                                    <p class="text-lg font-bold">23</p>
+                                </div>
+                                <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                                    <span class="text-xl">📝</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab 导航 -->
+                    <div class="border-b border-border mb-6">
+                        <nav class="flex space-x-8">
+                            <button class="tab-button tab-active py-2 px-1 text-sm font-medium transition-colors" data-tab="repositories">
+                                仓库列表
+                            </button>
+                            <button class="tab-button tab-inactive py-2 px-1 text-sm font-medium transition-colors" data-tab="organizations">
+                                组织管理
+                            </button>
+                            <button class="tab-button tab-inactive py-2 px-1 text-sm font-medium transition-colors" data-tab="activity">
+                                全局动态
+                            </button>
+                            <button class="tab-button tab-inactive py-2 px-1 text-sm font-medium transition-colors" data-tab="settings">
+                                设置
+                            </button>
+                        </nav>
+                    </div>
+
+                    <!-- Tab 内容 -->
+                    <div id="tab-content">
+                        <!-- 仓库列表 Tab -->
+                        <div id="repositories-tab" class="tab-content">
+                            <div class="bg-card border border-border rounded-lg">
+                                <div class="p-4 border-b border-border">
+                                    <div class="flex items-center justify-between">
+                                        <h2 class="text-lg font-semibold">我的仓库</h2>
+                                        <div class="flex items-center space-x-3">
+                                            <input type="text" placeholder="搜索仓库..." class="px-3 py-1.5 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                                            <select class="px-3 py-1.5 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                                                <option>全部类型</option>
+                                                <option>公开仓库</option>
+                                                <option>私有仓库</option>
+                                                <option>已归档</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="divide-y divide-border">
+                                    <div class="p-4 hover:bg-muted/50 cursor-pointer">
+                                        <div class="flex items-start justify-between">
+                                            <div class="flex-1">
+                                                <div class="flex items-center space-x-3 mb-2">
+                                                    <h3 class="font-semibold text-primary hover:underline">ai-dev-platform</h3>
+                                                    <span class="px-2 py-1 bg-success text-success-foreground text-xs rounded-full">公开</span>
+                                                </div>
+                                                <p class="text-sm text-muted-foreground mb-3">AI开发平台 - 集成多种AI工具的开发环境</p>
+                                                <div class="flex items-center space-x-4 text-sm text-muted-foreground">
+                                                    <div class="flex items-center space-x-1">
+                                                        <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+                                                        <span>TypeScript</span>
+                                                    </div>
+                                                    <div class="flex items-center space-x-1">
+                                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                                                        </svg>
+                                                        <span>24</span>
+                                                    </div>
+                                                    <div class="flex items-center space-x-1">
+                                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M7.707 3.293a1 1 0 010 1.414L5.414 7H11a7 7 0 017 7v2a1 1 0 11-2 0v-2a5 5 0 00-5-5H5.414l2.293 2.293a1 1 0 11-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                                        </svg>
+                                                        <span>8</span>
+                                                    </div>
+                                                    <span>更新于 2小时前</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center space-x-2">
+                                                <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">克隆</button>
+                                                <button class="px-3 py-1.5 bg-primary hover:bg-gray-800 text-primary-foreground rounded text-xs">查看</button>
+                                                <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">分支</button>
+                                                <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">提交</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-4 hover:bg-muted/50 cursor-pointer">
+                                        <div class="flex items-start justify-between">
+                                            <div class="flex-1">
+                                                <div class="flex items-center space-x-3 mb-2">
+                                                    <h3 class="font-semibold text-primary hover:underline">microservice-api</h3>
+                                                    <span class="px-2 py-1 bg-warning text-warning-foreground text-xs rounded-full">私有</span>
+                                                </div>
+                                                <p class="text-sm text-muted-foreground mb-3">微服务API网关 - 统一的API管理和路由服务</p>
+                                                <div class="flex items-center space-x-4 text-sm text-muted-foreground">
+                                                    <div class="flex items-center space-x-1">
+                                                        <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                                        <span>Go</span>
+                                                    </div>
+                                                    <div class="flex items-center space-x-1">
+                                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                                                        </svg>
+                                                        <span>12</span>
+                                                    </div>
+                                                    <div class="flex items-center space-x-1">
+                                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M7.707 3.293a1 1 0 010 1.414L5.414 7H11a7 7 0 017 7v2a1 1 0 11-2 0v-2a5 5 0 00-5-5H5.414l2.293 2.293a1 1 0 11-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                                        </svg>
+                                                        <span>3</span>
+                                                    </div>
+                                                    <span>更新于 1天前</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center space-x-2">
+                                                <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">克隆</button>
+                                                <button class="px-3 py-1.5 bg-primary hover:bg-gray-800 text-primary-foreground rounded text-xs">查看</button>
+                                                <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">分支</button>
+                                                <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">提交</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-4 hover:bg-muted/50 cursor-pointer">
+                                        <div class="flex items-start justify-between">
+                                            <div class="flex-1">
+                                                <div class="flex items-center space-x-3 mb-2">
+                                                    <h3 class="font-semibold text-primary hover:underline">react-dashboard</h3>
+                                                    <span class="px-2 py-1 bg-success text-success-foreground text-xs rounded-full">公开</span>
+                                                </div>
+                                                <p class="text-sm text-muted-foreground mb-3">React管理后台 - 基于React和Ant Design的管理系统</p>
+                                                <div class="flex items-center space-x-4 text-sm text-muted-foreground">
+                                                    <div class="flex items-center space-x-1">
+                                                        <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                                                        <span>JavaScript</span>
+                                                    </div>
+                                                    <div class="flex items-center space-x-1">
+                                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                                                        </svg>
+                                                        <span>18</span>
+                                                    </div>
+                                                    <div class="flex items-center space-x-1">
+                                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M7.707 3.293a1 1 0 010 1.414L5.414 7H11a7 7 0 717 7v2a1 1 0 11-2 0v-2a5 5 0 00-5-5H5.414l2.293 2.293a1 1 0 11-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                                        </svg>
+                                                        <span>5</span>
+                                                    </div>
+                                                    <span>更新于 3天前</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center space-x-2">
+                                                <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">克隆</button>
+                                                <button class="px-3 py-1.5 bg-primary hover:bg-gray-800 text-primary-foreground rounded text-xs">查看</button>
+                                                <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">分支</button>
+                                                <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">提交</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-4 hover:bg-muted/50 cursor-pointer">
+                                        <div class="flex items-start justify-between">
+                                            <div class="flex-1">
+                                                <div class="flex items-center space-x-3 mb-2">
+                                                    <h3 class="font-semibold text-primary hover:underline">python-ml-toolkit</h3>
+                                                    <span class="px-2 py-1 bg-warning text-warning-foreground text-xs rounded-full">私有</span>
+                                                </div>
+                                                <p class="text-sm text-muted-foreground mb-3">Python机器学习工具包 - 常用的ML算法和数据处理工具</p>
+                                                <div class="flex items-center space-x-4 text-sm text-muted-foreground">
+                                                    <div class="flex items-center space-x-1">
+                                                        <div class="w-3 h-3 bg-blue-600 rounded-full"></div>
+                                                        <span>Python</span>
+                                                    </div>
+                                                    <div class="flex items-center space-x-1">
+                                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                                                        </svg>
+                                                        <span>6</span>
+                                                    </div>
+                                                    <div class="flex items-center space-x-1">
+                                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd" d="M7.707 3.293a1 1 0 010 1.414L5.414 7H11a7 7 0 717 7v2a1 1 0 11-2 0v-2a5 5 0 00-5-5H5.414l2.293 2.293a1 1 0 11-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                                        </svg>
+                                                        <span>2</span>
+                                                    </div>
+                                                    <span>更新于 1周前</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center space-x-2">
+                                                <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">克隆</button>
+                                                <button class="px-3 py-1.5 bg-primary hover:bg-gray-800 text-primary-foreground rounded text-xs">查看</button>
+                                                <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">分支</button>
+                                                <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">提交</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // 代码管理系统
+        class CodeManager {
+            constructor() {
+                this.currentTab = 'repositories';
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.loadTabContent();
+            }
+
+            bindEvents() {
+                // Tab 切换
+                document.querySelectorAll('.tab-button').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const tab = e.target.dataset.tab;
+                        this.switchTab(tab);
+                    });
+                });
+
+                // 二级菜单功能
+                const navToggles = document.querySelectorAll('.nav-toggle');
+                navToggles.forEach(toggle => {
+                    toggle.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const targetId = this.dataset.target;
+                        const submenu = document.getElementById(targetId);
+                        const chevron = this.querySelector('.chevron-icon');
+                        
+                        if (submenu) {
+                            submenu.classList.toggle('expanded');
+                            submenu.classList.toggle('hidden');
+                            chevron.classList.toggle('rotated');
+                        }
+                    });
+                });
+            }
+
+            switchTab(tab) {
+                // 更新 tab 按钮状态
+                document.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('tab-active');
+                    btn.classList.add('tab-inactive');
+                });
+                
+                document.querySelector(`[data-tab="${tab}"]`).classList.remove('tab-inactive');
+                document.querySelector(`[data-tab="${tab}"]`).classList.add('tab-active');
+
+                this.currentTab = tab;
+                this.loadTabContent();
+            }
+
+            loadTabContent() {
+                const content = document.getElementById('tab-content');
+                
+                switch(this.currentTab) {
+                    case 'repositories':
+                        this.loadRepositoriesTab();
+                        break;
+                    case 'organizations':
+                        this.loadOrganizationsTab();
+                        break;
+                    case 'activity':
+                        this.loadActivityTab();
+                        break;
+                    case 'settings':
+                        this.loadSettingsTab();
+                        break;
+                }
+            }
+
+            loadPullRequestsTab() {
+                const content = document.getElementById('tab-content');
+                content.innerHTML = `
+                    <div id="pullrequests-tab" class="tab-content">
+                        <!-- PR统计 -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">待审查</p>
+                                        <p class="text-lg font-bold text-warning">8</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">👀</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">已合并</p>
+                                        <p class="text-lg font-bold text-success">23</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">✅</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">已关闭</p>
+                                        <p class="text-lg font-bold text-destructive">5</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">❌</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">草稿</p>
+                                        <p class="text-lg font-bold text-muted-foreground">3</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">📝</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PR列表 -->
+                        <div class="bg-card border border-border rounded-lg">
+                            <div class="p-4 border-b border-border">
+                                <div class="flex items-center justify-between">
+                                    <h2 class="text-lg font-semibold">合并请求</h2>
+                                    <div class="flex items-center space-x-3">
+                                        <input type="text" placeholder="搜索PR..." class="px-3 py-1.5 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                                        <select class="px-3 py-1.5 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                                            <option>全部状态</option>
+                                            <option>待审查</option>
+                                            <option>已合并</option>
+                                            <option>已关闭</option>
+                                            <option>草稿</option>
+                                        </select>
+                                        <button class="px-4 py-1.5 bg-success hover:bg-green-600 text-success-foreground rounded-lg text-sm font-medium">创建PR</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="divide-y divide-border">
+                                <div class="p-4 hover:bg-muted/50 cursor-pointer">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <div class="flex items-center space-x-3 mb-2">
+                                                <h3 class="font-semibold text-primary hover:underline">#42 添加用户权限管理功能</h3>
+                                                <span class="px-2 py-1 bg-warning text-warning-foreground text-xs rounded-full">待审查</span>
+                                            </div>
+                                            <p class="text-sm text-muted-foreground mb-3">实现基于角色的用户权限管理系统，支持动态权限分配和权限继承</p>
+                                            <div class="flex items-center space-x-4 text-sm text-muted-foreground">
+                                                <div class="flex items-center space-x-1">
+                                                    <span>👤</span>
+                                                    <span>张三</span>
+                                                </div>
+                                                <div class="flex items-center space-x-1">
+                                                    <span>🌿</span>
+                                                    <span>feature/user-permissions → main</span>
+                                                </div>
+                                                <div class="flex items-center space-x-1">
+                                                    <span class="text-success">+245</span>
+                                                    <span class="text-destructive">-67</span>
+                                                </div>
+                                                <span>2小时前</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <button class="px-3 py-1.5 bg-primary hover:bg-gray-800 text-primary-foreground rounded text-xs">审查</button>
+                                            <button class="px-3 py-1.5 bg-success hover:bg-green-600 text-success-foreground rounded text-xs">合并</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-4 hover:bg-muted/50 cursor-pointer">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <div class="flex items-center space-x-3 mb-2">
+                                                <h3 class="font-semibold text-primary hover:underline">#41 修复登录页面响应式布局</h3>
+                                                <span class="px-2 py-1 bg-success text-success-foreground text-xs rounded-full">已合并</span>
+                                            </div>
+                                            <p class="text-sm text-muted-foreground mb-3">修复移动端登录页面布局问题，优化用户体验</p>
+                                            <div class="flex items-center space-x-4 text-sm text-muted-foreground">
+                                                <div class="flex items-center space-x-1">
+                                                    <span>👤</span>
+                                                    <span>李四</span>
+                                                </div>
+                                                <div class="flex items-center space-x-1">
+                                                    <span>🌿</span>
+                                                    <span>fix/login-responsive → main</span>
+                                                </div>
+                                                <div class="flex items-center space-x-1">
+                                                    <span class="text-success">+23</span>
+                                                    <span class="text-destructive">-15</span>
+                                                </div>
+                                                <span>1天前</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <span class="text-sm text-muted-foreground">已由 王五 合并</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            loadRepositoriesTab() {
+                const content = document.getElementById('tab-content');
+                content.innerHTML = `
+                    <div id="repositories-tab" class="tab-content">
+                        <div class="bg-card border border-border rounded-lg">
+                            <div class="p-4 border-b border-border">
+                                <div class="flex items-center justify-between">
+                                    <h2 class="text-lg font-semibold">我的仓库</h2>
+                                    <div class="flex items-center space-x-3">
+                                        <input type="text" placeholder="搜索仓库..." class="px-3 py-1.5 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                                        <select class="px-3 py-1.5 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                                            <option>全部类型</option>
+                                            <option>公开仓库</option>
+                                            <option>私有仓库</option>
+                                            <option>已归档</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="divide-y divide-border">
+                                <div class="p-4 hover:bg-muted/50 cursor-pointer">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <div class="flex items-center space-x-3 mb-2">
+                                                <h3 class="font-semibold text-primary hover:underline cursor-pointer" onclick="window.codeManager.openRepository('ai-dev-platform')">ai-dev-platform</h3>
+                                                <span class="px-2 py-1 bg-success text-success-foreground text-xs rounded-full">公开</span>
+                                            </div>
+                                            <p class="text-sm text-muted-foreground mb-3">AI开发平台 - 集成多种AI工具的开发环境</p>
+                                            <div class="flex items-center space-x-4 text-sm text-muted-foreground">
+                                                <div class="flex items-center space-x-1">
+                                                    <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+                                                    <span>TypeScript</span>
+                                                </div>
+                                                <div class="flex items-center space-x-1">
+                                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                                                    </svg>
+                                                    <span>24</span>
+                                                </div>
+                                                <div class="flex items-center space-x-1">
+                                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M7.707 3.293a1 1 0 010 1.414L5.414 7H11a7 7 0 717 7v2a1 1 0 11-2 0v-2a5 5 0 00-5-5H5.414l2.293 2.293a1 1 0 11-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                                    </svg>
+                                                    <span>8</span>
+                                                </div>
+                                                <span>更新于 2小时前</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">克隆</button>
+                                            <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">分支</button>
+                                            <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">提交</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-4 hover:bg-muted/50 cursor-pointer">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <div class="flex items-center space-x-3 mb-2">
+                                                <h3 class="font-semibold text-primary hover:underline cursor-pointer" onclick="window.codeManager.openRepository('microservice-api')">microservice-api</h3>
+                                                <span class="px-2 py-1 bg-warning text-warning-foreground text-xs rounded-full">私有</span>
+                                            </div>
+                                            <p class="text-sm text-muted-foreground mb-3">微服务API网关 - 统一的API管理和路由服务</p>
+                                            <div class="flex items-center space-x-4 text-sm text-muted-foreground">
+                                                <div class="flex items-center space-x-1">
+                                                    <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                                                    <span>Go</span>
+                                                </div>
+                                                <div class="flex items-center space-x-1">
+                                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                                                    </svg>
+                                                    <span>12</span>
+                                                </div>
+                                                <div class="flex items-center space-x-1">
+                                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M7.707 3.293a1 1 0 010 1.414L5.414 7H11a7 7 0 717 7v2a1 1 0 11-2 0v-2a5 5 0 00-5-5H5.414l2.293 2.293a1 1 0 11-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                                    </svg>
+                                                    <span>3</span>
+                                                </div>
+                                                <span>更新于 1天前</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">克隆</button>
+                                            <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">分支</button>
+                                            <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">提交</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-4 hover:bg-muted/50 cursor-pointer">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <div class="flex items-center space-x-3 mb-2">
+                                                <h3 class="font-semibold text-primary hover:underline cursor-pointer" onclick="window.codeManager.openRepository('react-dashboard')">react-dashboard</h3>
+                                                <span class="px-2 py-1 bg-success text-success-foreground text-xs rounded-full">公开</span>
+                                            </div>
+                                            <p class="text-sm text-muted-foreground mb-3">React管理后台 - 基于React和Ant Design的管理系统</p>
+                                            <div class="flex items-center space-x-4 text-sm text-muted-foreground">
+                                                <div class="flex items-center space-x-1">
+                                                    <div class="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                                                    <span>JavaScript</span>
+                                                </div>
+                                                <div class="flex items-center space-x-1">
+                                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                                                    </svg>
+                                                    <span>18</span>
+                                                </div>
+                                                <div class="flex items-center space-x-1">
+                                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M7.707 3.293a1 1 0 010 1.414L5.414 7H11a7 7 0 717 7v2a1 1 0 11-2 0v-2a5 5 0 00-5-5H5.414l2.293 2.293a1 1 0 11-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                                    </svg>
+                                                    <span>5</span>
+                                                </div>
+                                                <span>更新于 3天前</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">克隆</button>
+                                            <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">分支</button>
+                                            <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">提交</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-4 hover:bg-muted/50 cursor-pointer">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <div class="flex items-center space-x-3 mb-2">
+                                                <h3 class="font-semibold text-primary hover:underline cursor-pointer" onclick="window.codeManager.openRepository('python-ml-toolkit')">python-ml-toolkit</h3>
+                                                <span class="px-2 py-1 bg-warning text-warning-foreground text-xs rounded-full">私有</span>
+                                            </div>
+                                            <p class="text-sm text-muted-foreground mb-3">Python机器学习工具包 - 常用的ML算法和数据处理工具</p>
+                                            <div class="flex items-center space-x-4 text-sm text-muted-foreground">
+                                                <div class="flex items-center space-x-1">
+                                                    <div class="w-3 h-3 bg-blue-600 rounded-full"></div>
+                                                    <span>Python</span>
+                                                </div>
+                                                <div class="flex items-center space-x-1">
+                                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                                                    </svg>
+                                                    <span>6</span>
+                                                </div>
+                                                <div class="flex items-center space-x-1">
+                                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M7.707 3.293a1 1 0 010 1.414L5.414 7H11a7 7 0 717 7v2a1 1 0 11-2 0v-2a5 5 0 00-5-5H5.414l2.293 2.293a1 1 0 11-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                                    </svg>
+                                                    <span>2</span>
+                                                </div>
+                                                <span>更新于 1周前</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">克隆</button>
+                                            <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">分支</button>
+                                            <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">提交</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            loadIssuesTab() {
+                const content = document.getElementById('tab-content');
+                content.innerHTML = `
+                    <div id="issues-tab" class="tab-content">
+                        <!-- Issues统计 -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">待处理</p>
+                                        <p class="text-lg font-bold text-warning">12</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">🐛</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">已解决</p>
+                                        <p class="text-lg font-bold text-success">45</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">✅</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">功能请求</p>
+                                        <p class="text-lg font-bold text-primary">8</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">💡</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">本周新增</p>
+                                        <p class="text-lg font-bold">6</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">📈</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Issues列表 -->
+                        <div class="bg-card border border-border rounded-lg">
+                            <div class="p-4 border-b border-border">
+                                <div class="flex items-center justify-between">
+                                    <h2 class="text-lg font-semibold">问题列表</h2>
+                                    <div class="flex items-center space-x-3">
+                                        <input type="text" placeholder="搜索问题..." class="px-3 py-1.5 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                                        <select class="px-3 py-1.5 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                                            <option>全部状态</option>
+                                            <option>待处理</option>
+                                            <option>进行中</option>
+                                            <option>已解决</option>
+                                            <option>已关闭</option>
+                                        </select>
+                                        <button class="px-4 py-1.5 bg-success hover:bg-green-600 text-success-foreground rounded-lg text-sm font-medium">新建Issue</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="divide-y divide-border">
+                                <div class="p-4 hover:bg-muted/50 cursor-pointer">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <div class="flex items-center space-x-3 mb-2">
+                                                <h3 class="font-semibold text-primary hover:underline">#15 登录页面在移动端显示异常</h3>
+                                                <span class="px-2 py-1 bg-destructive text-destructive-foreground text-xs rounded-full">Bug</span>
+                                                <span class="px-2 py-1 bg-warning text-warning-foreground text-xs rounded-full">待处理</span>
+                                            </div>
+                                            <p class="text-sm text-muted-foreground mb-3">在iPhone Safari浏览器中，登录表单的布局出现错位，输入框无法正常显示</p>
+                                            <div class="flex items-center space-x-4 text-sm text-muted-foreground">
+                                                <div class="flex items-center space-x-1">
+                                                    <span>👤</span>
+                                                    <span>张三</span>
+                                                </div>
+                                                <div class="flex items-center space-x-1">
+                                                    <span>📅</span>
+                                                    <span>2小时前</span>
+                                                </div>
+                                                <div class="flex items-center space-x-1">
+                                                    <span>💬</span>
+                                                    <span>3条评论</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <button class="px-3 py-1.5 bg-primary hover:bg-gray-800 text-primary-foreground rounded text-xs">查看</button>
+                                            <button class="px-3 py-1.5 bg-success hover:bg-green-600 text-success-foreground rounded text-xs">分配</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-4 hover:bg-muted/50 cursor-pointer">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <div class="flex items-center space-x-3 mb-2">
+                                                <h3 class="font-semibold text-primary hover:underline">#14 添加暗黑模式支持</h3>
+                                                <span class="px-2 py-1 bg-primary text-primary-foreground text-xs rounded-full">Feature</span>
+                                                <span class="px-2 py-1 bg-blue-500 text-white text-xs rounded-full">进行中</span>
+                                            </div>
+                                            <p class="text-sm text-muted-foreground mb-3">用户希望能够切换到暗黑模式，以便在夜间使用时减少眼部疲劳</p>
+                                            <div class="flex items-center space-x-4 text-sm text-muted-foreground">
+                                                <div class="flex items-center space-x-1">
+                                                    <span>👤</span>
+                                                    <span>李四</span>
+                                                </div>
+                                                <div class="flex items-center space-x-1">
+                                                    <span>📅</span>
+                                                    <span>1天前</span>
+                                                </div>
+                                                <div class="flex items-center space-x-1">
+                                                    <span>💬</span>
+                                                    <span>7条评论</span>
+                                                </div>
+                                                <div class="flex items-center space-x-1">
+                                                    <span>👨‍💻</span>
+                                                    <span>分配给: 王五</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <button class="px-3 py-1.5 bg-primary hover:bg-gray-800 text-primary-foreground rounded text-xs">查看</button>
+                                            <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">编辑</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            loadWikiTab() {
+                const content = document.getElementById('tab-content');
+                content.innerHTML = `
+                    <div id="wiki-tab" class="tab-content">
+                        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                            <!-- Wiki导航 -->
+                            <div class="lg:col-span-1">
+                                <div class="bg-card border border-border rounded-lg">
+                                    <div class="p-4 border-b border-border">
+                                        <h2 class="text-lg font-semibold">文档导航</h2>
+                                    </div>
+                                    <div class="p-4 space-y-2">
+                                        <div class="text-sm">
+                                            <div class="font-medium mb-2">📚 项目文档</div>
+                                            <div class="ml-4 space-y-1">
+                                                <div class="cursor-pointer hover:text-primary">📄 项目介绍</div>
+                                                <div class="cursor-pointer hover:text-primary">🚀 快速开始</div>
+                                                <div class="cursor-pointer hover:text-primary">⚙️ 配置说明</div>
+                                            </div>
+                                        </div>
+                                        <div class="text-sm">
+                                            <div class="font-medium mb-2">🔧 开发文档</div>
+                                            <div class="ml-4 space-y-1">
+                                                <div class="cursor-pointer hover:text-primary">🏗️ 架构设计</div>
+                                                <div class="cursor-pointer hover:text-primary">📝 编码规范</div>
+                                                <div class="cursor-pointer hover:text-primary">🧪 测试指南</div>
+                                            </div>
+                                        </div>
+                                        <div class="text-sm">
+                                            <div class="font-medium mb-2">📖 API文档</div>
+                                            <div class="ml-4 space-y-1">
+                                                <div class="cursor-pointer hover:text-primary">🔌 接口说明</div>
+                                                <div class="cursor-pointer hover:text-primary">📊 数据模型</div>
+                                                <div class="cursor-pointer hover:text-primary">🔐 认证授权</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Wiki内容 -->
+                            <div class="lg:col-span-3">
+                                <div class="bg-card border border-border rounded-lg">
+                                    <div class="p-4 border-b border-border">
+                                        <div class="flex items-center justify-between">
+                                            <h2 class="text-lg font-semibold">项目介绍</h2>
+                                            <div class="flex items-center space-x-2">
+                                                <button class="px-3 py-1.5 bg-primary hover:bg-gray-800 text-primary-foreground rounded text-xs">编辑</button>
+                                                <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">历史</button>
+                                                <button class="px-3 py-1.5 bg-success hover:bg-green-600 text-success-foreground rounded text-xs">新建页面</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-6">
+                                        <div class="prose max-w-none">
+                                            <h1>AI开发平台</h1>
+                                            <p>这是一个集成多种AI工具的现代化开发环境，旨在提高开发效率和代码质量。</p>
+
+                                            <h2>主要特性</h2>
+                                            <ul>
+                                                <li><strong>智能代码补全</strong>：基于AI的代码自动补全功能</li>
+                                                <li><strong>代码审查</strong>：自动化代码质量检查和建议</li>
+                                                <li><strong>项目管理</strong>：完整的项目生命周期管理</li>
+                                                <li><strong>团队协作</strong>：实时协作和沟通工具</li>
+                                            </ul>
+
+                                            <h2>技术栈</h2>
+                                            <ul>
+                                                <li>前端：React + TypeScript + Tailwind CSS</li>
+                                                <li>后端：Node.js + Express + MongoDB</li>
+                                                <li>AI引擎：OpenAI GPT + 自研模型</li>
+                                                <li>部署：Docker + Kubernetes</li>
+                                            </ul>
+
+                                            <h2>快速开始</h2>
+                                            <pre><code>git clone https://github.com/your-org/ai-dev-platform.git
+cd ai-dev-platform
+npm install
+npm start</code></pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            loadReleasesTab() {
+                const content = document.getElementById('tab-content');
+                content.innerHTML = `
+                    <div id="releases-tab" class="tab-content">
+                        <!-- 版本统计 -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">总版本数</p>
+                                        <p class="text-lg font-bold">12</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">🏷️</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">最新版本</p>
+                                        <p class="text-lg font-bold">v2.1.0</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">🚀</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">预发布</p>
+                                        <p class="text-lg font-bold">v2.2.0-beta</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">🧪</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">下载次数</p>
+                                        <p class="text-lg font-bold">1.2K</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">📥</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 版本列表 -->
+                        <div class="bg-card border border-border rounded-lg">
+                            <div class="p-4 border-b border-border">
+                                <div class="flex items-center justify-between">
+                                    <h2 class="text-lg font-semibold">版本发布</h2>
+                                    <button class="px-4 py-2 bg-success hover:bg-green-600 text-success-foreground rounded-lg text-sm font-medium">创建发布</button>
+                                </div>
+                            </div>
+                            <div class="divide-y divide-border">
+                                <div class="p-4">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <div class="flex items-center space-x-3 mb-2">
+                                                <h3 class="text-lg font-semibold">v2.1.0</h3>
+                                                <span class="px-2 py-1 bg-success text-success-foreground text-xs rounded-full">Latest</span>
+                                            </div>
+                                            <p class="text-sm text-muted-foreground mb-3">重大功能更新：添加AI代码审查功能，优化用户界面，修复已知问题</p>
+                                            <div class="flex items-center space-x-4 text-sm text-muted-foreground mb-4">
+                                                <div class="flex items-center space-x-1">
+                                                    <span>👤</span>
+                                                    <span>张三</span>
+                                                </div>
+                                                <div class="flex items-center space-x-1">
+                                                    <span>📅</span>
+                                                    <span>2025-01-20</span>
+                                                </div>
+                                                <div class="flex items-center space-x-1">
+                                                    <span>📥</span>
+                                                    <span>456次下载</span>
+                                                </div>
+                                            </div>
+                                            <div class="text-sm">
+                                                <h4 class="font-medium mb-2">更新内容：</h4>
+                                                <ul class="list-disc list-inside space-y-1 text-muted-foreground">
+                                                    <li>新增：AI代码审查功能</li>
+                                                    <li>优化：用户界面响应速度提升30%</li>
+                                                    <li>修复：登录页面在移动端的显示问题</li>
+                                                    <li>更新：依赖包版本升级</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <button class="px-3 py-1.5 bg-primary hover:bg-gray-800 text-primary-foreground rounded text-xs">下载</button>
+                                            <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">查看</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-4">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <div class="flex items-center space-x-3 mb-2">
+                                                <h3 class="text-lg font-semibold">v2.0.5</h3>
+                                                <span class="px-2 py-1 bg-muted text-muted-foreground text-xs rounded-full">Stable</span>
+                                            </div>
+                                            <p class="text-sm text-muted-foreground mb-3">稳定版本：性能优化和bug修复</p>
+                                            <div class="flex items-center space-x-4 text-sm text-muted-foreground mb-4">
+                                                <div class="flex items-center space-x-1">
+                                                    <span>👤</span>
+                                                    <span>李四</span>
+                                                </div>
+                                                <div class="flex items-center space-x-1">
+                                                    <span>📅</span>
+                                                    <span>2025-01-15</span>
+                                                </div>
+                                                <div class="flex items-center space-x-1">
+                                                    <span>📥</span>
+                                                    <span>789次下载</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <button class="px-3 py-1.5 bg-primary hover:bg-gray-800 text-primary-foreground rounded text-xs">下载</button>
+                                            <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">查看</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            loadOrganizationsTab() {
+                const content = document.getElementById('tab-content');
+                content.innerHTML = `
+                    <div id="organizations-tab" class="tab-content">
+                        <!-- 组织统计 -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">我的组织</p>
+                                        <p class="text-lg font-bold">3</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">🏢</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">团队成员</p>
+                                        <p class="text-lg font-bold">25</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">👥</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">组织仓库</p>
+                                        <p class="text-lg font-bold">42</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">📚</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 组织列表 -->
+                        <div class="bg-card border border-border rounded-lg">
+                            <div class="p-4 border-b border-border">
+                                <h2 class="text-lg font-semibold">组织列表</h2>
+                            </div>
+                            <div class="divide-y divide-border">
+                                <div class="p-4 hover:bg-muted/50 cursor-pointer">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                                <span class="text-white font-bold">AI</span>
+                                            </div>
+                                            <div>
+                                                <h3 class="font-semibold">AI Development Team</h3>
+                                                <p class="text-sm text-muted-foreground">AI开发团队 • 12个成员 • 18个仓库</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                            <span class="px-2 py-1 bg-success text-success-foreground text-xs rounded-full">管理员</span>
+                                            <button class="px-3 py-1.5 bg-primary hover:bg-gray-800 text-primary-foreground rounded text-xs">管理</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            loadActivityTab() {
+                const content = document.getElementById('tab-content');
+                content.innerHTML = `
+                    <div id="activity-tab" class="tab-content">
+                        <!-- 活动统计 -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">今日提交</p>
+                                        <p class="text-lg font-bold">23</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">📝</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">本周PR</p>
+                                        <p class="text-lg font-bold">8</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">🔀</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">代码审查</p>
+                                        <p class="text-lg font-bold">15</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">👀</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">问题处理</p>
+                                        <p class="text-lg font-bold">6</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">🐛</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 活动时间线 -->
+                        <div class="bg-card border border-border rounded-lg">
+                            <div class="p-4 border-b border-border">
+                                <h2 class="text-lg font-semibold">最近活动</h2>
+                            </div>
+                            <div class="p-4 space-y-4">
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-8 h-8 bg-success rounded-full flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="text-sm"><strong>张三</strong> 合并了 Pull Request <a href="#" class="text-primary hover:underline">#42</a> 到 <strong>ai-dev-platform</strong></p>
+                                        <p class="text-xs text-muted-foreground">2小时前</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="text-sm"><strong>李四</strong> 提交了 3 个新的 commits 到 <strong>microservice-api</strong></p>
+                                        <p class="text-xs text-muted-foreground">4小时前</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            openRepository(repoName) {
+                // 显示仓库详情页面
+                this.showRepositoryDetails(repoName);
+            }
+
+            showRepositoryDetails(repoName) {
+                const content = document.getElementById('tab-content');
+                content.innerHTML = `
+                    <div id="repository-details" class="tab-content">
+                        <!-- 仓库头部信息 -->
+                        <div class="bg-card border border-border rounded-lg mb-6">
+                            <div class="p-6">
+                                <div class="flex items-start justify-between mb-4">
+                                    <div class="flex-1">
+                                        <div class="flex items-center space-x-3 mb-2">
+                                            <button onclick="window.codeManager.loadRepositoriesTab()" class="text-muted-foreground hover:text-primary text-sm">← 返回仓库列表</button>
+                                        </div>
+                                        <div class="flex items-center space-x-3 mb-2">
+                                            <h1 class="text-2xl font-bold">${repoName}</h1>
+                                            <span class="px-2 py-1 bg-success text-success-foreground text-xs rounded-full">公开</span>
+                                        </div>
+                                        <p class="text-muted-foreground mb-4">AI开发平台 - 集成多种AI工具的开发环境</p>
+                                        <div class="flex items-center space-x-6 text-sm text-muted-foreground">
+                                            <div class="flex items-center space-x-1">
+                                                <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+                                                <span>TypeScript</span>
+                                            </div>
+                                            <div class="flex items-center space-x-1">
+                                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                                                </svg>
+                                                <span>24 Stars</span>
+                                            </div>
+                                            <div class="flex items-center space-x-1">
+                                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M7.707 3.293a1 1 0 010 1.414L5.414 7H11a7 7 0 717 7v2a1 1 0 11-2 0v-2a5 5 0 00-5-5H5.414l2.293 2.293a1 1 0 11-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                                </svg>
+                                                <span>8 Forks</span>
+                                            </div>
+                                            <span>更新于 2小时前</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-3">
+                                        <button class="px-4 py-2 bg-muted hover:bg-accent border border-border rounded-lg text-sm font-medium">⭐ Star</button>
+                                        <button class="px-4 py-2 bg-muted hover:bg-accent border border-border rounded-lg text-sm font-medium">🍴 Fork</button>
+                                        <button class="px-4 py-2 bg-success hover:bg-green-600 text-success-foreground rounded-lg text-sm font-medium">📥 Clone</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 仓库Tab导航 -->
+                        <div class="bg-card border border-border rounded-lg">
+                            <div class="border-b border-border">
+                                <nav class="flex space-x-8 px-6">
+                                    <button class="repo-tab-button repo-tab-active py-3 px-1 text-sm font-medium transition-colors border-b-2 border-primary" data-repo-tab="code">
+                                        📁 代码
+                                    </button>
+                                    <button class="repo-tab-button repo-tab-inactive py-3 px-1 text-sm font-medium transition-colors" data-repo-tab="issues">
+                                        🐛 Issues <span class="ml-1 px-1.5 py-0.5 bg-muted text-muted-foreground text-xs rounded-full">12</span>
+                                    </button>
+                                    <button class="repo-tab-button repo-tab-inactive py-3 px-1 text-sm font-medium transition-colors" data-repo-tab="pullrequests">
+                                        🔀 Pull Requests <span class="ml-1 px-1.5 py-0.5 bg-muted text-muted-foreground text-xs rounded-full">8</span>
+                                    </button>
+                                    <button class="repo-tab-button repo-tab-inactive py-3 px-1 text-sm font-medium transition-colors" data-repo-tab="wiki">
+                                        📖 Wiki
+                                    </button>
+                                    <button class="repo-tab-button repo-tab-inactive py-3 px-1 text-sm font-medium transition-colors" data-repo-tab="releases">
+                                        🏷️ Releases <span class="ml-1 px-1.5 py-0.5 bg-muted text-muted-foreground text-xs rounded-full">12</span>
+                                    </button>
+                                    <button class="repo-tab-button repo-tab-inactive py-3 px-1 text-sm font-medium transition-colors" data-repo-tab="insights">
+                                        📊 Insights
+                                    </button>
+                                    <button class="repo-tab-button repo-tab-inactive py-3 px-1 text-sm font-medium transition-colors" data-repo-tab="settings">
+                                        ⚙️ Settings
+                                    </button>
+                                </nav>
+                            </div>
+                            <div id="repo-tab-content" class="p-6">
+                                <!-- 默认显示代码Tab内容 -->
+                                <div id="code-tab" class="repo-tab-content">
+                                    <div class="space-y-4">
+                                        <!-- 分支选择和文件操作 -->
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center space-x-3">
+                                                <select class="px-3 py-1.5 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                                                    <option>🌿 main</option>
+                                                    <option>🌿 develop</option>
+                                                    <option>🌿 feature/user-auth</option>
+                                                </select>
+                                                <span class="text-sm text-muted-foreground">156 commits</span>
+                                            </div>
+                                            <div class="flex items-center space-x-2">
+                                                <button class="px-3 py-1.5 bg-success hover:bg-green-600 text-success-foreground rounded text-sm">📁 Add file</button>
+                                                <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-sm">📥 Code</button>
+                                            </div>
+                                        </div>
+
+                                        <!-- 最新提交信息 -->
+                                        <div class="bg-muted/50 border border-border rounded-lg p-3">
+                                            <div class="flex items-center justify-between">
+                                                <div class="flex items-center space-x-3">
+                                                    <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-sm font-medium">张</div>
+                                                    <div>
+                                                        <div class="text-sm font-medium">feat: 添加用户权限管理功能</div>
+                                                        <div class="text-xs text-muted-foreground">张三 提交于 2小时前</div>
+                                                    </div>
+                                                </div>
+                                                <div class="text-sm text-muted-foreground">a1b2c3d</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- 文件列表 -->
+                                        <div class="border border-border rounded-lg">
+                                            <div class="divide-y divide-border">
+                                                <div class="p-3 hover:bg-muted/50 cursor-pointer">
+                                                    <div class="flex items-center space-x-3">
+                                                        <span class="text-lg">📁</span>
+                                                        <span class="text-sm font-medium text-primary hover:underline">src</span>
+                                                        <span class="text-xs text-muted-foreground">源代码目录</span>
+                                                        <span class="ml-auto text-xs text-muted-foreground">2小时前</span>
+                                                    </div>
+                                                </div>
+                                                <div class="p-3 hover:bg-muted/50 cursor-pointer">
+                                                    <div class="flex items-center space-x-3">
+                                                        <span class="text-lg">📁</span>
+                                                        <span class="text-sm font-medium text-primary hover:underline">public</span>
+                                                        <span class="text-xs text-muted-foreground">静态资源目录</span>
+                                                        <span class="ml-auto text-xs text-muted-foreground">1天前</span>
+                                                    </div>
+                                                </div>
+                                                <div class="p-3 hover:bg-muted/50 cursor-pointer">
+                                                    <div class="flex items-center space-x-3">
+                                                        <span class="text-lg">📄</span>
+                                                        <span class="text-sm font-medium text-primary hover:underline">README.md</span>
+                                                        <span class="text-xs text-muted-foreground">项目说明文档</span>
+                                                        <span class="ml-auto text-xs text-muted-foreground">3天前</span>
+                                                    </div>
+                                                </div>
+                                                <div class="p-3 hover:bg-muted/50 cursor-pointer">
+                                                    <div class="flex items-center space-x-3">
+                                                        <span class="text-lg">📄</span>
+                                                        <span class="text-sm font-medium text-primary hover:underline">package.json</span>
+                                                        <span class="text-xs text-muted-foreground">项目配置文件</span>
+                                                        <span class="ml-auto text-xs text-muted-foreground">1周前</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- README预览 -->
+                                        <div class="border border-border rounded-lg">
+                                            <div class="p-4 border-b border-border">
+                                                <h3 class="font-semibold">README.md</h3>
+                                            </div>
+                                            <div class="p-6">
+                                                <div class="prose max-w-none">
+                                                    <h1>AI开发平台</h1>
+                                                    <p>这是一个集成多种AI工具的现代化开发环境，旨在提高开发效率和代码质量。</p>
+                                                    <h2>主要特性</h2>
+                                                    <ul>
+                                                        <li>智能代码补全：基于AI的代码自动补全功能</li>
+                                                        <li>代码审查：自动化代码质量检查和建议</li>
+                                                        <li>项目管理：完整的项目生命周期管理</li>
+                                                        <li>团队协作：实时协作和沟通工具</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // 初始化仓库Tab切换功能
+                this.initRepositoryTabs();
+            }
+
+            initRepositoryTabs() {
+                const repoTabButtons = document.querySelectorAll('.repo-tab-button');
+                repoTabButtons.forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const targetTab = e.target.getAttribute('data-repo-tab');
+                        this.switchRepositoryTab(targetTab);
+                    });
+                });
+            }
+
+            switchRepositoryTab(tabName) {
+                // 更新Tab按钮状态
+                document.querySelectorAll('.repo-tab-button').forEach(btn => {
+                    btn.classList.remove('repo-tab-active', 'border-primary');
+                    btn.classList.add('repo-tab-inactive');
+                });
+
+                const activeTab = document.querySelector(`[data-repo-tab="${tabName}"]`);
+                if (activeTab) {
+                    activeTab.classList.remove('repo-tab-inactive');
+                    activeTab.classList.add('repo-tab-active', 'border-primary');
+                }
+
+                // 加载对应Tab内容
+                this.loadRepositoryTabContent(tabName);
+            }
+
+            loadRepositoryTabContent(tabName) {
+                const content = document.getElementById('repo-tab-content');
+
+                switch(tabName) {
+                    case 'code':
+                        this.loadRepositoryCodeTab(content);
+                        break;
+                    case 'issues':
+                        this.loadRepositoryIssuesTab(content);
+                        break;
+                    case 'pullrequests':
+                        this.loadRepositoryPullRequestsTab(content);
+                        break;
+                    case 'wiki':
+                        this.loadRepositoryWikiTab(content);
+                        break;
+                    case 'releases':
+                        this.loadRepositoryReleasesTab(content);
+                        break;
+                    case 'insights':
+                        this.loadRepositoryInsightsTab(content);
+                        break;
+                    case 'settings':
+                        this.loadRepositorySettingsTab(content);
+                        break;
+                }
+            }
+
+            loadRepositoryCodeTab(content) {
+                content.innerHTML = `
+                    <div id="code-tab" class="repo-tab-content">
+                        <div class="space-y-4">
+                            <!-- 分支选择和文件操作 -->
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <select class="px-3 py-1.5 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                                        <option>🌿 main</option>
+                                        <option>🌿 develop</option>
+                                        <option>🌿 feature/user-auth</option>
+                                    </select>
+                                    <span class="text-sm text-muted-foreground">156 commits</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <button class="px-3 py-1.5 bg-success hover:bg-green-600 text-success-foreground rounded text-sm">📁 Add file</button>
+                                    <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-sm">📥 Code</button>
+                                </div>
+                            </div>
+
+                            <!-- 最新提交信息 -->
+                            <div class="bg-muted/50 border border-border rounded-lg p-3">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-primary-foreground text-sm font-medium">张</div>
+                                        <div>
+                                            <div class="text-sm font-medium">feat: 添加用户权限管理功能</div>
+                                            <div class="text-xs text-muted-foreground">张三 提交于 2小时前</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-sm text-muted-foreground">a1b2c3d</div>
+                                </div>
+                            </div>
+
+                            <!-- 文件列表 -->
+                            <div class="border border-border rounded-lg">
+                                <div class="divide-y divide-border">
+                                    <div class="p-3 hover:bg-muted/50 cursor-pointer">
+                                        <div class="flex items-center space-x-3">
+                                            <span class="text-lg">📁</span>
+                                            <span class="text-sm font-medium text-primary hover:underline">src</span>
+                                            <span class="text-xs text-muted-foreground">源代码目录</span>
+                                            <span class="ml-auto text-xs text-muted-foreground">2小时前</span>
+                                        </div>
+                                    </div>
+                                    <div class="p-3 hover:bg-muted/50 cursor-pointer">
+                                        <div class="flex items-center space-x-3">
+                                            <span class="text-lg">📁</span>
+                                            <span class="text-sm font-medium text-primary hover:underline">public</span>
+                                            <span class="text-xs text-muted-foreground">静态资源目录</span>
+                                            <span class="ml-auto text-xs text-muted-foreground">1天前</span>
+                                        </div>
+                                    </div>
+                                    <div class="p-3 hover:bg-muted/50 cursor-pointer">
+                                        <div class="flex items-center space-x-3">
+                                            <span class="text-lg">📄</span>
+                                            <span class="text-sm font-medium text-primary hover:underline">README.md</span>
+                                            <span class="text-xs text-muted-foreground">项目说明文档</span>
+                                            <span class="ml-auto text-xs text-muted-foreground">3天前</span>
+                                        </div>
+                                    </div>
+                                    <div class="p-3 hover:bg-muted/50 cursor-pointer">
+                                        <div class="flex items-center space-x-3">
+                                            <span class="text-lg">📄</span>
+                                            <span class="text-sm font-medium text-primary hover:underline">package.json</span>
+                                            <span class="text-xs text-muted-foreground">项目配置文件</span>
+                                            <span class="ml-auto text-xs text-muted-foreground">1周前</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- README预览 -->
+                            <div class="border border-border rounded-lg">
+                                <div class="p-4 border-b border-border">
+                                    <h3 class="font-semibold">README.md</h3>
+                                </div>
+                                <div class="p-6">
+                                    <div class="prose max-w-none">
+                                        <h1>AI开发平台</h1>
+                                        <p>这是一个集成多种AI工具的现代化开发环境，旨在提高开发效率和代码质量。</p>
+                                        <h2>主要特性</h2>
+                                        <ul>
+                                            <li>智能代码补全：基于AI的代码自动补全功能</li>
+                                            <li>代码审查：自动化代码质量检查和建议</li>
+                                            <li>项目管理：完整的项目生命周期管理</li>
+                                            <li>团队协作：实时协作和沟通工具</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            loadRepositoryIssuesTab(content) {
+                content.innerHTML = `
+                    <div id="repo-issues-tab" class="repo-tab-content">
+                        <!-- Issues统计 -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">待处理</p>
+                                        <p class="text-lg font-bold text-warning">8</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">🐛</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">已解决</p>
+                                        <p class="text-lg font-bold text-success">23</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">✅</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">功能请求</p>
+                                        <p class="text-lg font-bold text-primary">4</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">💡</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">本周新增</p>
+                                        <p class="text-lg font-bold">3</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">📈</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Issues列表 -->
+                        <div class="bg-card border border-border rounded-lg">
+                            <div class="p-4 border-b border-border">
+                                <div class="flex items-center justify-between">
+                                    <h2 class="text-lg font-semibold">Issues</h2>
+                                    <div class="flex items-center space-x-3">
+                                        <input type="text" placeholder="搜索Issues..." class="px-3 py-1.5 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                                        <select class="px-3 py-1.5 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                                            <option>全部状态</option>
+                                            <option>待处理</option>
+                                            <option>进行中</option>
+                                            <option>已解决</option>
+                                        </select>
+                                        <button class="px-4 py-1.5 bg-success hover:bg-green-600 text-success-foreground rounded-lg text-sm font-medium">新建Issue</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="divide-y divide-border">
+                                <div class="p-4 hover:bg-muted/50 cursor-pointer">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <div class="flex items-center space-x-3 mb-2">
+                                                <h3 class="font-semibold text-primary hover:underline">#15 登录页面在移动端显示异常</h3>
+                                                <span class="px-2 py-1 bg-destructive text-destructive-foreground text-xs rounded-full">Bug</span>
+                                                <span class="px-2 py-1 bg-warning text-warning-foreground text-xs rounded-full">待处理</span>
+                                            </div>
+                                            <p class="text-sm text-muted-foreground mb-3">在iPhone Safari浏览器中，登录表单的布局出现错位</p>
+                                            <div class="flex items-center space-x-4 text-sm text-muted-foreground">
+                                                <span>👤 张三</span>
+                                                <span>📅 2小时前</span>
+                                                <span>💬 3条评论</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            loadRepositoryPullRequestsTab(content) {
+                content.innerHTML = `
+                    <div id="repo-pullrequests-tab" class="repo-tab-content">
+                        <!-- PR统计 -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">待审查</p>
+                                        <p class="text-lg font-bold text-warning">5</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">👀</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">已合并</p>
+                                        <p class="text-lg font-bold text-success">18</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">✅</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">已关闭</p>
+                                        <p class="text-lg font-bold text-destructive">3</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">❌</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm text-muted-foreground">草稿</p>
+                                        <p class="text-lg font-bold text-muted-foreground">2</p>
+                                    </div>
+                                    <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+                                        <span class="text-xl">📝</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PR列表 -->
+                        <div class="bg-card border border-border rounded-lg">
+                            <div class="p-4 border-b border-border">
+                                <div class="flex items-center justify-between">
+                                    <h2 class="text-lg font-semibold">Pull Requests</h2>
+                                    <button class="px-4 py-1.5 bg-success hover:bg-green-600 text-success-foreground rounded-lg text-sm font-medium">创建PR</button>
+                                </div>
+                            </div>
+                            <div class="divide-y divide-border">
+                                <div class="p-4 hover:bg-muted/50 cursor-pointer">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <div class="flex items-center space-x-3 mb-2">
+                                                <h3 class="font-semibold text-primary hover:underline">#42 添加用户权限管理功能</h3>
+                                                <span class="px-2 py-1 bg-warning text-warning-foreground text-xs rounded-full">待审查</span>
+                                            </div>
+                                            <p class="text-sm text-muted-foreground mb-3">实现基于角色的用户权限管理系统</p>
+                                            <div class="flex items-center space-x-4 text-sm text-muted-foreground">
+                                                <span>👤 张三</span>
+                                                <span>🌿 feature/user-permissions → main</span>
+                                                <span class="text-success">+245</span>
+                                                <span class="text-destructive">-67</span>
+                                                <span>2小时前</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            loadSettingsTab() {
+                const content = document.getElementById('tab-content');
+                content.innerHTML = `
+                    <div id="settings-tab" class="tab-content">
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            <!-- 个人设置 -->
+                            <div class="lg:col-span-2">
+                                <div class="bg-card border border-border rounded-lg">
+                                    <div class="p-4 border-b border-border">
+                                        <h2 class="text-lg font-semibold">个人设置</h2>
+                                    </div>
+                                    <div class="p-4 space-y-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-foreground mb-2">用户名</label>
+                                            <input type="text" value="zhangsan" class="w-full px-3 py-2 bg-background border border-input rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-foreground mb-2">邮箱地址</label>
+                                            <input type="email" value="zhangsan@example.com" class="w-full px-3 py-2 bg-background border border-input rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-foreground mb-2">个人简介</label>
+                                            <textarea rows="3" placeholder="介绍一下自己..." class="w-full px-3 py-2 bg-background border border-input rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring"></textarea>
+                                        </div>
+                                        <div class="flex space-x-3">
+                                            <button class="px-4 py-2 bg-success hover:bg-green-600 text-success-foreground rounded-lg text-sm font-medium">保存设置</button>
+                                            <button class="px-4 py-2 bg-muted hover:bg-accent border border-border rounded-lg text-sm font-medium">取消</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 快捷操作 -->
+                            <div>
+                                <div class="bg-card border border-border rounded-lg">
+                                    <div class="p-4 border-b border-border">
+                                        <h2 class="text-lg font-semibold">快捷操作</h2>
+                                    </div>
+                                    <div class="p-4 space-y-3">
+                                        <button class="w-full px-4 py-2 bg-primary hover:bg-gray-800 text-primary-foreground rounded-lg text-sm font-medium">生成SSH密钥</button>
+                                        <button class="w-full px-4 py-2 bg-muted hover:bg-accent border border-border rounded-lg text-sm font-medium">导出仓库列表</button>
+                                        <button class="w-full px-4 py-2 bg-muted hover:bg-accent border border-border rounded-lg text-sm font-medium">备份设置</button>
+                                        <button class="w-full px-4 py-2 bg-destructive hover:bg-red-600 text-destructive-foreground rounded-lg text-sm font-medium">删除账户</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // 初始化代码管理器
+        document.addEventListener('DOMContentLoaded', () => {
+            window.codeManager = new CodeManager();
+
+            // 根据当前页面自动展开相应的二级菜单
+            const currentPath = window.location.pathname;
+            const resourcePages = [
+                'database-management.html',
+                'application-management.html',
+                'code-management.html',
+                'server-management.html'
+            ];
+
+            const isResourcePage = resourcePages.some(page => currentPath.includes(page));
+            if (isResourcePage) {
+                const resourceSubmenu = document.getElementById('resource-submenu');
+                const resourceChevron = document.querySelector('[data-target="resource-submenu"] .chevron-icon');
+
+                if (resourceSubmenu && resourceChevron) {
+                    resourceSubmenu.classList.add('expanded');
+                    resourceSubmenu.classList.remove('hidden');
+                    resourceChevron.classList.add('rotated');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
