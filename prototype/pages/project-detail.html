@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>项目详情 - AI开发平台</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Monaco Editor CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
     <link rel="stylesheet" href="../css/variables.css">
     <link rel="stylesheet" href="../css/styles.css">
     <script>
@@ -2648,6 +2650,8 @@ export default Layout;`,
         }
 
         // 任务详情模态框相关功能函数
+        let modalMonacoEditor = null;
+
         function openTaskDetails(taskId) {
             console.log(`打开任务详情: ${taskId}`);
 
@@ -2667,6 +2671,9 @@ export default Layout;`,
                     title.textContent = taskNames[taskId] || `${taskId} - 开发详情`;
                 }
 
+                // 初始化Monaco Editor
+                initModalMonacoEditor();
+
                 // 模拟实时日志更新
                 startModalLogSimulation(taskId);
             }
@@ -2682,7 +2689,82 @@ export default Layout;`,
                     clearInterval(window.modalLogInterval);
                     window.modalLogInterval = null;
                 }
+
+                // 清理Monaco Editor
+                if (modalMonacoEditor) {
+                    modalMonacoEditor.dispose();
+                    modalMonacoEditor = null;
+                }
             }
+        }
+
+        function initModalMonacoEditor() {
+            // 如果已经初始化过，先清理
+            if (modalMonacoEditor) {
+                modalMonacoEditor.dispose();
+                modalMonacoEditor = null;
+            }
+
+            // 配置Monaco Editor
+            require.config({
+                paths: {
+                    'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs'
+                }
+            });
+
+            require(['vs/editor/editor.main'], function () {
+                const container = document.getElementById('modal-monaco-editor');
+                if (container) {
+                    // 创建Monaco Editor实例
+                    modalMonacoEditor = monaco.editor.create(container, {
+                        value: getDefaultFileContent('user_logs_idx.sql'),
+                        language: 'sql',
+                        theme: 'vs-dark',
+                        automaticLayout: true,
+                        minimap: { enabled: true },
+                        fontSize: 14,
+                        lineNumbers: 'on',
+                        roundedSelection: false,
+                        scrollBeyondLastLine: false,
+                        readOnly: false,
+                        wordWrap: 'on',
+                        folding: true,
+                        lineDecorationsWidth: 10,
+                        lineNumbersMinChars: 3,
+                        glyphMargin: true,
+                        contextmenu: true,
+                        mouseWheelZoom: true,
+                        smoothScrolling: true,
+                        cursorBlinking: 'blink',
+                        cursorSmoothCaretAnimation: true,
+                        renderWhitespace: 'selection',
+                        renderControlCharacters: false,
+                        fontLigatures: true,
+                        suggest: {
+                            showKeywords: true,
+                            showSnippets: true,
+                            showFunctions: true
+                        },
+                        quickSuggestions: {
+                            other: true,
+                            comments: false,
+                            strings: false
+                        }
+                    });
+
+                    // 添加编辑器事件监听
+                    modalMonacoEditor.onDidChangeModelContent(() => {
+                        addModalLog(`[${new Date().toLocaleTimeString()}] 代码已修改`, 'info');
+                    });
+
+                    // 添加快捷键
+                    modalMonacoEditor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
+                        saveCurrentFile();
+                    });
+
+                    console.log('Monaco Editor 初始化完成');
+                }
+            });
         }
 
         function startModalLogSimulation(taskId) {
@@ -2753,27 +2835,12 @@ export default Layout;`,
             addModalLog(`[${new Date().toLocaleTimeString()}] 开始下载文件`, 'success');
         }
 
-        function switchModalTab(fileName) {
-            console.log(`切换到文件: ${fileName}`);
-
-            // 更新标签页样式
-            const tabs = document.querySelectorAll('#modal-editor-tabs > div');
-            tabs.forEach(tab => {
-                tab.classList.remove('bg-card');
-                tab.classList.add('hover:bg-accent');
-            });
-
-            // 激活当前标签页
-            event.target.closest('div').classList.remove('hover:bg-accent');
-            event.target.closest('div').classList.add('bg-card');
-
-            // 更新代码内容
-            const codeContent = document.getElementById('modal-code-content');
-            if (codeContent) {
-                const fileContents = {
-                    'user_logs_idx.sql': `-- 用户日志表索引优化脚本
+        function getDefaultFileContent(fileName) {
+            const fileContents = {
+                'user_logs_idx.sql': `-- 用户日志表索引优化脚本
 -- 生成时间: 2024-01-21 16:20:35
 -- Agent: GPT-4 Turbo
+-- 文件类型: SQL索引优化
 
 -- 创建复合索引以优化查询性能
 CREATE INDEX idx_user_logs_created_at_user_id
@@ -2794,78 +2861,213 @@ DROP INDEX IF EXISTS old_user_logs_created_at;
 DROP INDEX IF EXISTS old_user_logs_user_id;
 
 -- 更新表统计信息
-ANALYZE user_logs;`,
-                    'optimized_queries.sql': `-- 优化后的查询语句
+ANALYZE user_logs;
+
+-- 性能测试查询
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT user_id, action, created_at
+FROM user_logs
+WHERE created_at > CURRENT_DATE - INTERVAL '7 days'
+ORDER BY created_at DESC;`,
+                'optimized_queries.sql': `-- 优化后的查询语句
 -- 生成时间: 2024-01-21 16:20:48
 -- Agent: GPT-4 Turbo
+-- 文件类型: SQL查询优化
 
 -- 原始慢查询（优化前）
 -- SELECT * FROM user_logs WHERE created_at > '2024-01-01';
+-- 执行时间: 2.5秒，扫描行数: 1,000,000
 
 -- 优化后的查询（性能提升60%）
 SELECT user_id, action, created_at, ip_address
 FROM user_logs
 WHERE created_at > '2024-01-01'
+  AND action IS NOT NULL
 ORDER BY created_at DESC
 LIMIT 1000;
+-- 执行时间: 0.8秒，扫描行数: 50,000
 
 -- 统计查询优化
-SELECT action, COUNT(*) as count,
-       DATE(created_at) as log_date
-FROM user_logs
-WHERE created_at >= CURRENT_DATE - INTERVAL '30 days'
-GROUP BY action, DATE(created_at)
-ORDER BY log_date DESC, count DESC;
+WITH daily_stats AS (
+    SELECT
+        DATE(created_at) as log_date,
+        action,
+        COUNT(*) as action_count,
+        COUNT(DISTINCT user_id) as unique_users
+    FROM user_logs
+    WHERE created_at >= CURRENT_DATE - INTERVAL '30 days'
+    GROUP BY DATE(created_at), action
+)
+SELECT
+    log_date,
+    action,
+    action_count,
+    unique_users,
+    ROUND(action_count::numeric / SUM(action_count) OVER (PARTITION BY log_date) * 100, 2) as percentage
+FROM daily_stats
+ORDER BY log_date DESC, action_count DESC;
 
 -- 活跃用户查询优化
 SELECT DISTINCT user_id
 FROM user_logs
 WHERE created_at >= CURRENT_DATE - INTERVAL '7 days'
   AND action IN ('login', 'page_view', 'api_call')
+  AND user_id IS NOT NULL
 ORDER BY user_id;`,
-                    'migration_001.sql': `-- 数据库迁移脚本
+                'migration_001.sql': `-- 数据库迁移脚本
 -- 版本: 001
 -- 生成时间: 2024-01-21 16:20:52
 -- Agent: GPT-4 Turbo
+-- 文件类型: 数据库迁移
+
+-- 迁移说明
+-- 本迁移脚本用于优化user_logs表结构
+-- 添加新字段以支持更详细的用户行为分析
 
 -- 开始事务
 BEGIN;
 
+-- 创建迁移日志表
+CREATE TABLE IF NOT EXISTS migration_log (
+    id SERIAL PRIMARY KEY,
+    version VARCHAR(50) NOT NULL,
+    description TEXT,
+    executed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    execution_time_ms INTEGER
+);
+
+-- 记录迁移开始
+INSERT INTO migration_log (version, description)
+VALUES ('001', '用户日志表结构优化');
+
 -- 备份现有数据
-CREATE TABLE user_logs_backup AS
+CREATE TABLE user_logs_backup_20240121 AS
 SELECT * FROM user_logs;
 
 -- 添加新字段
 ALTER TABLE user_logs
-ADD COLUMN session_id VARCHAR(255),
-ADD COLUMN user_agent TEXT,
-ADD COLUMN response_time INTEGER DEFAULT 0;
+ADD COLUMN IF NOT EXISTS session_id VARCHAR(255),
+ADD COLUMN IF NOT EXISTS user_agent TEXT,
+ADD COLUMN IF NOT EXISTS response_time INTEGER DEFAULT 0,
+ADD COLUMN IF NOT EXISTS request_size INTEGER DEFAULT 0,
+ADD COLUMN IF NOT EXISTS response_size INTEGER DEFAULT 0;
 
 -- 创建新索引
-CREATE INDEX idx_user_logs_session_id ON user_logs (session_id);
-CREATE INDEX idx_user_logs_response_time ON user_logs (response_time)
-WHERE response_time > 1000;
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_user_logs_session_id
+ON user_logs (session_id) WHERE session_id IS NOT NULL;
 
--- 更新现有数据
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_user_logs_response_time
+ON user_logs (response_time) WHERE response_time > 1000;
+
+CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_user_logs_user_agent
+ON user_logs USING gin(to_tsvector('english', user_agent))
+WHERE user_agent IS NOT NULL;
+
+-- 更新现有数据（模拟数据）
 UPDATE user_logs
-SET response_time = FLOOR(RANDOM() * 2000 + 100)
+SET
+    response_time = FLOOR(RANDOM() * 2000 + 100),
+    request_size = FLOOR(RANDOM() * 10000 + 500),
+    response_size = FLOOR(RANDOM() * 50000 + 1000)
 WHERE response_time = 0;
 
 -- 提交事务
 COMMIT;
 
 -- 验证迁移结果
-SELECT COUNT(*) as total_records,
-       COUNT(DISTINCT user_id) as unique_users,
-       AVG(response_time) as avg_response_time
-FROM user_logs;`
-                };
+SELECT
+    COUNT(*) as total_records,
+    COUNT(DISTINCT user_id) as unique_users,
+    AVG(response_time) as avg_response_time,
+    MAX(response_time) as max_response_time,
+    COUNT(*) FILTER (WHERE session_id IS NOT NULL) as records_with_session
+FROM user_logs;
 
-                const content = fileContents[fileName] || `-- ${fileName} 文件内容`;
-                codeContent.innerHTML = `<pre class="whitespace-pre-wrap">${content}</pre>`;
+-- 更新迁移日志
+UPDATE migration_log
+SET execution_time_ms = EXTRACT(EPOCH FROM (CURRENT_TIMESTAMP - executed_at)) * 1000
+WHERE version = '001' AND execution_time_ms IS NULL;`
+            };
+
+            return fileContents[fileName] || `-- ${fileName} 文件内容\n-- 文件未找到或内容为空`;
+        }
+
+        function switchModalTab(fileName) {
+            console.log(`切换到文件: ${fileName}`);
+
+            // 更新标签页样式
+            const tabs = document.querySelectorAll('#modal-editor-tabs > div');
+            tabs.forEach(tab => {
+                tab.classList.remove('bg-card');
+                tab.classList.add('hover:bg-accent');
+            });
+
+            // 激活当前标签页
+            event.target.closest('div').classList.remove('hover:bg-accent');
+            event.target.closest('div').classList.add('bg-card');
+
+            // 更新Monaco Editor内容
+            if (modalMonacoEditor) {
+                const content = getDefaultFileContent(fileName);
+                modalMonacoEditor.setValue(content);
+
+                // 根据文件扩展名设置语言
+                const language = getLanguageFromFileName(fileName);
+                monaco.editor.setModelLanguage(modalMonacoEditor.getModel(), language);
+
+                // 设置当前文件名
+                window.currentModalFileName = fileName;
             }
 
             addModalLog(`[${new Date().toLocaleTimeString()}] 切换到文件: ${fileName}`, 'info');
+        }
+
+        function getLanguageFromFileName(fileName) {
+            const extension = fileName.split('.').pop().toLowerCase();
+            const languageMap = {
+                'sql': 'sql',
+                'js': 'javascript',
+                'ts': 'typescript',
+                'tsx': 'typescript',
+                'jsx': 'javascript',
+                'py': 'python',
+                'java': 'java',
+                'cpp': 'cpp',
+                'c': 'c',
+                'cs': 'csharp',
+                'php': 'php',
+                'rb': 'ruby',
+                'go': 'go',
+                'rs': 'rust',
+                'html': 'html',
+                'css': 'css',
+                'scss': 'scss',
+                'json': 'json',
+                'xml': 'xml',
+                'yaml': 'yaml',
+                'yml': 'yaml',
+                'md': 'markdown',
+                'sh': 'shell',
+                'bat': 'bat'
+            };
+
+            return languageMap[extension] || 'plaintext';
+        }
+
+        function saveCurrentFile() {
+            if (modalMonacoEditor && window.currentModalFileName) {
+                const content = modalMonacoEditor.getValue();
+                console.log(`保存文件: ${window.currentModalFileName}`);
+                addModalLog(`[${new Date().toLocaleTimeString()}] 文件已保存: ${window.currentModalFileName}`, 'success');
+                alert(`文件 ${window.currentModalFileName} 已保存`);
+            }
+        }
+
+        function formatCode() {
+            if (modalMonacoEditor) {
+                modalMonacoEditor.getAction('editor.action.formatDocument').run();
+                addModalLog(`[${new Date().toLocaleTimeString()}] 代码已格式化`, 'info');
+            }
         }
 
         function pauseTaskFromModal(taskId) {
@@ -2941,8 +3143,14 @@ FROM user_logs;`
                     <div class="w-1/2 flex flex-col">
                         <div class="p-3 border-b border-border bg-muted">
                             <div class="flex items-center justify-between">
-                                <h3 class="text-sm font-medium">生成的代码文件</h3>
+                                <h3 class="text-sm font-medium">VSCodium 代码编辑器</h3>
                                 <div class="flex space-x-2">
+                                    <button class="px-2 py-1 text-xs border border-border rounded hover:bg-accent" onclick="formatCode()">
+                                        格式化
+                                    </button>
+                                    <button class="px-2 py-1 text-xs border border-border rounded hover:bg-accent" onclick="saveCurrentFile()">
+                                        保存 (Ctrl+S)
+                                    </button>
                                     <button class="px-2 py-1 text-xs border border-border rounded hover:bg-accent" onclick="refreshGeneratedFiles()">
                                         刷新文件
                                     </button>
@@ -2966,32 +3174,9 @@ FROM user_logs;`
                             </div>
                         </div>
 
-                        <!-- 代码内容 -->
-                        <div id="modal-code-content" class="flex-1 p-4 bg-background font-mono text-sm overflow-auto">
-                            <pre class="whitespace-pre-wrap">-- 用户日志表索引优化脚本
--- 生成时间: 2024-01-21 16:20:35
--- Agent: GPT-4 Turbo
-
--- 创建复合索引以优化查询性能
-CREATE INDEX idx_user_logs_created_at_user_id
-ON user_logs (created_at DESC, user_id);
-
--- 创建覆盖索引以优化统计查询
-CREATE INDEX idx_user_logs_action_created_at
-ON user_logs (action, created_at DESC)
-INCLUDE (user_id, ip_address);
-
--- 创建部分索引以优化活跃用户查询
-CREATE INDEX idx_user_logs_active_users
-ON user_logs (user_id, created_at DESC)
-WHERE action IN ('login', 'page_view', 'api_call');
-
--- 删除冗余的旧索引
-DROP INDEX IF EXISTS old_user_logs_created_at;
-DROP INDEX IF EXISTS old_user_logs_user_id;
-
--- 更新表统计信息
-ANALYZE user_logs;</pre>
+                        <!-- Monaco Editor 代码编辑器 -->
+                        <div id="modal-monaco-editor" class="flex-1 bg-background">
+                            <!-- Monaco Editor 将在这里初始化 -->
                         </div>
                     </div>
                 </div>
