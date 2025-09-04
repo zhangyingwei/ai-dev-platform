@@ -2784,6 +2784,12 @@ export default Layout;`,
                     window.modalLogInterval = null;
                 }
 
+                // 停止AI Agent日志模拟
+                if (window.aiAgentLogInterval) {
+                    clearInterval(window.aiAgentLogInterval);
+                    window.aiAgentLogInterval = null;
+                }
+
                 // 清理Monaco Editor
                 if (modalMonacoEditor) {
                     modalMonacoEditor.dispose();
@@ -3559,22 +3565,24 @@ FROM user_logs;`,
 
         function switchBottomPanel(panelName) {
             // 更新标签页状态
-            const tabs = ['terminal-tab', 'output-tab', 'debug-tab', 'problems-tab'];
+            const tabs = ['ai-agent-tab', 'terminal-tab', 'output-tab', 'debug-tab', 'problems-tab'];
             tabs.forEach(tab => {
                 const element = document.getElementById(tab);
                 if (element) {
                     if (tab === `${panelName}-tab`) {
-                        element.classList.remove('text-gray-400');
-                        element.classList.add('text-gray-200', 'bg-gray-850');
+                        element.style.backgroundColor = 'var(--vscode-tab-active-bg)';
+                        element.style.color = 'var(--vscode-editor-fg)';
+                        element.style.borderRight = '1px solid var(--vscode-tab-border)';
                     } else {
-                        element.classList.remove('text-gray-200', 'bg-gray-850');
-                        element.classList.add('text-gray-400');
+                        element.style.backgroundColor = 'transparent';
+                        element.style.color = 'var(--vscode-activitybar-inactive-fg)';
+                        element.style.borderRight = 'none';
                     }
                 }
             });
 
             // 显示对应面板
-            const panels = ['terminal-panel', 'output-panel', 'debug-panel', 'problems-panel'];
+            const panels = ['ai-agent-panel', 'terminal-panel', 'output-panel', 'debug-panel', 'problems-panel'];
             panels.forEach(panel => {
                 const element = document.getElementById(panel);
                 if (element) {
@@ -3585,6 +3593,8 @@ FROM user_logs;`,
                     }
                 }
             });
+
+            addVSCodeTerminalLog(`[${new Date().toLocaleTimeString()}] 切换到${panelName}面板`, 'info');
         }
 
         function addVSCodeTerminalLog(message, type = 'info') {
@@ -3697,6 +3707,108 @@ FROM user_logs;`,
         function openVSCodeAccount() {
             addVSCodeTerminalLog(`[${new Date().toLocaleTimeString()}] 打开账户设置`, 'info');
             alert('账户设置');
+        }
+
+        // AI Agent相关功能函数
+        function pauseAIAgent() {
+            if (confirm('确定要暂停AI Agent吗？')) {
+                addAIAgentLog('USER', '用户请求暂停AI Agent');
+                addAIAgentLog('PAUSE', 'AI Agent已暂停，等待用户指令');
+
+                // 更新状态指示器
+                const statusIndicator = document.querySelector('#ai-agent-panel .animate-pulse');
+                if (statusIndicator) {
+                    statusIndicator.classList.remove('bg-green-400', 'animate-pulse');
+                    statusIndicator.classList.add('bg-yellow-400');
+                }
+
+                alert('AI Agent已暂停');
+            }
+        }
+
+        function addAIAgentLog(type, message) {
+            const aiAgentLogs = document.getElementById('ai-agent-logs');
+            if (aiAgentLogs) {
+                const logContainer = aiAgentLogs.querySelector('.space-y-1');
+                if (logContainer) {
+                    const logEntry = document.createElement('div');
+                    logEntry.className = 'flex items-start space-x-2';
+
+                    const timestamp = new Date().toLocaleTimeString();
+                    const typeColors = {
+                        'INIT': 'text-blue-400',
+                        'ANALYZE': 'text-yellow-400',
+                        'SUCCESS': 'text-green-400',
+                        'SCAN': 'text-blue-400',
+                        'WARN': 'text-orange-400',
+                        'GEN': 'text-purple-400',
+                        'DONE': 'text-green-400',
+                        'PERF': 'text-orange-400',
+                        'CREATE': 'text-blue-400',
+                        'TEST': 'text-yellow-400',
+                        'EXEC': 'text-blue-400',
+                        'RESULT': 'text-green-400',
+                        'DOC': 'text-purple-400',
+                        'PROGRESS': 'text-blue-400',
+                        'WAIT': 'text-yellow-400',
+                        'USER': 'text-cyan-400',
+                        'PAUSE': 'text-red-400',
+                        'RESUME': 'text-green-400',
+                        'ERROR': 'text-red-400'
+                    };
+
+                    const typeColor = typeColors[type] || 'text-gray-400';
+
+                    logEntry.innerHTML = `
+                        <span class="text-xs text-gray-500 font-mono w-20 flex-shrink-0">[${timestamp}]</span>
+                        <span class="${typeColor} text-xs w-16 flex-shrink-0">[${type}]</span>
+                        <span class="text-sm">${message}</span>
+                    `;
+
+                    logContainer.appendChild(logEntry);
+
+                    // 自动滚动到底部
+                    aiAgentLogs.scrollTop = aiAgentLogs.scrollHeight;
+                }
+            }
+        }
+
+        // 模拟AI Agent实时日志更新
+        function startAIAgentLogSimulation() {
+            const logMessages = [
+                { type: 'ANALYZE', message: '正在分析代码复杂度...' },
+                { type: 'SCAN', message: '扫描依赖关系: package.json' },
+                { type: 'GEN', message: '生成类型定义文件: types.d.ts' },
+                { type: 'TEST', message: '运行单元测试: 23/25 通过' },
+                { type: 'PERF', message: '性能分析: 内存使用优化15%' },
+                { type: 'DOC', message: '更新API文档: 新增3个接口' },
+                { type: 'PROGRESS', message: '当前进度: 70% - 即将完成' }
+            ];
+
+            let messageIndex = 0;
+            window.aiAgentLogInterval = setInterval(() => {
+                if (messageIndex < logMessages.length) {
+                    const log = logMessages[messageIndex];
+                    addAIAgentLog(log.type, log.message);
+                    messageIndex++;
+                } else {
+                    // 重新开始循环
+                    messageIndex = 0;
+                }
+            }, 5000); // 每5秒添加一条新日志
+        }
+
+        // 更新initVSCodeInterface函数
+        function initVSCodeInterface() {
+            // 设置默认激活的面板
+            switchVSCodePanel('explorer');
+            switchBottomPanel('ai-agent'); // 默认显示AI Agent面板
+
+            // 设置当前文件
+            window.currentVSCodeFile = 'user_logs_idx.sql';
+
+            // 开始AI Agent日志模拟
+            startAIAgentLogSimulation();
         }
 
         // 增强的格式化功能
@@ -4052,13 +4164,24 @@ FROM user_logs;`,
                         </div>
 
                         <!-- 编辑器标签页 -->
-                        <div class="flex bg-gray-800 border-b border-gray-700" id="vscode-editor-tabs">
-                            <div class="flex items-center space-x-2 px-4 py-2 bg-gray-850 border-r border-gray-700 cursor-pointer" onclick="switchVSCodeTab('user_logs_idx.sql')">
-                                <svg class="w-3 h-3 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm0 2h12v8H4V6z" clip-rule="evenodd"/>
+                        <div class="flex vscode-ui-font" style="background-color: var(--vscode-tab-inactive-bg); border-bottom: 1px solid var(--vscode-tab-border);" id="vscode-editor-tabs">
+                            <div class="vscode-tab flex items-center px-3 py-2 cursor-pointer border-r"
+                                 style="background-color: var(--vscode-tab-active-bg); border-right: 1px solid var(--vscode-tab-border); color: var(--vscode-editor-fg);"
+                                 onclick="switchVSCodeTab('user_logs_idx.sql')">
+                                <svg class="w-4 h-4 mr-2 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
                                 </svg>
-                                <span class="text-sm text-gray-200">user_logs_idx.sql</span>
-                                <button class="text-gray-400 hover:text-gray-200" onclick="closeVSCodeTab('user_logs_idx.sql')">×</button>
+                                <span class="text-sm mr-2">user_logs_idx.sql</span>
+                                <button class="w-4 h-4 flex items-center justify-center rounded hover:bg-gray-600 transition-colors duration-150"
+                                        style="color: var(--vscode-activitybar-inactive-fg);"
+                                        onmouseover="this.style.backgroundColor='var(--vscode-list-hover-bg)'"
+                                        onmouseout="this.style.backgroundColor='transparent'"
+                                        onclick="event.stopPropagation(); closeVSCodeTab('user_logs_idx.sql')"
+                                        title="关闭 (Ctrl+W)">
+                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z"/>
+                                    </svg>
+                                </button>
                             </div>
                         </div>
 
@@ -4068,25 +4191,183 @@ FROM user_logs;`,
                         </div>
 
                         <!-- 底部面板 -->
-                        <div class="h-64 bg-gray-850 border-t border-gray-700 flex flex-col" id="vscode-bottom-panel">
+                        <div class="h-64 flex flex-col" style="background-color: var(--vscode-panel-bg); border-top: 1px solid var(--vscode-panel-border);" id="vscode-bottom-panel">
                             <!-- 底部面板标签页 -->
-                            <div class="flex bg-gray-800 border-b border-gray-700">
-                                <button class="px-4 py-2 text-sm text-gray-200 bg-gray-850 border-r border-gray-700" onclick="switchBottomPanel('terminal')" id="terminal-tab">
+                            <div class="flex vscode-ui-font" style="background-color: var(--vscode-tab-inactive-bg); border-bottom: 1px solid var(--vscode-tab-border);">
+                                <button class="px-4 py-2 text-sm transition-colors duration-150"
+                                        style="background-color: var(--vscode-tab-active-bg); color: var(--vscode-editor-fg); border-right: 1px solid var(--vscode-tab-border);"
+                                        onclick="switchBottomPanel('ai-agent')" id="ai-agent-tab">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                                        <span>AI Agent</span>
+                                    </div>
+                                </button>
+                                <button class="px-4 py-2 text-sm transition-colors duration-150"
+                                        style="color: var(--vscode-activitybar-inactive-fg);"
+                                        onmouseover="this.style.color='var(--vscode-editor-fg)'"
+                                        onmouseout="this.style.color='var(--vscode-activitybar-inactive-fg)'"
+                                        onclick="switchBottomPanel('terminal')" id="terminal-tab">
                                     终端
                                 </button>
-                                <button class="px-4 py-2 text-sm text-gray-400 hover:text-gray-200" onclick="switchBottomPanel('output')" id="output-tab">
+                                <button class="px-4 py-2 text-sm transition-colors duration-150"
+                                        style="color: var(--vscode-activitybar-inactive-fg);"
+                                        onmouseover="this.style.color='var(--vscode-editor-fg)'"
+                                        onmouseout="this.style.color='var(--vscode-activitybar-inactive-fg)'"
+                                        onclick="switchBottomPanel('output')" id="output-tab">
                                     输出
                                 </button>
-                                <button class="px-4 py-2 text-sm text-gray-400 hover:text-gray-200" onclick="switchBottomPanel('debug')" id="debug-tab">
+                                <button class="px-4 py-2 text-sm transition-colors duration-150"
+                                        style="color: var(--vscode-activitybar-inactive-fg);"
+                                        onmouseover="this.style.color='var(--vscode-editor-fg)'"
+                                        onmouseout="this.style.color='var(--vscode-activitybar-inactive-fg)'"
+                                        onclick="switchBottomPanel('debug')" id="debug-tab">
                                     调试控制台
                                 </button>
-                                <button class="px-4 py-2 text-sm text-gray-400 hover:text-gray-200" onclick="switchBottomPanel('problems')" id="problems-tab">
+                                <button class="px-4 py-2 text-sm transition-colors duration-150"
+                                        style="color: var(--vscode-activitybar-inactive-fg);"
+                                        onmouseover="this.style.color='var(--vscode-editor-fg)'"
+                                        onmouseout="this.style.color='var(--vscode-activitybar-inactive-fg)'"
+                                        onclick="switchBottomPanel('problems')" id="problems-tab">
                                     问题
                                 </button>
                             </div>
 
+                            <!-- AI Agent面板 -->
+                            <div id="ai-agent-panel" class="flex-1 flex flex-col vscode-scrollbar" style="background-color: var(--vscode-panel-bg); color: var(--vscode-editor-fg);">
+                                <!-- AI Agent状态栏 -->
+                                <div class="flex items-center justify-between p-3 border-b" style="border-color: var(--vscode-panel-border); background-color: var(--vscode-sidebar-bg);">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="flex items-center space-x-2">
+                                            <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                                            <span class="text-sm font-medium">AI Agent 运行状态</span>
+                                        </div>
+                                        <div class="flex items-center space-x-4 text-xs">
+                                            <span style="color: var(--vscode-activitybar-inactive-fg);">模型: GPT-4 Turbo</span>
+                                            <span style="color: var(--vscode-activitybar-inactive-fg);">任务: 数据库优化</span>
+                                            <span style="color: var(--vscode-activitybar-inactive-fg);">进度: 65%</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <div class="flex items-center space-x-1 text-xs">
+                                            <span style="color: var(--vscode-activitybar-inactive-fg);">用时:</span>
+                                            <span class="text-green-400 font-mono">08:32</span>
+                                        </div>
+                                        <div class="flex items-center space-x-1 text-xs">
+                                            <span style="color: var(--vscode-activitybar-inactive-fg);">成本:</span>
+                                            <span class="text-blue-400 font-mono">$1.20</span>
+                                        </div>
+                                        <button class="px-2 py-1 text-xs rounded transition-colors duration-150"
+                                                style="background-color: var(--vscode-button-bg); color: var(--vscode-statusbar-fg);"
+                                                onmouseover="this.style.backgroundColor='var(--vscode-button-hover-bg)'"
+                                                onmouseout="this.style.backgroundColor='var(--vscode-button-bg)'"
+                                                onclick="pauseAIAgent()">
+                                            暂停
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- AI Agent日志内容 -->
+                                <div class="flex-1 p-3 overflow-y-auto vscode-font" id="ai-agent-logs">
+                                    <div class="space-y-1">
+                                        <div class="flex items-start space-x-2">
+                                            <span class="text-xs text-gray-500 font-mono w-20 flex-shrink-0">[16:20:15]</span>
+                                            <span class="text-blue-400 text-xs w-16 flex-shrink-0">[INIT]</span>
+                                            <span class="text-sm">AI Agent 初始化完成，开始执行数据库优化任务</span>
+                                        </div>
+                                        <div class="flex items-start space-x-2">
+                                            <span class="text-xs text-gray-500 font-mono w-20 flex-shrink-0">[16:20:18]</span>
+                                            <span class="text-yellow-400 text-xs w-16 flex-shrink-0">[ANALYZE]</span>
+                                            <span class="text-sm">正在分析数据库结构和性能瓶颈...</span>
+                                        </div>
+                                        <div class="flex items-start space-x-2">
+                                            <span class="text-xs text-gray-500 font-mono w-20 flex-shrink-0">[16:20:22]</span>
+                                            <span class="text-green-400 text-xs w-16 flex-shrink-0">[SUCCESS]</span>
+                                            <span class="text-sm">数据库连接成功，开始性能分析</span>
+                                        </div>
+                                        <div class="flex items-start space-x-2">
+                                            <span class="text-xs text-gray-500 font-mono w-20 flex-shrink-0">[16:20:25]</span>
+                                            <span class="text-blue-400 text-xs w-16 flex-shrink-0">[SCAN]</span>
+                                            <span class="text-sm">扫描表结构: user_logs (1,234,567 行)</span>
+                                        </div>
+                                        <div class="flex items-start space-x-2">
+                                            <span class="text-xs text-gray-500 font-mono w-20 flex-shrink-0">[16:20:28]</span>
+                                            <span class="text-orange-400 text-xs w-16 flex-shrink-0">[WARN]</span>
+                                            <span class="text-sm">发现性能瓶颈: user_logs表缺少created_at索引</span>
+                                        </div>
+                                        <div class="flex items-start space-x-2">
+                                            <span class="text-xs text-gray-500 font-mono w-20 flex-shrink-0">[16:20:32]</span>
+                                            <span class="text-purple-400 text-xs w-16 flex-shrink-0">[GEN]</span>
+                                            <span class="text-sm">正在生成索引优化脚本: user_logs_idx.sql</span>
+                                        </div>
+                                        <div class="flex items-start space-x-2">
+                                            <span class="text-xs text-gray-500 font-mono w-20 flex-shrink-0">[16:20:35]</span>
+                                            <span class="text-green-400 text-xs w-16 flex-shrink-0">[DONE]</span>
+                                            <span class="text-sm">索引优化脚本生成完成 (247 行代码)</span>
+                                        </div>
+                                        <div class="flex items-start space-x-2">
+                                            <span class="text-xs text-gray-500 font-mono w-20 flex-shrink-0">[16:20:38]</span>
+                                            <span class="text-blue-400 text-xs w-16 flex-shrink-0">[ANALYZE]</span>
+                                            <span class="text-sm">分析慢查询: SELECT * FROM user_logs WHERE created_at > ?</span>
+                                        </div>
+                                        <div class="flex items-start space-x-2">
+                                            <span class="text-xs text-gray-500 font-mono w-20 flex-shrink-0">[16:20:42]</span>
+                                            <span class="text-orange-400 text-xs w-16 flex-shrink-0">[PERF]</span>
+                                            <span class="text-sm">查询性能: 2.5秒 → 预计优化后: 0.8秒 (68%提升)</span>
+                                        </div>
+                                        <div class="flex items-start space-x-2">
+                                            <span class="text-xs text-gray-500 font-mono w-20 flex-shrink-0">[16:20:45]</span>
+                                            <span class="text-purple-400 text-xs w-16 flex-shrink-0">[GEN]</span>
+                                            <span class="text-sm">正在重写查询语句: optimized_queries.sql</span>
+                                        </div>
+                                        <div class="flex items-start space-x-2">
+                                            <span class="text-xs text-gray-500 font-mono w-20 flex-shrink-0">[16:20:48]</span>
+                                            <span class="text-green-400 text-xs w-16 flex-shrink-0">[DONE]</span>
+                                            <span class="text-sm">查询优化完成，预计性能提升60%</span>
+                                        </div>
+                                        <div class="flex items-start space-x-2">
+                                            <span class="text-xs text-gray-500 font-mono w-20 flex-shrink-0">[16:20:52]</span>
+                                            <span class="text-blue-400 text-xs w-16 flex-shrink-0">[CREATE]</span>
+                                            <span class="text-sm">正在生成数据库迁移文件: migration_001.sql</span>
+                                        </div>
+                                        <div class="flex items-start space-x-2">
+                                            <span class="text-xs text-gray-500 font-mono w-20 flex-shrink-0">[16:20:55]</span>
+                                            <span class="text-yellow-400 text-xs w-16 flex-shrink-0">[TEST]</span>
+                                            <span class="text-sm">正在运行性能测试: test_queries.sql</span>
+                                        </div>
+                                        <div class="flex items-start space-x-2">
+                                            <span class="text-xs text-gray-500 font-mono w-20 flex-shrink-0">[16:20:58]</span>
+                                            <span class="text-blue-400 text-xs w-16 flex-shrink-0">[EXEC]</span>
+                                            <span class="text-sm">执行测试查询: EXPLAIN ANALYZE SELECT...</span>
+                                        </div>
+                                        <div class="flex items-start space-x-2">
+                                            <span class="text-xs text-gray-500 font-mono w-20 flex-shrink-0">[16:21:02]</span>
+                                            <span class="text-green-400 text-xs w-16 flex-shrink-0">[RESULT]</span>
+                                            <span class="text-sm">测试结果: 扫描行数 1,000,000 → 50,000 (95%减少)</span>
+                                        </div>
+                                        <div class="flex items-start space-x-2">
+                                            <span class="text-xs text-gray-500 font-mono w-20 flex-shrink-0">[16:21:05]</span>
+                                            <span class="text-purple-400 text-xs w-16 flex-shrink-0">[DOC]</span>
+                                            <span class="text-sm">正在生成项目文档: README.md</span>
+                                        </div>
+                                        <div class="flex items-start space-x-2">
+                                            <span class="text-xs text-gray-500 font-mono w-20 flex-shrink-0">[16:21:08]</span>
+                                            <span class="text-blue-400 text-xs w-16 flex-shrink-0">[PROGRESS]</span>
+                                            <span class="text-sm">当前进度: 65% - 正在进行最终验证...</span>
+                                        </div>
+                                        <div class="flex items-start space-x-2">
+                                            <span class="text-xs text-gray-500 font-mono w-20 flex-shrink-0">[16:21:11]</span>
+                                            <span class="text-yellow-400 text-xs w-16 flex-shrink-0">[WAIT]</span>
+                                            <span class="text-sm flex items-center">
+                                                等待用户确认优化方案...
+                                                <div class="ml-2 w-2 h-2 bg-yellow-400 rounded-full animate-pulse"></div>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- 终端面板 -->
-                            <div id="terminal-panel" class="flex-1 p-3 font-mono text-sm text-gray-200 overflow-y-auto">
+                            <div id="terminal-panel" class="flex-1 p-3 vscode-font text-sm overflow-y-auto hidden vscode-scrollbar" style="background-color: var(--vscode-panel-bg); color: var(--vscode-editor-fg);">
                                 <div class="text-green-400">$ Agent执行日志</div>
                                 <div class="text-gray-300">[16:20:15] 任务开始执行：数据库优化任务</div>
                                 <div class="text-gray-300">[16:20:18] 正在分析数据库结构...</div>
@@ -4103,24 +4384,24 @@ FROM user_logs;`,
                             </div>
 
                             <!-- 输出面板 -->
-                            <div id="output-panel" class="flex-1 p-3 font-mono text-sm text-gray-200 overflow-y-auto hidden">
-                                <div class="text-gray-300">Agent输出日志:</div>
-                                <div class="text-gray-300">正在执行数据库优化任务...</div>
+                            <div id="output-panel" class="flex-1 p-3 vscode-font text-sm overflow-y-auto hidden vscode-scrollbar" style="background-color: var(--vscode-panel-bg); color: var(--vscode-editor-fg);">
+                                <div style="color: var(--vscode-sidebar-fg);">Agent输出日志:</div>
+                                <div style="color: var(--vscode-sidebar-fg);">正在执行数据库优化任务...</div>
                                 <div class="text-green-400">索引创建成功</div>
                                 <div class="text-green-400">查询优化完成</div>
                             </div>
 
                             <!-- 调试控制台面板 -->
-                            <div id="debug-panel" class="flex-1 p-3 font-mono text-sm text-gray-200 overflow-y-auto hidden">
-                                <div class="text-gray-300">调试信息:</div>
+                            <div id="debug-panel" class="flex-1 p-3 vscode-font text-sm overflow-y-auto hidden vscode-scrollbar" style="background-color: var(--vscode-panel-bg); color: var(--vscode-editor-fg);">
+                                <div style="color: var(--vscode-sidebar-fg);">调试信息:</div>
                                 <div class="text-blue-400">断点: user_logs_idx.sql:15</div>
                                 <div class="text-yellow-400">变量: table_name = 'user_logs'</div>
                             </div>
 
                             <!-- 问题面板 -->
-                            <div id="problems-panel" class="flex-1 p-3 text-sm text-gray-200 overflow-y-auto hidden">
-                                <div class="text-gray-300">问题 (0)</div>
-                                <div class="text-gray-500 mt-2">没有发现问题</div>
+                            <div id="problems-panel" class="flex-1 p-3 text-sm overflow-y-auto hidden vscode-scrollbar" style="background-color: var(--vscode-panel-bg); color: var(--vscode-editor-fg);">
+                                <div style="color: var(--vscode-sidebar-fg);">问题 (0)</div>
+                                <div style="color: var(--vscode-activitybar-inactive-fg);" class="mt-2">没有发现问题</div>
                             </div>
                         </div>
                     </div>
