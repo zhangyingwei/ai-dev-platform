@@ -3869,20 +3869,31 @@ FROM user_logs;`,
                 const deltaX = e.clientX - startX;
                 const newWidth = startWidth + deltaX;
 
-                if (newWidth >= 200 && newWidth <= 600) {
-                    const sidebar = document.getElementById('vscode-sidebar');
-                    sidebar.style.width = newWidth + 'px';
-                    console.log('侧边栏宽度:', newWidth);
-                }
+                // 移除限制条件，允许双向调整
+                const sidebar = document.getElementById('vscode-sidebar');
+
+                // 设置最小和最大宽度限制
+                const minWidth = 150;
+                const maxWidth = 800;
+                const finalWidth = Math.max(minWidth, Math.min(maxWidth, newWidth));
+
+                sidebar.style.width = finalWidth + 'px';
+                console.log('侧边栏宽度:', finalWidth, '(delta:', deltaX, ')');
+
             } else if (resizeType === 'panel') {
-                const deltaY = startY - e.clientY; // 注意这里是反向的
+                const deltaY = startY - e.clientY; // Y轴向上为正
                 const newHeight = startHeight + deltaY;
 
-                if (newHeight >= 100 && newHeight <= 500) {
-                    const panel = document.getElementById('vscode-bottom-panel');
-                    panel.style.height = newHeight + 'px';
-                    console.log('面板高度:', newHeight);
-                }
+                // 移除限制条件，允许双向调整
+                const panel = document.getElementById('vscode-bottom-panel');
+
+                // 设置最小和最大高度限制
+                const minHeight = 80;
+                const maxHeight = 600;
+                const finalHeight = Math.max(minHeight, Math.min(maxHeight, newHeight));
+
+                panel.style.height = finalHeight + 'px';
+                console.log('面板高度:', finalHeight, '(delta:', deltaY, ')');
             }
 
             e.preventDefault();
