@@ -2713,7 +2713,7 @@ export default Layout;`,
             });
 
             require(['vs/editor/editor.main'], function () {
-                const container = document.getElementById('modal-monaco-editor');
+                const container = document.getElementById('vscode-monaco-editor');
                 if (container) {
                     // 创建Monaco Editor实例
                     modalMonacoEditor = monaco.editor.create(container, {
@@ -2754,17 +2754,30 @@ export default Layout;`,
 
                     // 添加编辑器事件监听
                     modalMonacoEditor.onDidChangeModelContent(() => {
-                        addModalLog(`[${new Date().toLocaleTimeString()}] 代码已修改`, 'info');
+                        addVSCodeTerminalLog(`[${new Date().toLocaleTimeString()}] 代码已修改`, 'info');
                     });
 
                     // 添加快捷键
                     modalMonacoEditor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS, () => {
-                        saveCurrentFile();
+                        saveVSCodeFile();
                     });
 
-                    console.log('Monaco Editor 初始化完成');
+                    console.log('VSCode Monaco Editor 初始化完成');
+
+                    // 初始化VSCode界面
+                    initVSCodeInterface();
                 }
             });
+        }
+
+        // VSCode界面管理函数
+        function initVSCodeInterface() {
+            // 设置默认激活的面板
+            switchVSCodePanel('explorer');
+            switchBottomPanel('terminal');
+
+            // 设置当前文件
+            window.currentVSCodeFile = 'user_logs_idx.sql';
         }
 
         function startModalLogSimulation(taskId) {
@@ -2986,7 +2999,123 @@ FROM user_logs;
 -- 更新迁移日志
 UPDATE migration_log
 SET execution_time_ms = EXTRACT(EPOCH FROM (CURRENT_TIMESTAMP - executed_at)) * 1000
-WHERE version = '001' AND execution_time_ms IS NULL;`
+WHERE version = '001' AND execution_time_ms IS NULL;`,
+                'test_queries.sql': `-- 数据库优化测试脚本
+-- 生成时间: 2024-01-21 16:25:00
+-- Agent: GPT-4 Turbo
+-- 文件类型: 测试脚本
+
+-- 测试索引性能
+-- 测试1: 基础查询性能测试
+EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON)
+SELECT user_id, action, created_at
+FROM user_logs
+WHERE created_at > CURRENT_DATE - INTERVAL '7 days'
+ORDER BY created_at DESC
+LIMIT 100;
+
+-- 测试2: 复合索引效果测试
+EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON)
+SELECT COUNT(*)
+FROM user_logs
+WHERE created_at > CURRENT_DATE - INTERVAL '30 days'
+  AND user_id IN (SELECT user_id FROM users WHERE active = true);
+
+-- 测试3: 统计查询性能测试
+EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON)
+SELECT
+    DATE(created_at) as log_date,
+    action,
+    COUNT(*) as action_count
+FROM user_logs
+WHERE created_at >= CURRENT_DATE - INTERVAL '30 days'
+GROUP BY DATE(created_at), action
+ORDER BY log_date DESC, action_count DESC;
+
+-- 性能基准测试
+-- 执行前记录时间
+SELECT CURRENT_TIMESTAMP as test_start_time;
+
+-- 批量插入测试数据
+INSERT INTO user_logs (user_id, action, created_at, ip_address)
+SELECT
+    (RANDOM() * 1000)::INTEGER as user_id,
+    (ARRAY['login', 'logout', 'page_view', 'api_call', 'download'])[FLOOR(RANDOM() * 5 + 1)] as action,
+    CURRENT_TIMESTAMP - (RANDOM() * INTERVAL '30 days') as created_at,
+    INET '192.168.1.1' + (RANDOM() * 255)::INTEGER as ip_address
+FROM generate_series(1, 10000);
+
+-- 执行后记录时间
+SELECT CURRENT_TIMESTAMP as test_end_time;
+
+-- 验证数据完整性
+SELECT
+    COUNT(*) as total_records,
+    COUNT(DISTINCT user_id) as unique_users,
+    MIN(created_at) as earliest_log,
+    MAX(created_at) as latest_log
+FROM user_logs;`,
+                'README.md': `# 数据库优化项目
+
+## 项目概述
+本项目由AI Agent自动生成，用于优化user_logs表的查询性能。
+
+## 生成文件说明
+
+### 1. user_logs_idx.sql
+- **用途**: 数据库索引优化脚本
+- **功能**: 创建复合索引、覆盖索引、部分索引
+- **预期效果**: 查询性能提升60%
+
+### 2. optimized_queries.sql
+- **用途**: 查询语句优化
+- **功能**: 重写慢查询，优化统计查询
+- **特点**: 包含性能对比和执行计划
+
+### 3. migration_001.sql
+- **用途**: 数据库迁移脚本
+- **功能**: 表结构升级，添加新字段
+- **安全性**: 包含事务控制和回滚机制
+
+### 4. test_queries.sql
+- **用途**: 性能测试脚本
+- **功能**: 验证优化效果，性能基准测试
+- **输出**: 详细的执行计划和性能指标
+
+## 执行顺序
+
+1. **备份数据**: 执行migration_001.sql中的备份部分
+2. **创建索引**: 执行user_logs_idx.sql
+3. **测试性能**: 执行test_queries.sql验证效果
+4. **应用优化**: 使用optimized_queries.sql中的优化查询
+
+## 性能指标
+
+| 指标 | 优化前 | 优化后 | 提升 |
+|------|--------|--------|------|
+| 查询时间 | 2.5秒 | 0.8秒 | 68% |
+| 扫描行数 | 1,000,000 | 50,000 | 95% |
+| 内存使用 | 256MB | 64MB | 75% |
+
+## 注意事项
+
+⚠️ **重要提醒**:
+- 在生产环境执行前，请先在测试环境验证
+- 建议在业务低峰期执行索引创建
+- 执行前请确保有足够的磁盘空间
+- 建议先备份相关数据
+
+## Agent信息
+
+- **生成时间**: 2024-01-21 16:20:00
+- **Agent版本**: GPT-4 Turbo
+- **任务ID**: task-003
+- **预计执行时间**: 15分钟
+- **预计成本**: $2.50
+
+## 联系方式
+
+如有问题，请联系开发团队或查看系统日志。`
             };
 
             return fileContents[fileName] || `-- ${fileName} 文件内容\n-- 文件未找到或内容为空`;
@@ -3066,7 +3195,187 @@ WHERE version = '001' AND execution_time_ms IS NULL;`
         function formatCode() {
             if (modalMonacoEditor) {
                 modalMonacoEditor.getAction('editor.action.formatDocument').run();
-                addModalLog(`[${new Date().toLocaleTimeString()}] 代码已格式化`, 'info');
+                addVSCodeTerminalLog(`[${new Date().toLocaleTimeString()}] 代码已格式化`, 'info');
+            }
+        }
+
+        // VSCode界面管理函数
+        function switchVSCodePanel(panelName) {
+            // 更新活动栏按钮状态
+            const buttons = document.querySelectorAll('#vscode-sidebar').parentElement.querySelector('.w-12').querySelectorAll('button');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-gray-700', 'text-white');
+                btn.classList.add('text-gray-300');
+            });
+
+            const activeBtn = document.getElementById(`${panelName}-btn`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-gray-300');
+                activeBtn.classList.add('bg-gray-700', 'text-white');
+            }
+
+            // 显示对应面板
+            const panels = ['explorer-panel', 'search-panel', 'git-panel'];
+            panels.forEach(panel => {
+                const element = document.getElementById(panel);
+                if (element) {
+                    if (panel === `${panelName}-panel`) {
+                        element.classList.remove('hidden');
+                        element.classList.add('flex');
+                    } else {
+                        element.classList.add('hidden');
+                        element.classList.remove('flex');
+                    }
+                }
+            });
+        }
+
+        function toggleVSCodeFolder(element) {
+            const folderContent = element.nextElementSibling;
+            const folderIcon = element.querySelector('.folder-icon');
+
+            if (folderContent) {
+                if (folderContent.classList.contains('hidden')) {
+                    folderContent.classList.remove('hidden');
+                    // 更新图标为展开状态
+                    folderIcon.innerHTML = '<path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/>';
+                } else {
+                    folderContent.classList.add('hidden');
+                    // 更新图标为折叠状态
+                    folderIcon.innerHTML = '<path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/>';
+                }
+            }
+        }
+
+        function openVSCodeFile(fileName) {
+            console.log(`打开VSCode文件: ${fileName}`);
+
+            // 更新编辑器内容
+            if (modalMonacoEditor) {
+                const content = getDefaultFileContent(fileName);
+                modalMonacoEditor.setValue(content);
+
+                // 根据文件扩展名设置语言
+                const language = getLanguageFromFileName(fileName);
+                monaco.editor.setModelLanguage(modalMonacoEditor.getModel(), language);
+
+                // 设置当前文件名
+                window.currentVSCodeFile = fileName;
+            }
+
+            // 更新标签页
+            updateVSCodeTabs(fileName);
+
+            addVSCodeTerminalLog(`[${new Date().toLocaleTimeString()}] 打开文件: ${fileName}`, 'info');
+        }
+
+        function updateVSCodeTabs(fileName) {
+            const tabsContainer = document.getElementById('vscode-editor-tabs');
+            if (tabsContainer) {
+                // 获取文件图标
+                const fileIcon = getFileIcon(fileName);
+
+                tabsContainer.innerHTML = `
+                    <div class="flex items-center space-x-2 px-4 py-2 bg-gray-850 border-r border-gray-700 cursor-pointer" onclick="switchVSCodeTab('${fileName}')">
+                        ${fileIcon}
+                        <span class="text-sm text-gray-200">${fileName}</span>
+                        <button class="text-gray-400 hover:text-gray-200" onclick="closeVSCodeTab('${fileName}')">×</button>
+                    </div>
+                `;
+            }
+        }
+
+        function getFileIcon(fileName) {
+            const extension = fileName.split('.').pop().toLowerCase();
+            const iconMap = {
+                'sql': '<svg class="w-3 h-3 text-blue-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm0 2h12v8H4V6z" clip-rule="evenodd"/></svg>',
+                'js': '<svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm0 2h12v8H4V6z" clip-rule="evenodd"/></svg>',
+                'ts': '<svg class="w-3 h-3 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm0 2h12v8H4V6z" clip-rule="evenodd"/></svg>',
+                'md': '<svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm0 2h12v8H4V6z" clip-rule="evenodd"/></svg>',
+                'default': '<svg class="w-3 h-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm0 2h12v8H4V6z" clip-rule="evenodd"/></svg>'
+            };
+
+            return iconMap[extension] || iconMap['default'];
+        }
+
+        function switchVSCodeTab(fileName) {
+            openVSCodeFile(fileName);
+        }
+
+        function closeVSCodeTab(fileName) {
+            console.log(`关闭VSCode标签页: ${fileName}`);
+            addVSCodeTerminalLog(`[${new Date().toLocaleTimeString()}] 关闭文件: ${fileName}`, 'info');
+        }
+
+        function switchBottomPanel(panelName) {
+            // 更新标签页状态
+            const tabs = ['terminal-tab', 'output-tab', 'debug-tab', 'problems-tab'];
+            tabs.forEach(tab => {
+                const element = document.getElementById(tab);
+                if (element) {
+                    if (tab === `${panelName}-tab`) {
+                        element.classList.remove('text-gray-400');
+                        element.classList.add('text-gray-200', 'bg-gray-850');
+                    } else {
+                        element.classList.remove('text-gray-200', 'bg-gray-850');
+                        element.classList.add('text-gray-400');
+                    }
+                }
+            });
+
+            // 显示对应面板
+            const panels = ['terminal-panel', 'output-panel', 'debug-panel', 'problems-panel'];
+            panels.forEach(panel => {
+                const element = document.getElementById(panel);
+                if (element) {
+                    if (panel === `${panelName}-panel`) {
+                        element.classList.remove('hidden');
+                    } else {
+                        element.classList.add('hidden');
+                    }
+                }
+            });
+        }
+
+        function addVSCodeTerminalLog(message, type = 'info') {
+            const terminalPanel = document.getElementById('terminal-panel');
+            if (terminalPanel) {
+                const logEntry = document.createElement('div');
+                const colorMap = {
+                    'info': 'text-gray-300',
+                    'success': 'text-green-400',
+                    'warning': 'text-yellow-400',
+                    'error': 'text-red-400'
+                };
+                logEntry.className = colorMap[type] || 'text-gray-300';
+                logEntry.textContent = message;
+
+                // 在最后一行之前插入
+                const lastLine = terminalPanel.querySelector('.text-blue-400');
+                if (lastLine) {
+                    terminalPanel.insertBefore(logEntry, lastLine);
+                } else {
+                    terminalPanel.appendChild(logEntry);
+                }
+
+                terminalPanel.scrollTop = terminalPanel.scrollHeight;
+            }
+        }
+
+        function saveVSCodeFile() {
+            if (modalMonacoEditor && window.currentVSCodeFile) {
+                const content = modalMonacoEditor.getValue();
+                console.log(`保存VSCode文件: ${window.currentVSCodeFile}`);
+                addVSCodeTerminalLog(`[${new Date().toLocaleTimeString()}] 文件已保存: ${window.currentVSCodeFile}`, 'success');
+
+                // 更新输出面板
+                const outputPanel = document.getElementById('output-panel');
+                if (outputPanel) {
+                    const logEntry = document.createElement('div');
+                    logEntry.className = 'text-green-400';
+                    logEntry.textContent = `文件保存成功: ${window.currentVSCodeFile}`;
+                    outputPanel.appendChild(logEntry);
+                }
             }
         }
 
@@ -3104,79 +3413,216 @@ WHERE version = '001' AND execution_time_ms IS NULL;`
                     </button>
                 </div>
 
-                <!-- 模态框内容 -->
-                <div class="flex-1 flex overflow-hidden">
-                    <!-- 左侧：实时日志 -->
-                    <div class="w-1/2 border-r border-border flex flex-col">
-                        <div class="p-3 border-b border-border bg-muted">
-                            <div class="flex items-center justify-between">
-                                <h3 class="text-sm font-medium">实时执行日志</h3>
-                                <div class="flex space-x-2">
-                                    <button class="px-2 py-1 text-xs border border-border rounded hover:bg-accent" onclick="toggleAutoScrollModal()">
-                                        自动滚动
-                                    </button>
-                                    <button class="px-2 py-1 text-xs border border-border rounded hover:bg-accent" onclick="clearModalLogs()">
-                                        清空日志
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="task-modal-logs" class="flex-1 p-3 overflow-y-auto bg-background font-mono text-xs">
-                            <div class="text-info">[16:20:15] 任务开始执行：数据库优化任务</div>
-                            <div class="text-info">[16:20:18] 正在分析数据库结构...</div>
-                            <div class="text-success">[16:20:22] 数据库连接成功</div>
-                            <div class="text-info">[16:20:25] 开始分析表结构和索引...</div>
-                            <div class="text-warning">[16:20:28] 发现性能瓶颈：user_logs表缺少索引</div>
-                            <div class="text-info">[16:20:32] 正在生成优化SQL脚本...</div>
-                            <div class="text-success">[16:20:35] 生成索引优化脚本：user_logs_idx.sql</div>
-                            <div class="text-info">[16:20:38] 开始优化查询语句...</div>
-                            <div class="text-warning">[16:20:42] 检测到慢查询：SELECT * FROM user_logs WHERE created_at > ?</div>
-                            <div class="text-info">[16:20:45] 正在重写查询语句...</div>
-                            <div class="text-success">[16:20:48] 查询优化完成，预计性能提升60%</div>
-                            <div class="text-info">[16:20:52] 正在生成数据库迁移文件...</div>
-                            <div class="text-info">[16:20:55] 正在运行性能测试...</div>
-                            <div class="text-warning">[16:20:58] 测试中：执行优化后的查询...</div>
+                <!-- VSCode完整编辑器界面 -->
+                <div class="flex-1 flex overflow-hidden bg-gray-900">
+                    <!-- 左侧活动栏 -->
+                    <div class="w-12 bg-gray-800 border-r border-gray-700 flex flex-col">
+                        <div class="flex flex-col space-y-1 p-1">
+                            <button class="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-white hover:bg-gray-700 rounded"
+                                    onclick="switchVSCodePanel('explorer')" id="explorer-btn" title="资源管理器">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/>
+                                </svg>
+                            </button>
+                            <button class="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-white hover:bg-gray-700 rounded"
+                                    onclick="switchVSCodePanel('search')" id="search-btn" title="搜索">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
+                                </svg>
+                            </button>
+                            <button class="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-white hover:bg-gray-700 rounded"
+                                    onclick="switchVSCodePanel('git')" id="git-btn" title="源代码管理">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633z" clip-rule="evenodd"/>
+                                </svg>
+                            </button>
+                            <button class="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-white hover:bg-gray-700 rounded"
+                                    onclick="switchVSCodePanel('debug')" id="debug-btn" title="运行和调试">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                                </svg>
+                            </button>
+                            <button class="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-white hover:bg-gray-700 rounded"
+                                    onclick="switchVSCodePanel('extensions')" id="extensions-btn" title="扩展">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
+                                </svg>
+                            </button>
                         </div>
                     </div>
 
-                    <!-- 右侧：代码查看器 -->
-                    <div class="w-1/2 flex flex-col">
-                        <div class="p-3 border-b border-border bg-muted">
-                            <div class="flex items-center justify-between">
-                                <h3 class="text-sm font-medium">VSCodium 代码编辑器</h3>
-                                <div class="flex space-x-2">
-                                    <button class="px-2 py-1 text-xs border border-border rounded hover:bg-accent" onclick="formatCode()">
-                                        格式化
-                                    </button>
-                                    <button class="px-2 py-1 text-xs border border-border rounded hover:bg-accent" onclick="saveCurrentFile()">
-                                        保存 (Ctrl+S)
-                                    </button>
-                                    <button class="px-2 py-1 text-xs border border-border rounded hover:bg-accent" onclick="refreshGeneratedFiles()">
-                                        刷新文件
-                                    </button>
-                                    <button class="px-2 py-1 text-xs bg-primary text-primary-foreground rounded hover:bg-gray-800" onclick="downloadAllFiles()">
-                                        下载全部
-                                    </button>
+                    <!-- 侧边栏面板 -->
+                    <div class="w-80 bg-gray-850 border-r border-gray-700 flex flex-col" id="vscode-sidebar">
+                        <!-- 资源管理器面板 -->
+                        <div id="explorer-panel" class="flex-1 flex flex-col">
+                            <div class="p-3 border-b border-gray-700 bg-gray-800">
+                                <h3 class="text-sm font-medium text-gray-200 uppercase tracking-wide">资源管理器</h3>
+                            </div>
+                            <div class="flex-1 overflow-y-auto">
+                                <!-- 项目文件树 -->
+                                <div class="p-2">
+                                    <div class="text-xs text-gray-400 uppercase tracking-wide mb-2">AI开发平台</div>
+                                    <div class="space-y-1" id="vscode-file-tree">
+                                        <div class="flex items-center space-x-1 py-1 px-2 hover:bg-gray-700 rounded cursor-pointer" onclick="toggleVSCodeFolder(this)">
+                                            <svg class="w-3 h-3 text-gray-400 folder-icon" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/>
+                                            </svg>
+                                            <span class="text-sm text-gray-300">src</span>
+                                        </div>
+                                        <div class="folder-content ml-4 space-y-1">
+                                            <div class="flex items-center space-x-1 py-1 px-2 hover:bg-gray-700 rounded cursor-pointer" onclick="openVSCodeFile('user_logs_idx.sql')">
+                                                <svg class="w-3 h-3 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm0 2h12v8H4V6z" clip-rule="evenodd"/>
+                                                </svg>
+                                                <span class="text-sm text-gray-300">user_logs_idx.sql</span>
+                                            </div>
+                                            <div class="flex items-center space-x-1 py-1 px-2 hover:bg-gray-700 rounded cursor-pointer" onclick="openVSCodeFile('optimized_queries.sql')">
+                                                <svg class="w-3 h-3 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm0 2h12v8H4V6z" clip-rule="evenodd"/>
+                                                </svg>
+                                                <span class="text-sm text-gray-300">optimized_queries.sql</span>
+                                            </div>
+                                            <div class="flex items-center space-x-1 py-1 px-2 hover:bg-gray-700 rounded cursor-pointer" onclick="openVSCodeFile('migration_001.sql')">
+                                                <svg class="w-3 h-3 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm0 2h12v8H4V6z" clip-rule="evenodd"/>
+                                                </svg>
+                                                <span class="text-sm text-gray-300">migration_001.sql</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-1 py-1 px-2 hover:bg-gray-700 rounded cursor-pointer" onclick="toggleVSCodeFolder(this)">
+                                            <svg class="w-3 h-3 text-gray-400 folder-icon" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/>
+                                            </svg>
+                                            <span class="text-sm text-gray-300">tests</span>
+                                        </div>
+                                        <div class="folder-content ml-4 space-y-1 hidden">
+                                            <div class="flex items-center space-x-1 py-1 px-2 hover:bg-gray-700 rounded cursor-pointer" onclick="openVSCodeFile('test_queries.sql')">
+                                                <svg class="w-3 h-3 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm0 2h12v8H4V6z" clip-rule="evenodd"/>
+                                                </svg>
+                                                <span class="text-sm text-gray-300">test_queries.sql</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-1 py-1 px-2 hover:bg-gray-700 rounded cursor-pointer" onclick="openVSCodeFile('README.md')">
+                                            <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm0 2h12v8H4V6z" clip-rule="evenodd"/>
+                                            </svg>
+                                            <span class="text-sm text-gray-300">README.md</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- 文件标签页 -->
-                        <div class="flex border-b border-border bg-muted" id="modal-editor-tabs">
-                            <div class="flex items-center space-x-2 px-4 py-2 border-r border-border bg-card cursor-pointer" onclick="switchModalTab('user_logs_idx.sql')">
-                                <span class="text-sm">user_logs_idx.sql</span>
+                        <!-- 搜索面板 -->
+                        <div id="search-panel" class="flex-1 flex-col hidden">
+                            <div class="p-3 border-b border-gray-700 bg-gray-800">
+                                <h3 class="text-sm font-medium text-gray-200 uppercase tracking-wide">搜索</h3>
                             </div>
-                            <div class="flex items-center space-x-2 px-4 py-2 border-r border-border hover:bg-accent cursor-pointer" onclick="switchModalTab('optimized_queries.sql')">
-                                <span class="text-sm">optimized_queries.sql</span>
-                            </div>
-                            <div class="flex items-center space-x-2 px-4 py-2 hover:bg-accent cursor-pointer" onclick="switchModalTab('migration_001.sql')">
-                                <span class="text-sm">migration_001.sql</span>
+                            <div class="p-3">
+                                <input type="text" placeholder="搜索" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-sm text-gray-200 placeholder-gray-400 focus:outline-none focus:border-blue-500">
+                                <input type="text" placeholder="替换" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-sm text-gray-200 placeholder-gray-400 focus:outline-none focus:border-blue-500 mt-2">
                             </div>
                         </div>
 
-                        <!-- Monaco Editor 代码编辑器 -->
-                        <div id="modal-monaco-editor" class="flex-1 bg-background">
+                        <!-- Git面板 -->
+                        <div id="git-panel" class="flex-1 flex-col hidden">
+                            <div class="p-3 border-b border-gray-700 bg-gray-800">
+                                <h3 class="text-sm font-medium text-gray-200 uppercase tracking-wide">源代码管理</h3>
+                            </div>
+                            <div class="p-3">
+                                <div class="text-sm text-gray-300 mb-2">更改 (3)</div>
+                                <div class="space-y-1">
+                                    <div class="flex items-center space-x-2 py-1 px-2 hover:bg-gray-700 rounded">
+                                        <span class="text-green-400 text-xs">M</span>
+                                        <span class="text-sm text-gray-300">user_logs_idx.sql</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2 py-1 px-2 hover:bg-gray-700 rounded">
+                                        <span class="text-green-400 text-xs">A</span>
+                                        <span class="text-sm text-gray-300">optimized_queries.sql</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2 py-1 px-2 hover:bg-gray-700 rounded">
+                                        <span class="text-green-400 text-xs">A</span>
+                                        <span class="text-sm text-gray-300">migration_001.sql</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 主编辑区域 -->
+                    <div class="flex-1 flex flex-col">
+                        <!-- 编辑器标签页 -->
+                        <div class="flex bg-gray-800 border-b border-gray-700" id="vscode-editor-tabs">
+                            <div class="flex items-center space-x-2 px-4 py-2 bg-gray-850 border-r border-gray-700 cursor-pointer" onclick="switchVSCodeTab('user_logs_idx.sql')">
+                                <svg class="w-3 h-3 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm0 2h12v8H4V6z" clip-rule="evenodd"/>
+                                </svg>
+                                <span class="text-sm text-gray-200">user_logs_idx.sql</span>
+                                <button class="text-gray-400 hover:text-gray-200" onclick="closeVSCodeTab('user_logs_idx.sql')">×</button>
+                            </div>
+                        </div>
+
+                        <!-- Monaco Editor -->
+                        <div id="vscode-monaco-editor" class="flex-1 bg-gray-900">
                             <!-- Monaco Editor 将在这里初始化 -->
+                        </div>
+
+                        <!-- 底部面板 -->
+                        <div class="h-64 bg-gray-850 border-t border-gray-700 flex flex-col" id="vscode-bottom-panel">
+                            <!-- 底部面板标签页 -->
+                            <div class="flex bg-gray-800 border-b border-gray-700">
+                                <button class="px-4 py-2 text-sm text-gray-200 bg-gray-850 border-r border-gray-700" onclick="switchBottomPanel('terminal')" id="terminal-tab">
+                                    终端
+                                </button>
+                                <button class="px-4 py-2 text-sm text-gray-400 hover:text-gray-200" onclick="switchBottomPanel('output')" id="output-tab">
+                                    输出
+                                </button>
+                                <button class="px-4 py-2 text-sm text-gray-400 hover:text-gray-200" onclick="switchBottomPanel('debug')" id="debug-tab">
+                                    调试控制台
+                                </button>
+                                <button class="px-4 py-2 text-sm text-gray-400 hover:text-gray-200" onclick="switchBottomPanel('problems')" id="problems-tab">
+                                    问题
+                                </button>
+                            </div>
+
+                            <!-- 终端面板 -->
+                            <div id="terminal-panel" class="flex-1 p-3 font-mono text-sm text-gray-200 overflow-y-auto">
+                                <div class="text-green-400">$ Agent执行日志</div>
+                                <div class="text-gray-300">[16:20:15] 任务开始执行：数据库优化任务</div>
+                                <div class="text-gray-300">[16:20:18] 正在分析数据库结构...</div>
+                                <div class="text-green-400">[16:20:22] 数据库连接成功</div>
+                                <div class="text-gray-300">[16:20:25] 开始分析表结构和索引...</div>
+                                <div class="text-yellow-400">[16:20:28] 发现性能瓶颈：user_logs表缺少索引</div>
+                                <div class="text-gray-300">[16:20:32] 正在生成优化SQL脚本...</div>
+                                <div class="text-green-400">[16:20:35] 生成索引优化脚本：user_logs_idx.sql</div>
+                                <div class="text-gray-300">[16:20:38] 开始优化查询语句...</div>
+                                <div class="text-yellow-400">[16:20:42] 检测到慢查询：SELECT * FROM user_logs WHERE created_at > ?</div>
+                                <div class="text-gray-300">[16:20:45] 正在重写查询语句...</div>
+                                <div class="text-green-400">[16:20:48] 查询优化完成，预计性能提升60%</div>
+                                <div class="text-blue-400">$ _</div>
+                            </div>
+
+                            <!-- 输出面板 -->
+                            <div id="output-panel" class="flex-1 p-3 font-mono text-sm text-gray-200 overflow-y-auto hidden">
+                                <div class="text-gray-300">Agent输出日志:</div>
+                                <div class="text-gray-300">正在执行数据库优化任务...</div>
+                                <div class="text-green-400">索引创建成功</div>
+                                <div class="text-green-400">查询优化完成</div>
+                            </div>
+
+                            <!-- 调试控制台面板 -->
+                            <div id="debug-panel" class="flex-1 p-3 font-mono text-sm text-gray-200 overflow-y-auto hidden">
+                                <div class="text-gray-300">调试信息:</div>
+                                <div class="text-blue-400">断点: user_logs_idx.sql:15</div>
+                                <div class="text-yellow-400">变量: table_name = 'user_logs'</div>
+                            </div>
+
+                            <!-- 问题面板 -->
+                            <div id="problems-panel" class="flex-1 p-3 text-sm text-gray-200 overflow-y-auto hidden">
+                                <div class="text-gray-300">问题 (0)</div>
+                                <div class="text-gray-500 mt-2">没有发现问题</div>
+                            </div>
                         </div>
                     </div>
                 </div>
