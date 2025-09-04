@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目详情 - AI开发平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        border: "hsl(var(--border))",
+                        input: "hsl(var(--input))",
+                        ring: "hsl(var(--ring))",
+                        background: "hsl(var(--background))",
+                        foreground: "hsl(var(--foreground))",
+                        primary: {
+                            DEFAULT: "hsl(var(--primary))",
+                            foreground: "hsl(var(--primary-foreground))"
+                        },
+                        secondary: {
+                            DEFAULT: "hsl(var(--secondary))",
+                            foreground: "hsl(var(--secondary-foreground))"
+                        },
+                        destructive: {
+                            DEFAULT: "hsl(var(--destructive))",
+                            foreground: "hsl(var(--destructive-foreground))"
+                        },
+                        muted: {
+                            DEFAULT: "hsl(var(--muted))",
+                            foreground: "hsl(var(--muted-foreground))"
+                        },
+                        accent: {
+                            DEFAULT: "hsl(var(--accent))",
+                            foreground: "hsl(var(--accent-foreground))"
+                        },
+                        popover: {
+                            DEFAULT: "hsl(var(--popover))",
+                            foreground: "hsl(var(--popover-foreground))"
+                        },
+                        card: {
+                            DEFAULT: "hsl(var(--card))",
+                            foreground: "hsl(var(--card-foreground))"
+                        },
+                        success: '#10b981',
+                        warning: '#f59e0b',
+                        blue: '#3b82f6',
+                        green: '#10b981',
+                        red: '#ef4444',
+                        yellow: '#f59e0b',
+                        purple: '#8b5cf6',
+                        gray: '#6b7280',
+                        'success-foreground': '#ffffff',
+                        'warning-foreground': '#ffffff',
+                        'destructive-foreground': '#ffffff'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-foreground">
+    <div class="min-h-screen flex">
+        <!-- 侧边栏 -->
+        <div id="sidebar" class="w-64 bg-card border-r border-border flex flex-col transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out fixed lg:relative z-40 h-full">
+            <!-- Logo区域 -->
+            <div class="p-4 border-b border-border">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-primary-foreground" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <span class="text-lg font-bold">AI开发平台</span>
+                </div>
+            </div>
+
+            <!-- 导航菜单 -->
+            <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+                <a href="dashboard.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium">工作台</span>
+                </a>
+
+                <a href="ai-plugins.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium">AI插件管理</span>
+                </a>
+
+                <a href="development-management.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 01-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 010-2h4a1 1 0 011 1v4a1 1 0 01-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 010 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15 13.586V12a1 1 0 011-1z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium">开发管理</span>
+                </a>
+
+                <a href="project-management.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md bg-accent text-accent-foreground">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+                            <path fill-rule="evenodd" d="M4 5a2 2 0 012-2v1a2 2 0 00-2 2v6a2 2 0 002 2h8a2 2 0 002-2V6a2 2 0 00-2-2V3a2 2 0 012-2v1a2 2 0 00-2 2H6a2 2 0 00-2 2z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium">项目管理</span>
+                </a>
+
+                <a href="requirement-management.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 8a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 12a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 16a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium">需求管理</span>
+                </a>
+
+                <!-- 开发资源管理二级菜单 -->
+                <div>
+                    <button class="nav-toggle w-full flex items-center justify-between px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground text-sm font-medium" data-target="resource-submenu">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-4 h-4 flex items-center justify-center">
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 01-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 010-2h4a1 1 0 011 1v4a1 1 0 01-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 010 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15 13.586V12a1 1 0 011-1z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <span>开发资源管理</span>
+                        </div>
+                        <svg class="w-4 h-4 transition-transform duration-200 chevron-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
+                        </svg>
+                    </button>
+                    <div id="resource-submenu" class="submenu hidden ml-6 mt-1 space-y-1">
+                        <a href="database-management.html" class="nav-item flex items-center space-x-2 px-2 py-1.5 rounded-md hover:bg-accent hover:text-accent-foreground text-sm">
+                            <div class="w-3 h-3 flex items-center justify-center">
+                                <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 16a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/>
+                                </svg>
+                            </div>
+                            <span class="font-medium">数据库管理</span>
+                        </a>
+                        <a href="application-management.html" class="nav-item flex items-center space-x-2 px-2 py-1.5 rounded-md hover:bg-accent hover:text-accent-foreground text-sm">
+                            <div class="w-3 h-3 flex items-center justify-center">
+                                <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zm2 0v8h12V6H4z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <span class="font-medium">应用服务管理</span>
+                        </a>
+                        <a href="code-management.html" class="nav-item flex items-center space-x-2 px-2 py-1.5 rounded-md hover:bg-accent hover:text-accent-foreground text-sm">
+                            <div class="w-3 h-3 flex items-center justify-center">
+                                <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <span class="font-medium">代码管理</span>
+                        </a>
+                        <a href="server-management.html" class="nav-item flex items-center space-x-2 px-2 py-1.5 rounded-md hover:bg-accent hover:text-accent-foreground text-sm">
+                            <div class="w-3 h-3 flex items-center justify-center">
+                                <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <span class="font-medium">服务器管理</span>
+                        </a>
+                    </div>
+                </div>
+
+                <a href="monitoring.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium">监控运维</span>
+                </a>
+
+                <a href="system-management.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium">系统管理</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- 主内容区域 -->
+        <main class="flex-1 flex flex-col lg:ml-0">
+            <!-- 顶部导航栏 -->
+            <header class="bg-card border-b border-border px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <!-- 移动端菜单按钮 -->
+                        <button id="sidebar-toggle" class="lg:hidden p-2 rounded-md hover:bg-accent">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
+                            </svg>
+                        </button>
+                        
+                        <div class="flex items-center space-x-2 text-sm text-muted-foreground">
+                            <a href="project-management.html" class="hover:text-foreground">项目管理</a>
+                            <span>/</span>
+                            <span id="current-page">项目详情</span>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <!-- 主题切换按钮 -->
+                        <button id="theme-toggle" class="p-2 rounded-md hover:bg-accent transition-colors">
+                            <svg class="w-5 h-5 dark:hidden" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
+                            </svg>
+                            <svg class="w-5 h-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+                            </svg>
+                        </button>
+                        
+                        <!-- 用户信息 -->
+                        <div class="flex items-center space-x-2">
+                            <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                                <span class="text-sm font-medium text-primary-foreground">A</span>
+                            </div>
+                            <span class="text-sm font-medium">管理员</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 页面内容 -->
+            <main class="flex-1 p-6 overflow-auto" id="main-content">
+                <!-- 项目详情页面内容 -->
+                <div class="space-y-6">
+                    <!-- 项目头部信息 -->
+                    <div class="bg-card border border-border rounded-lg p-6">
+                        <div class="flex items-center space-x-4 mb-4">
+                            <div id="project-icon" class="w-16 h-16 bg-purple/10 rounded-lg flex items-center justify-center">
+                                <span class="text-purple font-semibold text-2xl">🤖</span>
+                            </div>
+                            <div class="flex-1">
+                                <h1 id="project-title" class="text-2xl font-bold mb-2">AI开发平台</h1>
+                                <p id="project-description" class="text-muted-foreground">智能化开发工具平台，提供AI辅助编程功能</p>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span id="project-status" class="px-3 py-1 bg-green/10 text-green text-sm rounded-full">进行中</span>
+                                <button class="px-4 py-2 border border-border rounded-md hover:bg-accent">编辑项目</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 标签页导航 -->
+                    <div class="bg-card border border-border rounded-lg">
+                        <nav class="border-b border-border px-6">
+                            <div class="flex space-x-8">
+                                <button class="py-3 px-1 border-b-2 border-primary text-primary font-medium text-sm" data-detail-tab="basic-info">
+                                    基本信息
+                                </button>
+                                <button class="py-3 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground text-sm" data-detail-tab="requirements">
+                                    需求管理
+                                </button>
+                                <button class="py-3 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground text-sm" data-detail-tab="tasks">
+                                    开发任务
+                                </button>
+                                <button class="py-3 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground text-sm" data-detail-tab="team">
+                                    人员管理
+                                </button>
+                                <button class="py-3 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground text-sm" data-detail-tab="deployment">
+                                    部署管理
+                                </button>
+                                <button class="py-3 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground text-sm" data-detail-tab="resources">
+                                    资源管理
+                                </button>
+                            </div>
+                        </nav>
+
+                        <!-- 标签页内容 -->
+                        <div class="p-6">
+                            <!-- 基本信息 -->
+                            <div id="basic-info-content" class="detail-tab-content">
+                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                    <!-- 项目基本信息 -->
+                                    <div class="space-y-6">
+                                        <div class="bg-muted rounded-lg p-4">
+                                            <h3 class="text-lg font-semibold mb-4">项目信息</h3>
+                                            <div class="space-y-3">
+                                                <div class="flex justify-between">
+                                                    <span class="text-muted-foreground">项目名称:</span>
+                                                    <span id="detail-project-name">AI开发平台</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-muted-foreground">项目状态:</span>
+                                                    <span id="detail-project-status" class="px-2 py-1 bg-green/10 text-green text-sm rounded">进行中</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-muted-foreground">项目负责人:</span>
+                                                    <span id="detail-project-manager">张项目经理</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-muted-foreground">创建时间:</span>
+                                                    <span id="detail-create-time">2024-01-15</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-muted-foreground">最后更新:</span>
+                                                    <span id="detail-update-time">2024-01-21</span>
+                                                </div>
+                                                <div class="flex justify-between">
+                                                    <span class="text-muted-foreground">项目进度:</span>
+                                                    <span id="detail-progress">75%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="bg-muted rounded-lg p-4">
+                                            <h3 class="text-lg font-semibold mb-4">技术栈</h3>
+                                            <div class="flex flex-wrap gap-2" id="detail-tech-stack">
+                                                <span class="px-3 py-1 bg-blue/10 text-blue text-sm rounded-full">React</span>
+                                                <span class="px-3 py-1 bg-green/10 text-green text-sm rounded-full">Node.js</span>
+                                                <span class="px-3 py-1 bg-yellow/10 text-yellow text-sm rounded-full">MongoDB</span>
+                                                <span class="px-3 py-1 bg-purple/10 text-purple text-sm rounded-full">Docker</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 项目统计 -->
+                                    <div class="space-y-6">
+                                        <div class="bg-muted rounded-lg p-4">
+                                            <h3 class="text-lg font-semibold mb-4">项目统计</h3>
+                                            <div class="grid grid-cols-2 gap-4">
+                                                <div class="text-center p-3 bg-card rounded-lg">
+                                                    <div class="text-2xl font-bold text-blue">24</div>
+                                                    <div class="text-xs text-muted-foreground">总需求数</div>
+                                                </div>
+                                                <div class="text-center p-3 bg-card rounded-lg">
+                                                    <div class="text-2xl font-bold text-green">18</div>
+                                                    <div class="text-xs text-muted-foreground">已完成</div>
+                                                </div>
+                                                <div class="text-center p-3 bg-card rounded-lg">
+                                                    <div class="text-2xl font-bold text-yellow">4</div>
+                                                    <div class="text-xs text-muted-foreground">进行中</div>
+                                                </div>
+                                                <div class="text-center p-3 bg-card rounded-lg">
+                                                    <div class="text-2xl font-bold text-red">2</div>
+                                                    <div class="text-xs text-muted-foreground">待处理</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="bg-muted rounded-lg p-4">
+                                            <h3 class="text-lg font-semibold mb-4">里程碑</h3>
+                                            <div class="space-y-3">
+                                                <div class="flex items-center space-x-3">
+                                                    <div class="w-3 h-3 bg-green rounded-full"></div>
+                                                    <div class="flex-1">
+                                                        <div class="text-sm font-medium">需求分析完成</div>
+                                                        <div class="text-xs text-muted-foreground">2024-01-15</div>
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-center space-x-3">
+                                                    <div class="w-3 h-3 bg-green rounded-full"></div>
+                                                    <div class="flex-1">
+                                                        <div class="text-sm font-medium">原型设计完成</div>
+                                                        <div class="text-xs text-muted-foreground">2024-01-18</div>
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-center space-x-3">
+                                                    <div class="w-3 h-3 bg-yellow rounded-full"></div>
+                                                    <div class="flex-1">
+                                                        <div class="text-sm font-medium">核心功能开发</div>
+                                                        <div class="text-xs text-muted-foreground">进行中</div>
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-center space-x-3">
+                                                    <div class="w-3 h-3 bg-gray rounded-full"></div>
+                                                    <div class="flex-1">
+                                                        <div class="text-sm font-medium">测试与部署</div>
+                                                        <div class="text-xs text-muted-foreground">待开始</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 需求管理 -->
+                            <div id="requirements-content" class="detail-tab-content hidden">
+                                <div class="space-y-6">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="text-lg font-semibold">项目需求列表</h3>
+                                        <button class="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/80">
+                                            新增需求
+                                        </button>
+                                    </div>
+
+                                    <div class="space-y-4">
+                                        <div class="border border-border rounded-lg p-4">
+                                            <div class="flex items-center justify-between mb-3">
+                                                <div class="flex items-center space-x-3">
+                                                    <span class="px-2 py-1 bg-blue/10 text-blue text-xs rounded">功能需求</span>
+                                                    <h4 class="font-medium">AI聊天功能</h4>
+                                                </div>
+                                                <span class="px-2 py-1 bg-green/10 text-green text-xs rounded">已完成</span>
+                                            </div>
+                                            <p class="text-sm text-muted-foreground mb-3">实现智能AI聊天功能，支持多轮对话和上下文理解</p>
+                                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                                                <div>
+                                                    <span class="text-muted-foreground">优先级:</span>
+                                                    <span class="ml-1 text-red">高</span>
+                                                </div>
+                                                <div>
+                                                    <span class="text-muted-foreground">负责人:</span>
+                                                    <span class="ml-1">李开发</span>
+                                                </div>
+                                                <div>
+                                                    <span class="text-muted-foreground">预计工时:</span>
+                                                    <span class="ml-1">40小时</span>
+                                                </div>
+                                                <div>
+                                                    <span class="text-muted-foreground">完成时间:</span>
+                                                    <span class="ml-1">2024-01-20</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="border border-border rounded-lg p-4">
+                                            <div class="flex items-center justify-between mb-3">
+                                                <div class="flex items-center space-x-3">
+                                                    <span class="px-2 py-1 bg-green/10 text-green text-xs rounded">优化需求</span>
+                                                    <h4 class="font-medium">界面优化</h4>
+                                                </div>
+                                                <span class="px-2 py-1 bg-yellow/10 text-yellow text-xs rounded">进行中</span>
+                                            </div>
+                                            <p class="text-sm text-muted-foreground mb-3">优化用户界面设计，提升用户体验</p>
+                                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                                                <div>
+                                                    <span class="text-muted-foreground">优先级:</span>
+                                                    <span class="ml-1 text-yellow">中</span>
+                                                </div>
+                                                <div>
+                                                    <span class="text-muted-foreground">负责人:</span>
+                                                    <span class="ml-1">王设计</span>
+                                                </div>
+                                                <div>
+                                                    <span class="text-muted-foreground">预计工时:</span>
+                                                    <span class="ml-1">24小时</span>
+                                                </div>
+                                                <div>
+                                                    <span class="text-muted-foreground">预计完成:</span>
+                                                    <span class="ml-1">2024-01-25</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 其他标签页内容 -->
+                            <div id="tasks-content" class="detail-tab-content hidden">
+                                <h3 class="text-lg font-semibold mb-4">开发任务管理</h3>
+                                <p class="text-muted-foreground">开发任务功能正在开发中...</p>
+                            </div>
+
+                            <div id="team-content" class="detail-tab-content hidden">
+                                <h3 class="text-lg font-semibold mb-4">团队人员管理</h3>
+                                <p class="text-muted-foreground">人员管理功能正在开发中...</p>
+                            </div>
+
+                            <div id="deployment-content" class="detail-tab-content hidden">
+                                <h3 class="text-lg font-semibold mb-4">自动化部署</h3>
+                                <p class="text-muted-foreground">部署管理功能正在开发中...</p>
+                            </div>
+
+                            <div id="resources-content" class="detail-tab-content hidden">
+                                <h3 class="text-lg font-semibold mb-4">关联开发资源</h3>
+                                <p class="text-muted-foreground">资源管理功能正在开发中...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </main>
+    </div>
+
+    <!-- 移动端遮罩 -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden hidden"></div>
+
+    <script>
+        // 二级菜单交互功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 处理二级菜单展开/收起
+            const navToggles = document.querySelectorAll('.nav-toggle');
+            
+            navToggles.forEach(toggle => {
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.dataset.target;
+                    const submenu = document.getElementById(targetId);
+                    const chevron = this.querySelector('.chevron-icon');
+                    
+                    if (submenu) {
+                        // 切换展开状态
+                        submenu.classList.toggle('expanded');
+                        submenu.classList.toggle('hidden');
+                        chevron.classList.toggle('rotated');
+                    }
+                });
+            });
+
+            // 移动端侧边栏切换
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('-translate-x-full');
+                overlay.classList.toggle('hidden');
+            });
+
+            overlay.addEventListener('click', function() {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            });
+
+            // 从URL参数获取项目ID并加载项目数据
+            const urlParams = new URLSearchParams(window.location.search);
+            const projectId = urlParams.get('id') || 'ai-platform';
+            loadProjectData(projectId);
+
+            // 详情页面标签页切换
+            const detailTabs = document.querySelectorAll('[data-detail-tab]');
+            const detailContents = document.querySelectorAll('.detail-tab-content');
+
+            detailTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const targetTab = this.dataset.detailTab;
+
+                    // 更新标签页样式
+                    detailTabs.forEach(t => {
+                        t.classList.remove('border-primary', 'text-primary');
+                        t.classList.add('border-transparent', 'text-muted-foreground');
+                    });
+                    this.classList.remove('border-transparent', 'text-muted-foreground');
+                    this.classList.add('border-primary', 'text-primary');
+
+                    // 显示对应内容
+                    detailContents.forEach(content => {
+                        content.classList.add('hidden');
+                    });
+                    document.getElementById(targetTab + '-content').classList.remove('hidden');
+                });
+            });
+        });
+
+        // 加载项目数据
+        function loadProjectData(projectId) {
+            const projectData = getProjectData(projectId);
+            if (projectData) {
+                updateProjectInfo(projectData);
+            }
+        }
+
+        // 获取项目数据
+        function getProjectData(projectId) {
+            const projects = {
+                'ai-platform': {
+                    id: 'ai-platform',
+                    name: 'AI开发平台',
+                    description: '智能化开发工具平台，提供AI辅助编程功能',
+                    status: '进行中',
+                    statusColor: 'green',
+                    manager: '张项目经理',
+                    createTime: '2024-01-15',
+                    updateTime: '2024-01-21',
+                    progress: '75%',
+                    icon: '🤖',
+                    iconBg: 'purple'
+                },
+                'payment-system': {
+                    id: 'payment-system',
+                    name: '支付系统',
+                    description: '多渠道支付集成系统，支持微信、支付宝等',
+                    status: '开发中',
+                    statusColor: 'yellow',
+                    manager: '李技术总监',
+                    createTime: '2024-01-10',
+                    updateTime: '2024-01-21',
+                    progress: '45%',
+                    icon: '💳',
+                    iconBg: 'green'
+                },
+                'mobile-app': {
+                    id: 'mobile-app',
+                    name: '移动应用',
+                    description: '跨平台移动应用开发，支持iOS和Android',
+                    status: '已完成',
+                    statusColor: 'green',
+                    manager: '王移动开发',
+                    createTime: '2023-12-01',
+                    updateTime: '2024-01-15',
+                    progress: '100%',
+                    icon: '📱',
+                    iconBg: 'blue'
+                }
+            };
+            
+            return projects[projectId] || null;
+        }
+
+        // 更新项目信息
+        function updateProjectInfo(projectData) {
+            // 颜色映射
+            const colorClasses = {
+                blue: { bg: 'bg-blue/10', text: 'text-blue' },
+                green: { bg: 'bg-green/10', text: 'text-green' },
+                yellow: { bg: 'bg-yellow/10', text: 'text-yellow' },
+                purple: { bg: 'bg-purple/10', text: 'text-purple' },
+                red: { bg: 'bg-red/10', text: 'text-red' }
+            };
+            
+            // 更新基本信息
+            const iconColor = colorClasses[projectData.iconBg] || colorClasses.purple;
+            document.getElementById('project-icon').innerHTML = `<span class="${iconColor.text} font-semibold text-2xl">${projectData.icon}</span>`;
+            document.getElementById('project-icon').className = `w-16 h-16 ${iconColor.bg} rounded-lg flex items-center justify-center`;
+            document.getElementById('project-title').textContent = projectData.name;
+            document.getElementById('project-description').textContent = projectData.description;
+            
+            // 更新状态
+            const statusColor = colorClasses[projectData.statusColor] || colorClasses.green;
+            document.getElementById('project-status').textContent = projectData.status;
+            document.getElementById('project-status').className = `px-3 py-1 ${statusColor.bg} ${statusColor.text} text-sm rounded-full`;
+            
+            // 更新页面标题
+            document.title = `${projectData.name} - 项目详情 - AI开发平台`;
+        }
+    </script>
+</body>
+</html>
