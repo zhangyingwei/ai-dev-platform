@@ -2705,56 +2705,177 @@ export default Layout;`,
                 modalMonacoEditor = null;
             }
 
-            // 配置Monaco Editor
+            // 配置Monaco Editor - 使用官方CDN
             require.config({
                 paths: {
                     'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs'
                 }
             });
 
+            // 设置Monaco Editor环境
+            window.MonacoEnvironment = {
+                getWorkerUrl: function (moduleId, label) {
+                    if (label === 'json') {
+                        return 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/language/json/json.worker.js';
+                    }
+                    if (label === 'css' || label === 'scss' || label === 'less') {
+                        return 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/language/css/css.worker.js';
+                    }
+                    if (label === 'html' || label === 'handlebars' || label === 'razor') {
+                        return 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/language/html/html.worker.js';
+                    }
+                    if (label === 'typescript' || label === 'javascript') {
+                        return 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/language/typescript/ts.worker.js';
+                    }
+                    return 'https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/editor/editor.worker.js';
+                }
+            };
+
             require(['vs/editor/editor.main'], function () {
                 const container = document.getElementById('vscode-monaco-editor');
                 if (container) {
-                    // 创建Monaco Editor实例
+                    // 创建Monaco Editor实例 - 完整VSCode配置
                     modalMonacoEditor = monaco.editor.create(container, {
                         value: getDefaultFileContent('user_logs_idx.sql'),
                         language: 'sql',
                         theme: 'vs-dark',
+
+                        // 编辑器基础配置
                         automaticLayout: true,
-                        minimap: { enabled: true },
                         fontSize: 14,
+                        fontFamily: 'Consolas, "Courier New", monospace',
+                        fontWeight: 'normal',
+                        lineHeight: 20,
+                        letterSpacing: 0,
+
+                        // 行号和装饰
                         lineNumbers: 'on',
-                        roundedSelection: false,
-                        scrollBeyondLastLine: false,
-                        readOnly: false,
-                        wordWrap: 'on',
-                        folding: true,
+                        lineNumbersMinChars: 4,
                         lineDecorationsWidth: 10,
-                        lineNumbersMinChars: 3,
                         glyphMargin: true,
-                        contextmenu: true,
-                        mouseWheelZoom: true,
+
+                        // 滚动和选择
+                        scrollBeyondLastLine: false,
                         smoothScrolling: true,
+                        mouseWheelZoom: true,
+                        roundedSelection: false,
+
+                        // 代码折叠和换行
+                        folding: true,
+                        foldingStrategy: 'auto',
+                        wordWrap: 'on',
+                        wordWrapColumn: 120,
+
+                        // 小地图
+                        minimap: {
+                            enabled: true,
+                            side: 'right',
+                            showSlider: 'mouseover',
+                            renderCharacters: true,
+                            maxColumn: 120
+                        },
+
+                        // 光标和选择
                         cursorBlinking: 'blink',
                         cursorSmoothCaretAnimation: true,
+                        cursorStyle: 'line',
+                        cursorWidth: 2,
+
+                        // 渲染选项
                         renderWhitespace: 'selection',
                         renderControlCharacters: false,
+                        renderIndentGuides: true,
+                        renderLineHighlight: 'line',
+
+                        // 字体连字
                         fontLigatures: true,
+
+                        // 代码提示和补全
                         suggest: {
                             showKeywords: true,
                             showSnippets: true,
-                            showFunctions: true
+                            showFunctions: true,
+                            showConstructors: true,
+                            showFields: true,
+                            showVariables: true,
+                            showClasses: true,
+                            showStructs: true,
+                            showInterfaces: true,
+                            showModules: true,
+                            showProperties: true,
+                            showEvents: true,
+                            showOperators: true,
+                            showUnits: true,
+                            showValues: true,
+                            showConstants: true,
+                            showEnums: true,
+                            showEnumMembers: true,
+                            showColors: true,
+                            showFiles: true,
+                            showReferences: true,
+                            showFolders: true,
+                            showTypeParameters: true
                         },
+
+                        // 快速建议
                         quickSuggestions: {
                             other: true,
                             comments: false,
                             strings: false
-                        }
+                        },
+                        quickSuggestionsDelay: 100,
+
+                        // 参数提示
+                        parameterHints: {
+                            enabled: true,
+                            cycle: true
+                        },
+
+                        // 悬停提示
+                        hover: {
+                            enabled: true,
+                            delay: 300,
+                            sticky: true
+                        },
+
+                        // 上下文菜单
+                        contextmenu: true,
+
+                        // 查找和替换
+                        find: {
+                            seedSearchStringFromSelection: true,
+                            autoFindInSelection: 'never'
+                        },
+
+                        // 格式化
+                        formatOnPaste: true,
+                        formatOnType: true,
+
+                        // 其他选项
+                        readOnly: false,
+                        selectOnLineNumbers: true,
+                        selectionHighlight: true,
+                        occurrencesHighlight: true,
+                        codeLens: true,
+                        colorDecorators: true,
+                        links: true,
+                        matchBrackets: 'always',
+                        autoClosingBrackets: 'always',
+                        autoClosingQuotes: 'always',
+                        autoSurround: 'languageDefined',
+                        dragAndDrop: true,
+                        copyWithSyntaxHighlighting: true
                     });
 
                     // 添加编辑器事件监听
                     modalMonacoEditor.onDidChangeModelContent(() => {
                         addVSCodeTerminalLog(`[${new Date().toLocaleTimeString()}] 代码已修改`, 'info');
+                        updateFileStatus(window.currentVSCodeFile, 'modified');
+                    });
+
+                    // 添加光标位置变化监听
+                    modalMonacoEditor.onDidChangeCursorPosition((e) => {
+                        updateStatusBar(e.position.lineNumber, e.position.column);
                     });
 
                     // 添加快捷键
@@ -2762,7 +2883,20 @@ export default Layout;`,
                         saveVSCodeFile();
                     });
 
-                    console.log('VSCode Monaco Editor 初始化完成');
+                    modalMonacoEditor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyF, () => {
+                        modalMonacoEditor.getAction('actions.find').run();
+                    });
+
+                    modalMonacoEditor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyH, () => {
+                        modalMonacoEditor.getAction('editor.action.startFindReplaceAction').run();
+                    });
+
+                    modalMonacoEditor.addCommand(monaco.KeyMod.Alt | monaco.KeyMod.Shift | monaco.KeyCode.KeyF, () => {
+                        modalMonacoEditor.getAction('editor.action.formatDocument').run();
+                    });
+
+                    console.log('Monaco Editor 初始化完成 - 完整VSCode配置');
+                    addVSCodeTerminalLog(`[${new Date().toLocaleTimeString()}] Monaco Editor 初始化完成`, 'success');
 
                     // 初始化VSCode界面
                     initVSCodeInterface();
@@ -3259,6 +3393,12 @@ FROM user_logs;`,
                 const language = getLanguageFromFileName(fileName);
                 monaco.editor.setModelLanguage(modalMonacoEditor.getModel(), language);
 
+                // 更新工具栏语言显示
+                const languageDisplay = document.getElementById('editor-language');
+                if (languageDisplay) {
+                    languageDisplay.textContent = language.toUpperCase();
+                }
+
                 // 设置当前文件名
                 window.currentVSCodeFile = fileName;
             }
@@ -3266,7 +3406,7 @@ FROM user_logs;`,
             // 更新标签页
             updateVSCodeTabs(fileName);
 
-            addVSCodeTerminalLog(`[${new Date().toLocaleTimeString()}] 打开文件: ${fileName}`, 'info');
+            addVSCodeTerminalLog(`[${new Date().toLocaleTimeString()}] 打开文件: ${fileName} (${getLanguageFromFileName(fileName)})`, 'info');
         }
 
         function updateVSCodeTabs(fileName) {
@@ -3374,6 +3514,118 @@ FROM user_logs;`,
                     const logEntry = document.createElement('div');
                     logEntry.className = 'text-green-400';
                     logEntry.textContent = `文件保存成功: ${window.currentVSCodeFile}`;
+                    outputPanel.appendChild(logEntry);
+                }
+
+                // 更新文件状态为已保存
+                updateFileStatus(window.currentVSCodeFile, 'saved');
+            }
+        }
+
+        // Monaco Editor 辅助函数
+        function updateFileStatus(fileName, status) {
+            // 更新标签页显示状态
+            const tabs = document.querySelectorAll('#vscode-editor-tabs > div');
+            tabs.forEach(tab => {
+                const tabText = tab.querySelector('span');
+                if (tabText && tabText.textContent === fileName) {
+                    if (status === 'modified') {
+                        if (!tabText.textContent.includes('●')) {
+                            tabText.textContent = '● ' + fileName;
+                        }
+                    } else if (status === 'saved') {
+                        tabText.textContent = fileName;
+                    }
+                }
+            });
+        }
+
+        function updateStatusBar(line, column) {
+            // 在底部面板显示光标位置
+            const terminalPanel = document.getElementById('terminal-panel');
+            if (terminalPanel) {
+                // 更新或创建状态行
+                let statusLine = terminalPanel.querySelector('.status-line');
+                if (!statusLine) {
+                    statusLine = document.createElement('div');
+                    statusLine.className = 'status-line text-blue-400 text-xs';
+                    terminalPanel.appendChild(statusLine);
+                }
+                statusLine.textContent = `行 ${line}, 列 ${column}`;
+            }
+        }
+
+        // 增强的格式化功能
+        function formatCode() {
+            if (modalMonacoEditor) {
+                modalMonacoEditor.getAction('editor.action.formatDocument').run();
+                addVSCodeTerminalLog(`[${new Date().toLocaleTimeString()}] 代码已格式化`, 'info');
+
+                // 显示格式化结果
+                const outputPanel = document.getElementById('output-panel');
+                if (outputPanel) {
+                    const logEntry = document.createElement('div');
+                    logEntry.className = 'text-blue-400';
+                    logEntry.textContent = `代码格式化完成: ${window.currentVSCodeFile}`;
+                    outputPanel.appendChild(logEntry);
+                }
+            }
+        }
+
+        // Monaco Editor 主题切换
+        function switchMonacoTheme(theme) {
+            if (modalMonacoEditor) {
+                monaco.editor.setTheme(theme);
+                addVSCodeTerminalLog(`[${new Date().toLocaleTimeString()}] 主题已切换为: ${theme}`, 'info');
+            }
+        }
+
+        // Monaco Editor 语言切换
+        function switchMonacoLanguage(language) {
+            if (modalMonacoEditor) {
+                monaco.editor.setModelLanguage(modalMonacoEditor.getModel(), language);
+                addVSCodeTerminalLog(`[${new Date().toLocaleTimeString()}] 语言模式已切换为: ${language}`, 'info');
+            }
+        }
+
+        // 获取编辑器统计信息
+        function getEditorStats() {
+            if (modalMonacoEditor) {
+                const model = modalMonacoEditor.getModel();
+                const lineCount = model.getLineCount();
+                const characterCount = model.getValueLength();
+                const selection = modalMonacoEditor.getSelection();
+                const selectedText = model.getValueInRange(selection);
+
+                return {
+                    lines: lineCount,
+                    characters: characterCount,
+                    selectedCharacters: selectedText.length,
+                    language: model.getLanguageId()
+                };
+            }
+            return null;
+        }
+
+        // 显示编辑器统计信息
+        function showEditorStats() {
+            const stats = getEditorStats();
+            if (stats) {
+                const message = `文件统计 - 行数: ${stats.lines}, 字符数: ${stats.characters}, 语言: ${stats.language}`;
+                addVSCodeTerminalLog(`[${new Date().toLocaleTimeString()}] ${message}`, 'info');
+
+                // 在输出面板显示详细统计
+                const outputPanel = document.getElementById('output-panel');
+                if (outputPanel) {
+                    const logEntry = document.createElement('div');
+                    logEntry.className = 'text-gray-300';
+                    logEntry.innerHTML = `
+                        <div>文件: ${window.currentVSCodeFile}</div>
+                        <div>行数: ${stats.lines}</div>
+                        <div>字符数: ${stats.characters}</div>
+                        <div>语言: ${stats.language}</div>
+                        <div>已选择: ${stats.selectedCharacters} 字符</div>
+                    `;
                     outputPanel.appendChild(logEntry);
                 }
             }
@@ -3552,6 +3804,32 @@ FROM user_logs;`,
 
                     <!-- 主编辑区域 -->
                     <div class="flex-1 flex flex-col">
+                        <!-- 编辑器工具栏 -->
+                        <div class="flex items-center justify-between px-4 py-2 bg-gray-800 border-b border-gray-700">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-sm text-gray-300">Monaco Editor</span>
+                                <span class="text-xs text-gray-500">|</span>
+                                <span class="text-xs text-gray-400" id="editor-language">SQL</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <button class="px-2 py-1 text-xs text-gray-400 hover:text-gray-200 hover:bg-gray-700 rounded" onclick="formatCode()" title="格式化代码 (Alt+Shift+F)">
+                                    格式化
+                                </button>
+                                <button class="px-2 py-1 text-xs text-gray-400 hover:text-gray-200 hover:bg-gray-700 rounded" onclick="showEditorStats()" title="文件统计">
+                                    统计
+                                </button>
+                                <button class="px-2 py-1 text-xs text-gray-400 hover:text-gray-200 hover:bg-gray-700 rounded" onclick="switchMonacoTheme('vs-light')" title="切换亮色主题">
+                                    亮色
+                                </button>
+                                <button class="px-2 py-1 text-xs text-gray-400 hover:text-gray-200 hover:bg-gray-700 rounded" onclick="switchMonacoTheme('vs-dark')" title="切换暗色主题">
+                                    暗色
+                                </button>
+                                <button class="px-2 py-1 text-xs text-gray-400 hover:text-gray-200 hover:bg-gray-700 rounded" onclick="saveVSCodeFile()" title="保存文件 (Ctrl+S)">
+                                    保存
+                                </button>
+                            </div>
+                        </div>
+
                         <!-- 编辑器标签页 -->
                         <div class="flex bg-gray-800 border-b border-gray-700" id="vscode-editor-tabs">
                             <div class="flex items-center space-x-2 px-4 py-2 bg-gray-850 border-r border-gray-700 cursor-pointer" onclick="switchVSCodeTab('user_logs_idx.sql')">
