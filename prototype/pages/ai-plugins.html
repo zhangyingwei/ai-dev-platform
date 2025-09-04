@@ -264,7 +264,7 @@
                             <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                         </svg>
                     </div>
-                    <span class="text-sm font-medium">AI Agent 管理</span>
+                    <span class="text-sm font-medium">AI插件管理</span>
                 </a>
 
                 <div class="mt-4 mb-3">
@@ -287,15 +287,58 @@
                     </div>
                     <span class="text-sm font-medium">监控运维</span>
                 </a>
-                <a href="resource-management.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
-                    <div class="w-4 h-4 flex items-center justify-center">
-                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z" clip-rule="evenodd"/>
-                            <path d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V9a1 1 0 00-1-1h-1v-1z"/>
+
+                <!-- 开发资源管理 - 二级菜单 -->
+                <div class="nav-group">
+                    <button class="nav-item nav-toggle flex items-center justify-between w-full px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground" data-target="resource-submenu">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-4 h-4 flex items-center justify-center">
+                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z" clip-rule="evenodd"/>
+                                    <path d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V9a1 1 0 00-1-1h-1v-1z"/>
+                                </svg>
+                            </div>
+                            <span class="text-sm font-medium">开发资源管理</span>
+                        </div>
+                        <svg class="w-4 h-4 transition-transform duration-200 chevron-icon" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
                         </svg>
+                    </button>
+                    <div id="resource-submenu" class="submenu hidden ml-6 mt-1 space-y-1">
+                        <a href="database-management.html" class="nav-item flex items-center space-x-2 px-2 py-1.5 rounded-md hover:bg-accent hover:text-accent-foreground text-sm">
+                            <div class="w-3 h-3 flex items-center justify-center">
+                                <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 16a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"/>
+                                </svg>
+                            </div>
+                            <span class="font-medium">数据库管理</span>
+                        </a>
+                        <a href="application-management.html" class="nav-item flex items-center space-x-2 px-2 py-1.5 rounded-md hover:bg-accent hover:text-accent-foreground text-sm">
+                            <div class="w-3 h-3 flex items-center justify-center">
+                                <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zm2 0v8h12V6H4z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <span class="font-medium">应用服务管理</span>
+                        </a>
+                        <a href="code-management.html" class="nav-item flex items-center space-x-2 px-2 py-1.5 rounded-md hover:bg-accent hover:text-accent-foreground text-sm">
+                            <div class="w-3 h-3 flex items-center justify-center">
+                                <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <span class="font-medium">代码管理</span>
+                        </a>
+                        <a href="server-management.html" class="nav-item flex items-center space-x-2 px-2 py-1.5 rounded-md hover:bg-accent hover:text-accent-foreground text-sm">
+                            <div class="w-3 h-3 flex items-center justify-center">
+                                <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <span class="font-medium">服务器管理</span>
+                        </a>
                     </div>
-                    <span class="text-sm font-medium">开发资源管理</span>
-                </a>
+                </div>
                 <a href="system-management.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
                     <div class="w-4 h-4 flex items-center justify-center">
                         <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
@@ -675,6 +718,27 @@
     <!-- 隐藏的文件输入 -->
     <input type="file" id="import-file-input" accept=".json" class="hidden">
 
+    <script>
+        // 二级菜单展开/收起功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleButtons = document.querySelectorAll('.nav-toggle');
+
+            toggleButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-target');
+                    const submenu = document.getElementById(targetId);
+                    const chevron = this.querySelector('.chevron-icon');
+
+                    if (submenu) {
+                        submenu.classList.toggle('hidden');
+                        if (chevron) {
+                            chevron.style.transform = submenu.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(90deg)';
+                        }
+                    }
+                });
+            });
+        });
+    </script>
     <script src="../js/ai-agents.js"></script>
 </body>
 </html>
