@@ -1121,9 +1121,394 @@
                                 </div>
                             </div>
 
+                            <!-- 资源管理 -->
                             <div id="resources-content" class="detail-tab-content hidden">
-                                <h3 class="text-lg font-semibold mb-4">关联开发资源</h3>
-                                <p class="text-muted-foreground">资源管理功能正在开发中...</p>
+                                <div class="space-y-6">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="text-lg font-semibold">项目资源管理</h3>
+                                        <div class="flex items-center space-x-3">
+                                            <button class="px-4 py-2 bg-success text-success-foreground rounded-md hover:bg-success/80">
+                                                创建数据库
+                                            </button>
+                                            <button class="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/80">
+                                                创建应用
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- 资源概览 -->
+                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                        <div class="bg-muted rounded-lg p-4">
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <p class="text-sm text-muted-foreground">数据库实例</p>
+                                                    <p class="text-lg font-bold">3</p>
+                                                </div>
+                                                <div class="w-10 h-10 bg-blue/10 rounded-lg flex items-center justify-center">
+                                                    <span class="text-xl">🗄️</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="bg-muted rounded-lg p-4">
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <p class="text-sm text-muted-foreground">应用服务</p>
+                                                    <p class="text-lg font-bold">5</p>
+                                                </div>
+                                                <div class="w-10 h-10 bg-green/10 rounded-lg flex items-center justify-center">
+                                                    <span class="text-xl">🚀</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="bg-muted rounded-lg p-4">
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <p class="text-sm text-muted-foreground">运行中服务</p>
+                                                    <p class="text-lg font-bold">4</p>
+                                                </div>
+                                                <div class="w-10 h-10 bg-green/10 rounded-lg flex items-center justify-center">
+                                                    <span class="text-xl">✅</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="bg-muted rounded-lg p-4">
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <p class="text-sm text-muted-foreground">存储使用</p>
+                                                    <p class="text-lg font-bold">2.5GB</p>
+                                                </div>
+                                                <div class="w-10 h-10 bg-purple/10 rounded-lg flex items-center justify-center">
+                                                    <span class="text-xl">💾</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 数据库管理 -->
+                                    <div class="bg-card border border-border rounded-lg">
+                                        <div class="p-4 border-b border-border">
+                                            <div class="flex items-center justify-between">
+                                                <h4 class="text-lg font-semibold">数据库管理</h4>
+                                                <div class="flex items-center space-x-3">
+                                                    <input type="text" placeholder="搜索数据库..." class="px-3 py-1.5 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                                                    <select class="px-3 py-1.5 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                                                        <option>全部类型</option>
+                                                        <option>MySQL</option>
+                                                        <option>PostgreSQL</option>
+                                                        <option>Redis</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="overflow-x-auto">
+                                            <table class="w-full">
+                                                <thead class="bg-muted">
+                                                    <tr>
+                                                        <th class="px-4 py-3 text-left text-sm font-medium text-muted-foreground">实例名称</th>
+                                                        <th class="px-4 py-3 text-left text-sm font-medium text-muted-foreground">类型</th>
+                                                        <th class="px-4 py-3 text-left text-sm font-medium text-muted-foreground">版本</th>
+                                                        <th class="px-4 py-3 text-left text-sm font-medium text-muted-foreground">连接地址</th>
+                                                        <th class="px-4 py-3 text-left text-sm font-medium text-muted-foreground">状态</th>
+                                                        <th class="px-4 py-3 text-left text-sm font-medium text-muted-foreground">操作</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="divide-y divide-border">
+                                                    <!-- MySQL 主库 -->
+                                                    <tr class="hover:bg-muted/50">
+                                                        <td class="px-4 py-3">
+                                                            <div class="flex items-center space-x-3">
+                                                                <span class="text-xl">🐬</span>
+                                                                <div>
+                                                                    <p class="font-medium">ai-platform-mysql</p>
+                                                                    <p class="text-sm text-muted-foreground">主数据库</p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3 text-sm">MySQL</td>
+                                                        <td class="px-4 py-3 text-sm">8.0.35</td>
+                                                        <td class="px-4 py-3 text-sm font-mono">mysql.ai-platform.local:3306</td>
+                                                        <td class="px-4 py-3">
+                                                            <span class="px-2 py-1 bg-green/10 text-green text-xs rounded-full">运行中</span>
+                                                        </td>
+                                                        <td class="px-4 py-3">
+                                                            <div class="flex items-center space-x-2">
+                                                                <button class="px-2 py-1 bg-primary hover:bg-primary/80 text-primary-foreground rounded text-xs" onclick="viewDatabaseDetails('ai-platform-mysql')">查看详情</button>
+                                                                <button class="px-2 py-1 bg-muted hover:bg-accent border border-border rounded text-xs">监控</button>
+                                                                <button class="px-2 py-1 bg-muted hover:bg-accent border border-border rounded text-xs">备份</button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+
+                                                    <!-- Redis 缓存 -->
+                                                    <tr class="hover:bg-muted/50">
+                                                        <td class="px-4 py-3">
+                                                            <div class="flex items-center space-x-3">
+                                                                <span class="text-xl">🔴</span>
+                                                                <div>
+                                                                    <p class="font-medium">ai-platform-redis</p>
+                                                                    <p class="text-sm text-muted-foreground">缓存数据库</p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3 text-sm">Redis</td>
+                                                        <td class="px-4 py-3 text-sm">7.0.12</td>
+                                                        <td class="px-4 py-3 text-sm font-mono">redis.ai-platform.local:6379</td>
+                                                        <td class="px-4 py-3">
+                                                            <span class="px-2 py-1 bg-green/10 text-green text-xs rounded-full">运行中</span>
+                                                        </td>
+                                                        <td class="px-4 py-3">
+                                                            <div class="flex items-center space-x-2">
+                                                                <button class="px-2 py-1 bg-primary hover:bg-primary/80 text-primary-foreground rounded text-xs" onclick="viewDatabaseDetails('ai-platform-redis')">查看详情</button>
+                                                                <button class="px-2 py-1 bg-muted hover:bg-accent border border-border rounded text-xs">监控</button>
+                                                                <button class="px-2 py-1 bg-muted hover:bg-accent border border-border rounded text-xs">清理</button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+
+                                                    <!-- PostgreSQL 分析库 -->
+                                                    <tr class="hover:bg-muted/50">
+                                                        <td class="px-4 py-3">
+                                                            <div class="flex items-center space-x-3">
+                                                                <span class="text-xl">🐘</span>
+                                                                <div>
+                                                                    <p class="font-medium">ai-platform-analytics</p>
+                                                                    <p class="text-sm text-muted-foreground">数据分析库</p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-4 py-3 text-sm">PostgreSQL</td>
+                                                        <td class="px-4 py-3 text-sm">15.4</td>
+                                                        <td class="px-4 py-3 text-sm font-mono">postgres.ai-platform.local:5432</td>
+                                                        <td class="px-4 py-3">
+                                                            <span class="px-2 py-1 bg-green/10 text-green text-xs rounded-full">运行中</span>
+                                                        </td>
+                                                        <td class="px-4 py-3">
+                                                            <div class="flex items-center space-x-2">
+                                                                <button class="px-2 py-1 bg-primary hover:bg-primary/80 text-primary-foreground rounded text-xs" onclick="viewDatabaseDetails('ai-platform-analytics')">查看详情</button>
+                                                                <button class="px-2 py-1 bg-muted hover:bg-accent border border-border rounded text-xs">监控</button>
+                                                                <button class="px-2 py-1 bg-muted hover:bg-accent border border-border rounded text-xs">备份</button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <!-- 应用服务管理 -->
+                                    <div class="bg-card border border-border rounded-lg">
+                                        <div class="p-4 border-b border-border">
+                                            <div class="flex items-center justify-between">
+                                                <h4 class="text-lg font-semibold">应用服务管理</h4>
+                                                <div class="flex items-center space-x-3">
+                                                    <input type="text" placeholder="搜索应用..." class="px-3 py-1.5 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                                                    <select class="px-3 py-1.5 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                                                        <option>全部状态</option>
+                                                        <option>运行中</option>
+                                                        <option>已停止</option>
+                                                        <option>部署中</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+                                            <!-- 前端应用 -->
+                                            <div class="border border-border rounded-lg p-4 hover:bg-muted/50">
+                                                <div class="flex items-center justify-between mb-3">
+                                                    <div class="flex items-center space-x-3">
+                                                        <div class="w-10 h-10 bg-blue/10 rounded-lg flex items-center justify-center">
+                                                            <span class="text-xl">🌐</span>
+                                                        </div>
+                                                        <div>
+                                                            <h5 class="font-semibold">AI平台前端</h5>
+                                                            <p class="text-sm text-muted-foreground">React应用</p>
+                                                        </div>
+                                                    </div>
+                                                    <span class="px-2 py-1 bg-green/10 text-green text-xs rounded-full">运行中</span>
+                                                </div>
+                                                <div class="space-y-2 text-sm mb-3">
+                                                    <div class="flex justify-between">
+                                                        <span class="text-muted-foreground">端口:</span>
+                                                        <span>3000</span>
+                                                    </div>
+                                                    <div class="flex justify-between">
+                                                        <span class="text-muted-foreground">内存:</span>
+                                                        <span>256MB</span>
+                                                    </div>
+                                                    <div class="flex justify-between">
+                                                        <span class="text-muted-foreground">CPU:</span>
+                                                        <span>15%</span>
+                                                    </div>
+                                                    <div class="flex justify-between">
+                                                        <span class="text-muted-foreground">运行时间:</span>
+                                                        <span>2天</span>
+                                                    </div>
+                                                </div>
+                                                <div class="flex space-x-2">
+                                                    <button class="px-2 py-1 bg-primary hover:bg-primary/80 text-primary-foreground rounded text-xs">访问</button>
+                                                    <button class="px-2 py-1 bg-muted hover:bg-accent border border-border rounded text-xs">日志</button>
+                                                    <button class="px-2 py-1 bg-muted hover:bg-accent border border-border rounded text-xs">重启</button>
+                                                </div>
+                                            </div>
+
+                                            <!-- 后端API -->
+                                            <div class="border border-border rounded-lg p-4 hover:bg-muted/50">
+                                                <div class="flex items-center justify-between mb-3">
+                                                    <div class="flex items-center space-x-3">
+                                                        <div class="w-10 h-10 bg-green/10 rounded-lg flex items-center justify-center">
+                                                            <span class="text-xl">⚙️</span>
+                                                        </div>
+                                                        <div>
+                                                            <h5 class="font-semibold">AI平台API</h5>
+                                                            <p class="text-sm text-muted-foreground">Node.js服务</p>
+                                                        </div>
+                                                    </div>
+                                                    <span class="px-2 py-1 bg-green/10 text-green text-xs rounded-full">运行中</span>
+                                                </div>
+                                                <div class="space-y-2 text-sm mb-3">
+                                                    <div class="flex justify-between">
+                                                        <span class="text-muted-foreground">端口:</span>
+                                                        <span>8080</span>
+                                                    </div>
+                                                    <div class="flex justify-between">
+                                                        <span class="text-muted-foreground">内存:</span>
+                                                        <span>512MB</span>
+                                                    </div>
+                                                    <div class="flex justify-between">
+                                                        <span class="text-muted-foreground">CPU:</span>
+                                                        <span>25%</span>
+                                                    </div>
+                                                    <div class="flex justify-between">
+                                                        <span class="text-muted-foreground">运行时间:</span>
+                                                        <span>2天</span>
+                                                    </div>
+                                                </div>
+                                                <div class="flex space-x-2">
+                                                    <button class="px-2 py-1 bg-primary hover:bg-primary/80 text-primary-foreground rounded text-xs">访问</button>
+                                                    <button class="px-2 py-1 bg-muted hover:bg-accent border border-border rounded text-xs">日志</button>
+                                                    <button class="px-2 py-1 bg-muted hover:bg-accent border border-border rounded text-xs">重启</button>
+                                                </div>
+                                            </div>
+
+                                            <!-- AI服务 -->
+                                            <div class="border border-border rounded-lg p-4 hover:bg-muted/50">
+                                                <div class="flex items-center justify-between mb-3">
+                                                    <div class="flex items-center space-x-3">
+                                                        <div class="w-10 h-10 bg-purple/10 rounded-lg flex items-center justify-center">
+                                                            <span class="text-xl">🤖</span>
+                                                        </div>
+                                                        <div>
+                                                            <h5 class="font-semibold">AI推理服务</h5>
+                                                            <p class="text-sm text-muted-foreground">Python服务</p>
+                                                        </div>
+                                                    </div>
+                                                    <span class="px-2 py-1 bg-green/10 text-green text-xs rounded-full">运行中</span>
+                                                </div>
+                                                <div class="space-y-2 text-sm mb-3">
+                                                    <div class="flex justify-between">
+                                                        <span class="text-muted-foreground">端口:</span>
+                                                        <span>5000</span>
+                                                    </div>
+                                                    <div class="flex justify-between">
+                                                        <span class="text-muted-foreground">内存:</span>
+                                                        <span>1GB</span>
+                                                    </div>
+                                                    <div class="flex justify-between">
+                                                        <span class="text-muted-foreground">CPU:</span>
+                                                        <span>45%</span>
+                                                    </div>
+                                                    <div class="flex justify-between">
+                                                        <span class="text-muted-foreground">运行时间:</span>
+                                                        <span>1天</span>
+                                                    </div>
+                                                </div>
+                                                <div class="flex space-x-2">
+                                                    <button class="px-2 py-1 bg-primary hover:bg-primary/80 text-primary-foreground rounded text-xs">访问</button>
+                                                    <button class="px-2 py-1 bg-muted hover:bg-accent border border-border rounded text-xs">日志</button>
+                                                    <button class="px-2 py-1 bg-muted hover:bg-accent border border-border rounded text-xs">重启</button>
+                                                </div>
+                                            </div>
+
+                                            <!-- 监控服务 -->
+                                            <div class="border border-border rounded-lg p-4 hover:bg-muted/50">
+                                                <div class="flex items-center justify-between mb-3">
+                                                    <div class="flex items-center space-x-3">
+                                                        <div class="w-10 h-10 bg-yellow/10 rounded-lg flex items-center justify-center">
+                                                            <span class="text-xl">📊</span>
+                                                        </div>
+                                                        <div>
+                                                            <h5 class="font-semibold">监控服务</h5>
+                                                            <p class="text-sm text-muted-foreground">Prometheus</p>
+                                                        </div>
+                                                    </div>
+                                                    <span class="px-2 py-1 bg-green/10 text-green text-xs rounded-full">运行中</span>
+                                                </div>
+                                                <div class="space-y-2 text-sm mb-3">
+                                                    <div class="flex justify-between">
+                                                        <span class="text-muted-foreground">端口:</span>
+                                                        <span>9090</span>
+                                                    </div>
+                                                    <div class="flex justify-between">
+                                                        <span class="text-muted-foreground">内存:</span>
+                                                        <span>128MB</span>
+                                                    </div>
+                                                    <div class="flex justify-between">
+                                                        <span class="text-muted-foreground">CPU:</span>
+                                                        <span>8%</span>
+                                                    </div>
+                                                    <div class="flex justify-between">
+                                                        <span class="text-muted-foreground">运行时间:</span>
+                                                        <span>5天</span>
+                                                    </div>
+                                                </div>
+                                                <div class="flex space-x-2">
+                                                    <button class="px-2 py-1 bg-primary hover:bg-primary/80 text-primary-foreground rounded text-xs">访问</button>
+                                                    <button class="px-2 py-1 bg-muted hover:bg-accent border border-border rounded text-xs">日志</button>
+                                                    <button class="px-2 py-1 bg-muted hover:bg-accent border border-border rounded text-xs">重启</button>
+                                                </div>
+                                            </div>
+
+                                            <!-- 文档服务 -->
+                                            <div class="border border-border rounded-lg p-4 hover:bg-muted/50">
+                                                <div class="flex items-center justify-between mb-3">
+                                                    <div class="flex items-center space-x-3">
+                                                        <div class="w-10 h-10 bg-indigo/10 rounded-lg flex items-center justify-center">
+                                                            <span class="text-xl">📚</span>
+                                                        </div>
+                                                        <div>
+                                                            <h5 class="font-semibold">文档服务</h5>
+                                                            <p class="text-sm text-muted-foreground">VuePress</p>
+                                                        </div>
+                                                    </div>
+                                                    <span class="px-2 py-1 bg-yellow/10 text-yellow text-xs rounded-full">部署中</span>
+                                                </div>
+                                                <div class="space-y-2 text-sm mb-3">
+                                                    <div class="flex justify-between">
+                                                        <span class="text-muted-foreground">端口:</span>
+                                                        <span>8081</span>
+                                                    </div>
+                                                    <div class="flex justify-between">
+                                                        <span class="text-muted-foreground">内存:</span>
+                                                        <span>--</span>
+                                                    </div>
+                                                    <div class="flex justify-between">
+                                                        <span class="text-muted-foreground">CPU:</span>
+                                                        <span>--</span>
+                                                    </div>
+                                                    <div class="flex justify-between">
+                                                        <span class="text-muted-foreground">状态:</span>
+                                                        <span>启动中</span>
+                                                    </div>
+                                                </div>
+                                                <div class="flex space-x-2">
+                                                    <button class="px-2 py-1 bg-muted border border-border rounded text-xs" disabled>访问</button>
+                                                    <button class="px-2 py-1 bg-muted hover:bg-accent border border-border rounded text-xs">日志</button>
+                                                    <button class="px-2 py-1 bg-red/10 text-red hover:bg-red/20 rounded text-xs">停止</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1283,6 +1668,68 @@
             
             // 更新页面标题
             document.title = `${projectData.name} - 项目详情 - AI开发平台`;
+        }
+
+        // 数据库详情查看功能
+        function viewDatabaseDetails(databaseId) {
+            const databaseInfo = {
+                'ai-platform-mysql': {
+                    name: 'AI平台主数据库',
+                    type: 'MySQL',
+                    version: '8.0.35',
+                    host: 'mysql.ai-platform.local:3306',
+                    databases: ['ai_platform', 'user_management', 'project_data'],
+                    tables: {
+                        'ai_platform': ['users', 'projects', 'tasks', 'requirements'],
+                        'user_management': ['user_profiles', 'permissions', 'roles'],
+                        'project_data': ['project_files', 'code_repos', 'deployments']
+                    }
+                },
+                'ai-platform-redis': {
+                    name: 'AI平台缓存数据库',
+                    type: 'Redis',
+                    version: '7.0.12',
+                    host: 'redis.ai-platform.local:6379',
+                    databases: ['0', '1', '2'],
+                    keys: ['session:*', 'cache:*', 'queue:*']
+                },
+                'ai-platform-analytics': {
+                    name: 'AI平台分析数据库',
+                    type: 'PostgreSQL',
+                    version: '15.4',
+                    host: 'postgres.ai-platform.local:5432',
+                    databases: ['analytics', 'logs', 'metrics'],
+                    tables: {
+                        'analytics': ['user_behavior', 'feature_usage', 'performance_metrics'],
+                        'logs': ['application_logs', 'error_logs', 'audit_logs'],
+                        'metrics': ['system_metrics', 'business_metrics', 'custom_metrics']
+                    }
+                }
+            };
+
+            const dbInfo = databaseInfo[databaseId];
+            if (dbInfo) {
+                let detailsText = `数据库详情：${dbInfo.name}\n\n`;
+                detailsText += `类型：${dbInfo.type}\n`;
+                detailsText += `版本：${dbInfo.version}\n`;
+                detailsText += `连接地址：${dbInfo.host}\n\n`;
+
+                if (dbInfo.type === 'Redis') {
+                    detailsText += `数据库：${dbInfo.databases.join(', ')}\n`;
+                    detailsText += `主要键模式：${dbInfo.keys.join(', ')}\n\n`;
+                } else {
+                    detailsText += `数据库列表：${dbInfo.databases.join(', ')}\n\n`;
+                    if (dbInfo.tables) {
+                        detailsText += `数据表信息：\n`;
+                        Object.keys(dbInfo.tables).forEach(db => {
+                            detailsText += `  ${db}: ${dbInfo.tables[db].join(', ')}\n`;
+                        });
+                    }
+                }
+
+                detailsText += `\n点击"查看详情"可以进入数据库管理界面，对库表数据进行查询操作。`;
+                alert(detailsText);
+            }
         }
     </script>
 </body>
