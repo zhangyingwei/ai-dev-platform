@@ -508,6 +508,9 @@
                                             <button class="py-2 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground text-sm" data-dev-tab="development-tasks">
                                                 进行中任务
                                             </button>
+                                            <button class="py-2 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground text-sm" data-dev-tab="cloud-editor">
+                                                云编辑器
+                                            </button>
                                         </div>
                                     </nav>
 
@@ -1182,6 +1185,153 @@
                                                         <p class="text-sm text-muted-foreground">docs: 更新API文档和部署指南</p>
                                                     </div>
                                                     <div class="text-sm text-muted-foreground">1天前</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 云编辑器界面 -->
+                                    <div class="hidden" data-dev-tab-content="cloud-editor">
+                                        <div class="bg-card border border-border rounded-lg p-4">
+                                            <div class="flex items-center justify-between mb-4">
+                                                <h3 class="text-lg font-semibold">云端代码编辑器</h3>
+                                                <div class="flex space-x-2">
+                                                    <button class="px-3 py-1.5 border border-border rounded text-sm hover:bg-accent" onclick="saveAllFiles()">
+                                                        保存所有文件
+                                                    </button>
+                                                    <button class="px-3 py-1.5 bg-primary text-primary-foreground rounded text-sm hover:bg-gray-800" onclick="runCode()">
+                                                        运行代码
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <!-- 编辑器主体 -->
+                                            <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 h-96">
+                                                <!-- 文件树 -->
+                                                <div class="lg:col-span-1 border border-border rounded-lg">
+                                                    <div class="p-3 border-b border-border bg-muted">
+                                                        <h4 class="text-sm font-medium">项目文件</h4>
+                                                    </div>
+                                                    <div class="p-2 text-sm" id="file-tree">
+                                                        <div class="flex items-center space-x-2 py-1 px-2 hover:bg-accent rounded cursor-pointer" onclick="toggleFolder(this)">
+                                                            <span class="text-xs folder-icon">📁</span>
+                                                            <span class="font-medium">src</span>
+                                                        </div>
+                                                        <div class="folder-content ml-4">
+                                                            <div class="flex items-center space-x-2 py-1 px-2 hover:bg-accent rounded cursor-pointer" onclick="openFileInEditor('Header.tsx')">
+                                                                <span class="text-xs">📄</span>
+                                                                <span>Header.tsx</span>
+                                                            </div>
+                                                            <div class="flex items-center space-x-2 py-1 px-2 hover:bg-accent rounded cursor-pointer" onclick="openFileInEditor('Navigation.tsx')">
+                                                                <span class="text-xs">📄</span>
+                                                                <span>Navigation.tsx</span>
+                                                            </div>
+                                                            <div class="flex items-center space-x-2 py-1 px-2 hover:bg-accent rounded cursor-pointer" onclick="openFileInEditor('Layout.tsx')">
+                                                                <span class="text-xs">📄</span>
+                                                                <span>Layout.tsx</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex items-center space-x-2 py-1 px-2 hover:bg-accent rounded cursor-pointer" onclick="toggleFolder(this)">
+                                                            <span class="text-xs folder-icon">📁</span>
+                                                            <span class="font-medium">styles</span>
+                                                        </div>
+                                                        <div class="folder-content ml-4">
+                                                            <div class="flex items-center space-x-2 py-1 px-2 hover:bg-accent rounded cursor-pointer" onclick="openFileInEditor('layout.css')">
+                                                                <span class="text-xs">📄</span>
+                                                                <span>layout.css</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- 代码编辑器 -->
+                                                <div class="lg:col-span-2 border border-border rounded-lg">
+                                                    <!-- 编辑器标签页 -->
+                                                    <div class="flex border-b border-border bg-muted" id="editor-tabs">
+                                                        <div class="flex items-center space-x-2 px-4 py-2 border-r border-border bg-card cursor-pointer">
+                                                            <span class="text-sm">Header.tsx</span>
+                                                            <button class="text-xs hover:text-destructive" onclick="closeEditorTab('Header.tsx')">×</button>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Monaco Editor容器 -->
+                                                    <div id="monaco-editor-container" class="h-80 bg-background">
+                                                        <div class="flex items-center justify-center h-full bg-muted">
+                                                            <div class="text-center">
+                                                                <div class="text-lg font-medium mb-2">代码编辑器</div>
+                                                                <div class="text-sm text-muted-foreground">点击左侧文件查看代码</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- 实时监控面板 -->
+                                                <div class="lg:col-span-1 border border-border rounded-lg">
+                                                    <div class="p-3 border-b border-border bg-muted">
+                                                        <h4 class="text-sm font-medium">实时监控</h4>
+                                                    </div>
+                                                    <div class="p-2 space-y-3">
+                                                        <!-- Agent状态 -->
+                                                        <div class="text-xs">
+                                                            <div class="flex items-center justify-between mb-1">
+                                                                <span class="text-muted-foreground">Agent状态:</span>
+                                                                <span class="text-success">运行中</span>
+                                                            </div>
+                                                            <div class="flex items-center justify-between mb-1">
+                                                                <span class="text-muted-foreground">进度:</span>
+                                                                <span data-progress>75%</span>
+                                                            </div>
+                                                            <div class="w-full bg-muted rounded-full h-1.5">
+                                                                <div class="bg-primary h-1.5 rounded-full" style="width: 75%"></div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- 文件变更 -->
+                                                        <div class="text-xs">
+                                                            <div class="text-muted-foreground mb-2">文件变更:</div>
+                                                            <div id="file-changes" class="space-y-1">
+                                                                <div class="flex items-center justify-between p-2 bg-muted rounded">
+                                                                    <span>Header.tsx</span>
+                                                                    <span class="text-success">已生成</span>
+                                                                </div>
+                                                                <div class="flex items-center justify-between p-2 bg-muted rounded">
+                                                                    <span>Navigation.tsx</span>
+                                                                    <span class="text-warning">生成中...</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- 控制按钮 -->
+                                                        <div class="space-y-2">
+                                                            <button class="w-full px-3 py-1.5 border border-border rounded text-xs hover:bg-accent" onclick="pauseAgent()">
+                                                                暂停Agent
+                                                            </button>
+                                                            <button class="w-full px-3 py-1.5 border border-destructive text-destructive rounded text-xs hover:bg-destructive hover:text-destructive-foreground" onclick="stopAgent()">
+                                                                停止Agent
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- 日志输出 -->
+                                            <div class="mt-4 border border-border rounded-lg">
+                                                <div class="flex items-center justify-between p-3 border-b border-border bg-muted">
+                                                    <h4 class="text-sm font-medium">Agent执行日志</h4>
+                                                    <div class="flex space-x-2">
+                                                        <button class="px-2 py-1 text-xs border border-border rounded hover:bg-accent" onclick="toggleAutoScroll()">
+                                                            自动滚动
+                                                        </button>
+                                                        <button class="px-2 py-1 text-xs border border-border rounded hover:bg-accent" onclick="clearLogs()">
+                                                            清空日志
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div id="editor-logs" class="p-3 h-32 overflow-y-auto bg-background font-mono text-xs">
+                                                    <div class="text-info">[14:30:15] 正在分析需求文档...</div>
+                                                    <div class="text-info">[14:30:18] 开始生成Header组件...</div>
+                                                    <div class="text-success">[14:30:22] Header.tsx 生成完成</div>
+                                                    <div class="text-info">[14:30:25] 开始生成Navigation组件...</div>
+                                                    <div class="text-warning">[14:30:28] 正在优化响应式布局...</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -2289,6 +2439,209 @@
 
         function downloadCode(taskId) {
             alert(`下载代码：${taskId}`);
+        }
+
+        // 云编辑器相关功能函数
+        function saveAllFiles() {
+            alert('所有文件已保存');
+            addEditorLog('[' + new Date().toLocaleTimeString() + '] 所有文件已保存', 'success');
+        }
+
+        function runCode() {
+            alert('正在运行代码...');
+            addEditorLog('[' + new Date().toLocaleTimeString() + '] 开始运行代码', 'info');
+        }
+
+        function toggleFolder(element) {
+            const folderContent = element.nextElementSibling;
+            const folderIcon = element.querySelector('.folder-icon');
+
+            if (folderContent) {
+                if (folderContent.style.display === 'none') {
+                    folderContent.style.display = 'block';
+                    folderIcon.textContent = '📂';
+                } else {
+                    folderContent.style.display = 'none';
+                    folderIcon.textContent = '📁';
+                }
+            }
+        }
+
+        function openFileInEditor(fileName) {
+            console.log(`打开文件: ${fileName}`);
+
+            // 模拟文件内容
+            const fileContents = {
+                'Header.tsx': `import React from 'react';
+
+interface HeaderProps {
+  title: string;
+  subtitle?: string;
+}
+
+const Header: React.FC<HeaderProps> = ({ title, subtitle }) => {
+  return (
+    <header className="bg-white shadow-sm border-b">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center py-6">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
+            {subtitle && (
+              <p className="text-sm text-gray-600">{subtitle}</p>
+            )}
+          </div>
+        </div>
+      </div>
+    </header>
+  );
+};
+
+export default Header;`,
+                'Navigation.tsx': `import React from 'react';
+
+const Navigation: React.FC = () => {
+  return (
+    <nav className="bg-gray-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          <div className="flex items-center">
+            <div className="flex-shrink-0">
+              <span className="text-white font-bold">AI开发平台</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+export default Navigation;`,
+                'Layout.tsx': `import React from 'react';
+import Header from './Header';
+import Navigation from './Navigation';
+
+interface LayoutProps {
+  children: React.ReactNode;
+}
+
+const Layout: React.FC<LayoutProps> = ({ children }) => {
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Navigation />
+      <Header title="AI开发平台" subtitle="智能化项目管理系统" />
+      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        {children}
+      </main>
+    </div>
+  );
+};
+
+export default Layout;`,
+                'layout.css': `/* 布局样式 */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.header {
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.navigation {
+  background: #1f2937;
+  color: white;
+}
+
+.main-content {
+  min-height: calc(100vh - 120px);
+  background: #f9fafb;
+  padding: 24px 0;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 12px;
+  }
+
+  .main-content {
+    padding: 16px 0;
+  }
+}`
+            };
+
+            const content = fileContents[fileName] || `// ${fileName} 文件内容`;
+
+            // 更新编辑器内容显示
+            const editorContainer = document.getElementById('monaco-editor-container');
+            if (editorContainer) {
+                editorContainer.innerHTML = `
+                    <div class="h-full p-4 bg-background font-mono text-sm overflow-auto">
+                        <pre class="whitespace-pre-wrap">${content}</pre>
+                    </div>
+                `;
+            }
+
+            // 更新标签页
+            updateEditorTab(fileName);
+
+            addEditorLog(`[${new Date().toLocaleTimeString()}] 已打开文件: ${fileName}`, 'info');
+        }
+
+        function updateEditorTab(fileName) {
+            const tabsContainer = document.getElementById('editor-tabs');
+            if (tabsContainer) {
+                tabsContainer.innerHTML = `
+                    <div class="flex items-center space-x-2 px-4 py-2 border-r border-border bg-card cursor-pointer">
+                        <span class="text-sm">${fileName}</span>
+                        <button class="text-xs hover:text-destructive" onclick="closeEditorTab('${fileName}')">×</button>
+                    </div>
+                `;
+            }
+        }
+
+        function closeEditorTab(fileName) {
+            console.log(`关闭标签页: ${fileName}`);
+            addEditorLog(`[${new Date().toLocaleTimeString()}] 关闭文件: ${fileName}`, 'info');
+        }
+
+        function pauseAgent() {
+            if (confirm('确定要暂停Agent吗？')) {
+                alert('Agent已暂停');
+                addEditorLog(`[${new Date().toLocaleTimeString()}] Agent已暂停`, 'warning');
+            }
+        }
+
+        function stopAgent() {
+            if (confirm('确定要停止Agent吗？这将终止当前的代码生成过程。')) {
+                alert('Agent已停止');
+                addEditorLog(`[${new Date().toLocaleTimeString()}] Agent已停止`, 'destructive');
+            }
+        }
+
+        function toggleAutoScroll() {
+            alert('自动滚动已切换');
+        }
+
+        function clearLogs() {
+            const editorLogs = document.getElementById('editor-logs');
+            if (editorLogs) {
+                editorLogs.innerHTML = '';
+            }
+        }
+
+        function addEditorLog(message, type = 'info') {
+            const editorLogs = document.getElementById('editor-logs');
+            if (editorLogs) {
+                const logEntry = document.createElement('div');
+                logEntry.className = `text-${type}`;
+                logEntry.textContent = message;
+
+                editorLogs.appendChild(logEntry);
+                editorLogs.scrollTop = editorLogs.scrollHeight;
+            }
         }
     </script>
 </body>
