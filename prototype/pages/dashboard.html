@@ -116,8 +116,11 @@
             </div>
 
             <!-- 导航菜单 -->
-            <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-                <a href="dashboard.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md bg-accent text-accent-foreground">
+            <nav class="flex-1 p-3 space-y-1">
+                <div class="mb-3">
+                    <p class="text-xs font-medium text-muted-foreground uppercase tracking-wider px-2 py-1">主要功能</p>
+                </div>
+                <a href="../index.html" class="nav-item active flex items-center space-x-2 px-2 py-2 rounded-md bg-accent text-accent-foreground shadow-sm">
                     <div class="w-4 h-4 flex items-center justify-center">
                         <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
@@ -125,25 +128,27 @@
                     </div>
                     <span class="text-sm font-medium">工作台</span>
                 </a>
-
-                <a href="ai-plugins.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
+                <a href="requirement-management.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
                     <div class="w-4 h-4 flex items-center justify-center">
                         <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
+                            <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
                         </svg>
                     </div>
-                    <span class="text-sm font-medium">AI插件管理</span>
+                    <span class="text-sm font-medium">需求管理</span>
                 </a>
 
-                <a href="development-management.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
+                <a href="ai-coding-assistant.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
                     <div class="w-4 h-4 flex items-center justify-center">
                         <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 01-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 010-2h4a1 1 0 011 1v4a1 1 0 01-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 010 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15 13.586V12a1 1 0 011-1z" clip-rule="evenodd"/>
+                            <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                         </svg>
                     </div>
-                    <span class="text-sm font-medium">开发管理</span>
+                    <span class="text-sm font-medium">AI编码助手管理</span>
                 </a>
 
+                <div class="mt-4 mb-3">
+                    <p class="text-xs font-medium text-muted-foreground uppercase tracking-wider px-2 py-1">管理功能</p>
+                </div>
                 <a href="project-management.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
                     <div class="w-4 h-4 flex items-center justify-center">
                         <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
@@ -154,25 +159,17 @@
                     <span class="text-sm font-medium">项目管理</span>
                 </a>
 
-                <a href="requirement-management.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
-                    <div class="w-4 h-4 flex items-center justify-center">
-                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 8a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 12a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 16a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                    <span class="text-sm font-medium">需求管理</span>
-                </a>
-
-                <!-- 开发资源管理二级菜单 -->
-                <div>
-                    <button class="nav-toggle w-full flex items-center justify-between px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground text-sm font-medium" data-target="resource-submenu">
+                <!-- 开发资源管理 - 二级菜单 -->
+                <div class="nav-group">
+                    <button class="nav-item nav-toggle flex items-center justify-between w-full px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground" data-target="resource-submenu">
                         <div class="flex items-center space-x-2">
                             <div class="w-4 h-4 flex items-center justify-center">
                                 <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h4a1 1 0 010 2H6.414l2.293 2.293a1 1 0 01-1.414 1.414L5 6.414V8a1 1 0 01-2 0V4zm9 1a1 1 0 010-2h4a1 1 0 011 1v4a1 1 0 01-2 0V6.414l-2.293 2.293a1 1 0 11-1.414-1.414L13.586 5H12zm-9 7a1 1 0 012 0v1.586l2.293-2.293a1 1 0 111.414 1.414L6.414 15H8a1 1 0 010 2H4a1 1 0 01-1-1v-4zm13-1a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 010-2h1.586l-2.293-2.293a1 1 0 111.414-1.414L15 13.586V12a1 1 0 011-1z" clip-rule="evenodd"/>
+                                    <path fill-rule="evenodd" d="M2 5a2 2 0 012-2h8a2 2 0 012 2v10a2 2 0 002 2H4a2 2 0 01-2-2V5zm3 1h6v4H5V6zm6 6H5v2h6v-2z" clip-rule="evenodd"/>
+                                    <path d="M15 7h1a2 2 0 012 2v5.5a1.5 1.5 0 01-3 0V9a1 1 0 00-1-1h-1v-1z"/>
                                 </svg>
                             </div>
-                            <span>开发资源管理</span>
+                            <span class="text-sm font-medium">开发资源管理</span>
                         </div>
                         <svg class="w-4 h-4 transition-transform duration-200 chevron-icon" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 111.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
@@ -213,9 +210,6 @@
                         </a>
                     </div>
                 </div>
-
-
-
                 <a href="system-management.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
                     <div class="w-4 h-4 flex items-center justify-center">
                         <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
