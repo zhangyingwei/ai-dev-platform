@@ -9,6 +9,100 @@
     <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
     <link rel="stylesheet" href="../css/variables.css">
     <link rel="stylesheet" href="../css/styles.css">
+
+    <!-- VSCode精确样式 -->
+    <style>
+        /* VSCode Dark Theme 精确颜色 */
+        :root {
+            --vscode-titlebar-bg: #3c3c3c;
+            --vscode-titlebar-fg: #cccccc;
+            --vscode-activitybar-bg: #333333;
+            --vscode-activitybar-fg: #ffffff;
+            --vscode-activitybar-inactive-fg: #ffffff66;
+            --vscode-activitybar-border: #2b2b2b;
+            --vscode-sidebar-bg: #252526;
+            --vscode-sidebar-fg: #cccccc;
+            --vscode-sidebar-border: #2b2b2b;
+            --vscode-editor-bg: #1e1e1e;
+            --vscode-editor-fg: #d4d4d4;
+            --vscode-panel-bg: #181818;
+            --vscode-panel-border: #2b2b2b;
+            --vscode-statusbar-bg: #007acc;
+            --vscode-statusbar-fg: #ffffff;
+            --vscode-tab-active-bg: #1e1e1e;
+            --vscode-tab-inactive-bg: #2d2d30;
+            --vscode-tab-border: #2b2b2b;
+            --vscode-button-bg: #0e639c;
+            --vscode-button-hover-bg: #1177bb;
+            --vscode-input-bg: #3c3c3c;
+            --vscode-input-border: #3c3c3c;
+            --vscode-list-hover-bg: #2a2d2e;
+            --vscode-list-active-bg: #094771;
+            --vscode-scrollbar-bg: #79797966;
+            --vscode-scrollbar-hover-bg: #646464b3;
+        }
+
+        /* VSCode字体设置 */
+        .vscode-font {
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .vscode-ui-font {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        /* VSCode滚动条样式 */
+        .vscode-scrollbar::-webkit-scrollbar {
+            width: 14px;
+            height: 14px;
+        }
+
+        .vscode-scrollbar::-webkit-scrollbar-thumb {
+            background-color: var(--vscode-scrollbar-bg);
+            border-radius: 0;
+        }
+
+        .vscode-scrollbar::-webkit-scrollbar-thumb:hover {
+            background-color: var(--vscode-scrollbar-hover-bg);
+        }
+
+        .vscode-scrollbar::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+
+        .vscode-scrollbar::-webkit-scrollbar-corner {
+            background-color: transparent;
+        }
+
+        /* VSCode精确尺寸 */
+        .vscode-titlebar {
+            height: 30px;
+        }
+
+        .vscode-menubar {
+            height: 30px;
+        }
+
+        .vscode-activitybar {
+            width: 48px;
+        }
+
+        .vscode-sidebar {
+            width: 300px;
+        }
+
+        .vscode-statusbar {
+            height: 22px;
+        }
+
+        .vscode-tab {
+            height: 35px;
+        }
+    </style>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -3700,8 +3794,8 @@ FROM user_logs;`,
     <!-- 任务开发详情模态框 - 全屏显示 -->
     <div id="task-details-modal" class="fixed inset-0 bg-background hidden z-50">
         <div class="w-full h-full flex flex-col">
-                <!-- VSCode风格标题栏 -->
-                <div class="flex items-center justify-between h-8 px-4 bg-gray-800 border-b border-gray-700">
+                <!-- VSCode标题栏 -->
+                <div class="vscode-titlebar flex items-center justify-between px-4 vscode-ui-font" style="background-color: var(--vscode-titlebar-bg); color: var(--vscode-titlebar-fg); border-bottom: 1px solid var(--vscode-activitybar-border);">
                     <div class="flex items-center space-x-3">
                         <!-- 窗口控制按钮 -->
                         <div class="flex items-center space-x-2">
@@ -3711,58 +3805,73 @@ FROM user_logs;`,
                         </div>
                         <div class="flex items-center space-x-2">
                             <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                            <span class="text-sm text-gray-200 font-medium" id="task-details-title">数据库优化任务 - VSCode开发环境</span>
+                            <span class="text-sm font-medium" id="task-details-title">数据库优化任务 - VSCode开发环境</span>
                             <span class="px-2 py-0.5 bg-green-600 text-white text-xs rounded">运行中</span>
                         </div>
                     </div>
-                    <div class="flex items-center space-x-4">
-                        <div class="text-xs text-gray-400">Agent: GPT-4 Turbo</div>
-                        <div class="text-xs text-gray-400">进度: 65%</div>
-                        <div class="text-xs text-gray-400">用时: 8分钟</div>
+                    <div class="flex items-center space-x-4 text-xs">
+                        <div>Agent: GPT-4 Turbo</div>
+                        <div>进度: 65%</div>
+                        <div>用时: 8分钟</div>
                     </div>
                 </div>
 
                 <!-- VSCode完整编辑器界面 -->
-                <div class="flex-1 flex overflow-hidden bg-gray-900">
+                <div class="flex-1 flex overflow-hidden" style="background-color: var(--vscode-editor-bg);">
                     <!-- 左侧活动栏 -->
-                    <div class="w-12 bg-gray-800 border-r border-gray-700 flex flex-col justify-between">
+                    <div class="vscode-activitybar flex flex-col justify-between vscode-ui-font" style="background-color: var(--vscode-activitybar-bg); border-right: 1px solid var(--vscode-activitybar-border);">
                         <!-- 主要功能按钮 -->
-                        <div class="flex flex-col space-y-1 p-1">
-                            <button class="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-white hover:bg-gray-700 rounded relative"
+                        <div class="flex flex-col p-1">
+                            <button class="w-12 h-12 flex items-center justify-center relative transition-colors duration-150"
+                                    style="color: var(--vscode-activitybar-fg);"
+                                    onmouseover="this.style.backgroundColor='var(--vscode-list-hover-bg)'"
+                                    onmouseout="this.style.backgroundColor='transparent'"
                                     onclick="switchVSCodePanel('explorer')" id="explorer-btn" title="资源管理器 (Ctrl+Shift+E)">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/>
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M10 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2h-8l-2-2z"/>
                                 </svg>
-                                <div class="absolute -left-1 top-0 w-0.5 h-full bg-white rounded-r hidden" id="explorer-indicator"></div>
+                                <div class="absolute left-0 top-0 w-0.5 h-full bg-white hidden" id="explorer-indicator"></div>
                             </button>
-                            <button class="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-white hover:bg-gray-700 rounded relative"
+                            <button class="w-12 h-12 flex items-center justify-center relative transition-colors duration-150"
+                                    style="color: var(--vscode-activitybar-inactive-fg);"
+                                    onmouseover="this.style.backgroundColor='var(--vscode-list-hover-bg)'; this.style.color='var(--vscode-activitybar-fg)'"
+                                    onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--vscode-activitybar-inactive-fg)'"
                                     onclick="switchVSCodePanel('search')" id="search-btn" title="搜索 (Ctrl+Shift+F)">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
                                 </svg>
-                                <div class="absolute -left-1 top-0 w-0.5 h-full bg-white rounded-r hidden" id="search-indicator"></div>
+                                <div class="absolute left-0 top-0 w-0.5 h-full bg-white hidden" id="search-indicator"></div>
                             </button>
-                            <button class="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-white hover:bg-gray-700 rounded relative"
+                            <button class="w-12 h-12 flex items-center justify-center relative transition-colors duration-150"
+                                    style="color: var(--vscode-activitybar-inactive-fg);"
+                                    onmouseover="this.style.backgroundColor='var(--vscode-list-hover-bg)'; this.style.color='var(--vscode-activitybar-fg)'"
+                                    onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--vscode-activitybar-inactive-fg)'"
                                     onclick="switchVSCodePanel('git')" id="git-btn" title="源代码管理 (Ctrl+Shift+G)">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633z" clip-rule="evenodd"/>
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M21.007 8.222A3.738 3.738 0 0 0 15.045 5.2a3.737 3.737 0 0 0 1.156 6.583 2.988 2.988 0 0 1-2.668 1.67h-2.99a4.456 4.456 0 0 0-2.989 1.165V7.4a3.737 3.737 0 1 0-1.494 0v9.117a3.776 3.776 0 1 0 1.816.099 2.99 2.99 0 0 1 2.668-1.667h2.99a4.484 4.484 0 0 0 4.223-3.039 3.736 3.736 0 0 0 3.25-3.687zM4.565 3.738a2.242 2.242 0 1 1 4.484 0 2.242 2.242 0 0 1-4.484 0zm4.484 16.441a2.242 2.242 0 1 1-4.484 0 2.242 2.242 0 0 1 4.484 0z"/>
                                 </svg>
-                                <div class="absolute -left-1 top-0 w-0.5 h-full bg-white rounded-r hidden" id="git-indicator"></div>
-                                <div class="absolute -top-1 -right-1 w-4 h-4 bg-blue-500 text-white text-xs rounded-full flex items-center justify-center">3</div>
+                                <div class="absolute left-0 top-0 w-0.5 h-full bg-white hidden" id="git-indicator"></div>
+                                <div class="absolute top-1 right-1 w-4 h-4 bg-blue-500 text-white text-xs rounded-full flex items-center justify-center">3</div>
                             </button>
-                            <button class="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-white hover:bg-gray-700 rounded relative"
+                            <button class="w-12 h-12 flex items-center justify-center relative transition-colors duration-150"
+                                    style="color: var(--vscode-activitybar-inactive-fg);"
+                                    onmouseover="this.style.backgroundColor='var(--vscode-list-hover-bg)'; this.style.color='var(--vscode-activitybar-fg)'"
+                                    onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--vscode-activitybar-inactive-fg)'"
                                     onclick="switchVSCodePanel('debug')" id="debug-btn" title="运行和调试 (Ctrl+Shift+D)">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"/>
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M8 5v14l11-7z"/>
                                 </svg>
-                                <div class="absolute -left-1 top-0 w-0.5 h-full bg-white rounded-r hidden" id="debug-indicator"></div>
+                                <div class="absolute left-0 top-0 w-0.5 h-full bg-white hidden" id="debug-indicator"></div>
                             </button>
-                            <button class="w-10 h-10 flex items-center justify-center text-gray-300 hover:text-white hover:bg-gray-700 rounded relative"
+                            <button class="w-12 h-12 flex items-center justify-center relative transition-colors duration-150"
+                                    style="color: var(--vscode-activitybar-inactive-fg);"
+                                    onmouseover="this.style.backgroundColor='var(--vscode-list-hover-bg)'; this.style.color='var(--vscode-activitybar-fg)'"
+                                    onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--vscode-activitybar-inactive-fg)'"
                                     onclick="switchVSCodePanel('extensions')" id="extensions-btn" title="扩展 (Ctrl+Shift+X)">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/>
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M13.5 1.515a3 3 0 0 0-3 0L3 5.845a2 2 0 0 0-1 1.732v8.846a2 2 0 0 0 1 1.732l7.5 4.33a3 3 0 0 0 3 0l7.5-4.33a2 2 0 0 0 1-1.732V7.577a2 2 0 0 0-1-1.732L13.5 1.515z"/>
                                 </svg>
-                                <div class="absolute -left-1 top-0 w-0.5 h-full bg-white rounded-r hidden" id="extensions-indicator"></div>
+                                <div class="absolute left-0 top-0 w-0.5 h-full bg-white hidden" id="extensions-indicator"></div>
                             </button>
                         </div>
 
@@ -3784,7 +3893,7 @@ FROM user_logs;`,
                     </div>
 
                     <!-- 侧边栏面板 -->
-                    <div class="w-80 bg-gray-850 border-r border-gray-700 flex flex-col" id="vscode-sidebar">
+                    <div class="vscode-sidebar flex flex-col vscode-ui-font vscode-scrollbar" style="background-color: var(--vscode-sidebar-bg); border-right: 1px solid var(--vscode-sidebar-border); color: var(--vscode-sidebar-fg);" id="vscode-sidebar">
                         <!-- 资源管理器面板 -->
                         <div id="explorer-panel" class="flex-1 flex flex-col">
                             <div class="flex items-center justify-between p-3 border-b border-gray-700 bg-gray-800">
@@ -4018,7 +4127,7 @@ FROM user_logs;`,
                 </div>
 
                 <!-- VSCode状态栏 -->
-                <div class="h-6 px-4 bg-blue-600 border-t border-gray-700 flex items-center justify-between text-xs text-white">
+                <div class="vscode-statusbar px-4 flex items-center justify-between vscode-ui-font" style="background-color: var(--vscode-statusbar-bg); color: var(--vscode-statusbar-fg); border-top: 1px solid var(--vscode-panel-border); font-size: 12px;">
                     <div class="flex items-center space-x-4">
                         <div class="flex items-center space-x-1">
                             <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
