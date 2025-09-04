@@ -277,6 +277,9 @@
                                 <button class="py-3 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground text-sm" data-detail-tab="team">
                                     人员管理
                                 </button>
+                                <button class="py-3 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground text-sm" data-detail-tab="code">
+                                    项目代码管理
+                                </button>
                                 <button class="py-3 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground text-sm" data-detail-tab="deployment">
                                     部署管理
                                 </button>
@@ -476,6 +479,262 @@
                             <div id="team-content" class="detail-tab-content hidden">
                                 <h3 class="text-lg font-semibold mb-4">团队人员管理</h3>
                                 <p class="text-muted-foreground">人员管理功能正在开发中...</p>
+                            </div>
+
+                            <!-- 项目代码管理 -->
+                            <div id="code-content" class="detail-tab-content hidden">
+                                <div class="space-y-6">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="text-lg font-semibold">项目代码管理</h3>
+                                        <div class="flex items-center space-x-3">
+                                            <button class="px-4 py-2 bg-success text-success-foreground rounded-md hover:bg-success/80">
+                                                新建仓库
+                                            </button>
+                                            <button class="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/80">
+                                                导入仓库
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- 代码统计 -->
+                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                        <div class="bg-muted rounded-lg p-4">
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <p class="text-sm text-muted-foreground">项目仓库</p>
+                                                    <p class="text-lg font-bold">3</p>
+                                                </div>
+                                                <div class="w-10 h-10 bg-blue/10 rounded-lg flex items-center justify-center">
+                                                    <span class="text-xl">📁</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="bg-muted rounded-lg p-4">
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <p class="text-sm text-muted-foreground">代码分支</p>
+                                                    <p class="text-lg font-bold">12</p>
+                                                </div>
+                                                <div class="w-10 h-10 bg-green/10 rounded-lg flex items-center justify-center">
+                                                    <span class="text-xl">🌿</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="bg-muted rounded-lg p-4">
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <p class="text-sm text-muted-foreground">今日提交</p>
+                                                    <p class="text-lg font-bold">8</p>
+                                                </div>
+                                                <div class="w-10 h-10 bg-purple/10 rounded-lg flex items-center justify-center">
+                                                    <span class="text-xl">📝</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="bg-muted rounded-lg p-4">
+                                            <div class="flex items-center justify-between">
+                                                <div>
+                                                    <p class="text-sm text-muted-foreground">代码行数</p>
+                                                    <p class="text-lg font-bold">15.2K</p>
+                                                </div>
+                                                <div class="w-10 h-10 bg-yellow/10 rounded-lg flex items-center justify-center">
+                                                    <span class="text-xl">💻</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 仓库列表 -->
+                                    <div class="bg-card border border-border rounded-lg">
+                                        <div class="p-4 border-b border-border">
+                                            <div class="flex items-center justify-between">
+                                                <h4 class="text-lg font-semibold">项目仓库</h4>
+                                                <div class="flex items-center space-x-3">
+                                                    <input type="text" placeholder="搜索仓库..." class="px-3 py-1.5 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                                                    <select class="px-3 py-1.5 bg-background border border-input rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-ring">
+                                                        <option>全部分支</option>
+                                                        <option>主分支</option>
+                                                        <option>开发分支</option>
+                                                        <option>功能分支</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="divide-y divide-border">
+                                            <!-- 主仓库 -->
+                                            <div class="p-4 hover:bg-muted/50">
+                                                <div class="flex items-start justify-between">
+                                                    <div class="flex-1">
+                                                        <div class="flex items-center space-x-3 mb-2">
+                                                            <h5 class="font-semibold text-primary hover:underline cursor-pointer">ai-platform-frontend</h5>
+                                                            <span class="px-2 py-1 bg-green/10 text-green text-xs rounded-full">主仓库</span>
+                                                            <span class="px-2 py-1 bg-blue/10 text-blue text-xs rounded-full">公开</span>
+                                                        </div>
+                                                        <p class="text-sm text-muted-foreground mb-3">AI开发平台前端代码 - React + TypeScript</p>
+                                                        <div class="flex items-center space-x-4 text-sm text-muted-foreground">
+                                                            <div class="flex items-center space-x-1">
+                                                                <div class="w-3 h-3 bg-blue rounded-full"></div>
+                                                                <span>TypeScript</span>
+                                                            </div>
+                                                            <div class="flex items-center space-x-1">
+                                                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                                                                </svg>
+                                                                <span>15</span>
+                                                            </div>
+                                                            <div class="flex items-center space-x-1">
+                                                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path fill-rule="evenodd" d="M7.707 3.293a1 1 0 010 1.414L5.414 7H11a7 7 0 017 7v2a1 1 0 11-2 0v-2a5 5 0 00-5-5H5.414l2.293 2.293a1 1 0 11-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                                                </svg>
+                                                                <span>5</span>
+                                                            </div>
+                                                            <span>更新于 2小时前</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-center space-x-2">
+                                                        <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">克隆</button>
+                                                        <button class="px-3 py-1.5 bg-primary hover:bg-primary/80 text-primary-foreground rounded text-xs">查看</button>
+                                                        <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">分支</button>
+                                                        <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">提交</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- 后端仓库 -->
+                                            <div class="p-4 hover:bg-muted/50">
+                                                <div class="flex items-start justify-between">
+                                                    <div class="flex-1">
+                                                        <div class="flex items-center space-x-3 mb-2">
+                                                            <h5 class="font-semibold text-primary hover:underline cursor-pointer">ai-platform-backend</h5>
+                                                            <span class="px-2 py-1 bg-yellow/10 text-yellow text-xs rounded-full">私有</span>
+                                                        </div>
+                                                        <p class="text-sm text-muted-foreground mb-3">AI开发平台后端API - Node.js + Express</p>
+                                                        <div class="flex items-center space-x-4 text-sm text-muted-foreground">
+                                                            <div class="flex items-center space-x-1">
+                                                                <div class="w-3 h-3 bg-green rounded-full"></div>
+                                                                <span>JavaScript</span>
+                                                            </div>
+                                                            <div class="flex items-center space-x-1">
+                                                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                                                                </svg>
+                                                                <span>8</span>
+                                                            </div>
+                                                            <div class="flex items-center space-x-1">
+                                                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path fill-rule="evenodd" d="M7.707 3.293a1 1 0 010 1.414L5.414 7H11a7 7 0 017 7v2a1 1 0 11-2 0v-2a5 5 0 00-5-5H5.414l2.293 2.293a1 1 0 11-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                                                </svg>
+                                                                <span>3</span>
+                                                            </div>
+                                                            <span>更新于 4小时前</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-center space-x-2">
+                                                        <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">克隆</button>
+                                                        <button class="px-3 py-1.5 bg-primary hover:bg-primary/80 text-primary-foreground rounded text-xs">查看</button>
+                                                        <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">分支</button>
+                                                        <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">提交</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- 文档仓库 -->
+                                            <div class="p-4 hover:bg-muted/50">
+                                                <div class="flex items-start justify-between">
+                                                    <div class="flex-1">
+                                                        <div class="flex items-center space-x-3 mb-2">
+                                                            <h5 class="font-semibold text-primary hover:underline cursor-pointer">ai-platform-docs</h5>
+                                                            <span class="px-2 py-1 bg-blue/10 text-blue text-xs rounded-full">公开</span>
+                                                        </div>
+                                                        <p class="text-sm text-muted-foreground mb-3">项目文档和API文档 - Markdown + VuePress</p>
+                                                        <div class="flex items-center space-x-4 text-sm text-muted-foreground">
+                                                            <div class="flex items-center space-x-1">
+                                                                <div class="w-3 h-3 bg-purple rounded-full"></div>
+                                                                <span>Markdown</span>
+                                                            </div>
+                                                            <div class="flex items-center space-x-1">
+                                                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                                                                </svg>
+                                                                <span>3</span>
+                                                            </div>
+                                                            <div class="flex items-center space-x-1">
+                                                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path fill-rule="evenodd" d="M7.707 3.293a1 1 0 010 1.414L5.414 7H11a7 7 0 017 7v2a1 1 0 11-2 0v-2a5 5 0 00-5-5H5.414l2.293 2.293a1 1 0 11-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                                                </svg>
+                                                                <span>1</span>
+                                                            </div>
+                                                            <span>更新于 1天前</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex items-center space-x-2">
+                                                        <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">克隆</button>
+                                                        <button class="px-3 py-1.5 bg-primary hover:bg-primary/80 text-primary-foreground rounded text-xs">查看</button>
+                                                        <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">分支</button>
+                                                        <button class="px-3 py-1.5 bg-muted hover:bg-accent border border-border rounded text-xs">提交</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 最近提交 -->
+                                    <div class="bg-card border border-border rounded-lg">
+                                        <div class="p-4 border-b border-border">
+                                            <h4 class="text-lg font-semibold">最近提交</h4>
+                                        </div>
+                                        <div class="divide-y divide-border">
+                                            <div class="p-4 hover:bg-muted/50">
+                                                <div class="flex items-center space-x-4">
+                                                    <div class="w-8 h-8 bg-blue/10 rounded-full flex items-center justify-center">
+                                                        <span class="text-blue font-semibold text-sm">李</span>
+                                                    </div>
+                                                    <div class="flex-1">
+                                                        <div class="flex items-center space-x-2 mb-1">
+                                                            <span class="font-medium">李前端开发</span>
+                                                            <span class="text-sm text-muted-foreground">提交到</span>
+                                                            <span class="text-sm font-medium text-primary">ai-platform-frontend</span>
+                                                        </div>
+                                                        <p class="text-sm text-muted-foreground">feat: 添加用户权限管理界面</p>
+                                                    </div>
+                                                    <div class="text-sm text-muted-foreground">2小时前</div>
+                                                </div>
+                                            </div>
+                                            <div class="p-4 hover:bg-muted/50">
+                                                <div class="flex items-center space-x-4">
+                                                    <div class="w-8 h-8 bg-green/10 rounded-full flex items-center justify-center">
+                                                        <span class="text-green font-semibold text-sm">王</span>
+                                                    </div>
+                                                    <div class="flex-1">
+                                                        <div class="flex items-center space-x-2 mb-1">
+                                                            <span class="font-medium">王后端开发</span>
+                                                            <span class="text-sm text-muted-foreground">提交到</span>
+                                                            <span class="text-sm font-medium text-primary">ai-platform-backend</span>
+                                                        </div>
+                                                        <p class="text-sm text-muted-foreground">fix: 修复用户登录接口的权限验证问题</p>
+                                                    </div>
+                                                    <div class="text-sm text-muted-foreground">4小时前</div>
+                                                </div>
+                                            </div>
+                                            <div class="p-4 hover:bg-muted/50">
+                                                <div class="flex items-center space-x-4">
+                                                    <div class="w-8 h-8 bg-purple/10 rounded-full flex items-center justify-center">
+                                                        <span class="text-purple font-semibold text-sm">张</span>
+                                                    </div>
+                                                    <div class="flex-1">
+                                                        <div class="flex items-center space-x-2 mb-1">
+                                                            <span class="font-medium">张项目经理</span>
+                                                            <span class="text-sm text-muted-foreground">提交到</span>
+                                                            <span class="text-sm font-medium text-primary">ai-platform-docs</span>
+                                                        </div>
+                                                        <p class="text-sm text-muted-foreground">docs: 更新API文档和部署指南</p>
+                                                    </div>
+                                                    <div class="text-sm text-muted-foreground">1天前</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <div id="deployment-content" class="detail-tab-content hidden">
