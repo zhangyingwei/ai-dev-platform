@@ -6,6 +6,10 @@
     <title>需求管理 - AI开发平台</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../css/styles.css">
+    <!-- EasyMDE CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+    <!-- EasyMDE JS -->
+    <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -157,6 +161,139 @@
         .chevron-icon.rotated {
             transform: rotate(90deg);
         }
+
+        /* 需求拆分页面样式 */
+        .requirement-item.active {
+            background-color: hsl(var(--accent));
+            border-color: hsl(var(--primary));
+        }
+
+        .requirement-item {
+            transition: all 0.2s ease;
+        }
+
+        .requirement-item:hover {
+            background-color: hsl(var(--accent));
+        }
+
+        /* 需求项主要内容区域样式 */
+        .requirement-item .flex-1 {
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+
+        .requirement-item .flex-1:hover {
+            background-color: hsl(var(--muted) / 0.5);
+        }
+
+        /* 详情按钮区域样式 */
+        .requirement-item .flex.flex-col.items-end {
+            cursor: default;
+        }
+
+        /* 模态框动画 */
+        #add-sub-requirement-modal, #ai-breakdown-modal {
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* AI拆分相关样式 */
+        .ai-breakdown-result {
+            transition: all 0.2s ease;
+        }
+
+        .ai-breakdown-result:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 加载动画 */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+
+        /* 成功提示样式 */
+        .toast-success {
+            animation: slideInRight 0.3s ease, fadeOut 0.3s ease 2.7s;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        /* EasyMDE编辑器自定义样式 */
+        .EasyMDEContainer {
+            border: none !important;
+        }
+
+        .EasyMDEContainer .editor-toolbar {
+            background-color: hsl(var(--muted)) !important;
+            border-top: none !important;
+            border-left: none !important;
+            border-right: none !important;
+            border-bottom: 1px solid hsl(var(--border)) !important;
+        }
+
+        .EasyMDEContainer .editor-toolbar button {
+            color: hsl(var(--foreground)) !important;
+        }
+
+        .EasyMDEContainer .editor-toolbar button:hover {
+            background-color: hsl(var(--accent)) !important;
+        }
+
+        .EasyMDEContainer .CodeMirror {
+            background-color: hsl(var(--background)) !important;
+            color: hsl(var(--foreground)) !important;
+            border: none !important;
+        }
+
+        .EasyMDEContainer .CodeMirror-cursor {
+            border-left: 1px solid hsl(var(--foreground)) !important;
+        }
+
+        .EasyMDEContainer .editor-preview {
+            background-color: hsl(var(--background)) !important;
+            color: hsl(var(--foreground)) !important;
+        }
+
+        .EasyMDEContainer .editor-preview h1,
+        .EasyMDEContainer .editor-preview h2,
+        .EasyMDEContainer .editor-preview h3,
+        .EasyMDEContainer .editor-preview h4,
+        .EasyMDEContainer .editor-preview h5,
+        .EasyMDEContainer .editor-preview h6 {
+            color: hsl(var(--foreground)) !important;
+        }
+
+        .EasyMDEContainer .editor-preview code {
+            background-color: hsl(var(--muted)) !important;
+            color: hsl(var(--foreground)) !important;
+        }
+
+        .EasyMDEContainer .editor-preview pre {
+            background-color: hsl(var(--muted)) !important;
+        }
+
+        .EasyMDEContainer .editor-preview blockquote {
+            border-left: 4px solid hsl(var(--border)) !important;
+            background-color: hsl(var(--muted)) !important;
+        }
     </style>
 </head>
 <body class="bg-background text-foreground">
@@ -194,18 +331,6 @@
                     </div>
                     <span class="text-sm font-medium">需求管理</span>
                 </a>
-                <a href="ai-coding-assistant.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
-                    <div class="w-4 h-4 flex items-center justify-center">
-                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                    <span class="text-sm font-medium">AI编码助手管理</span>
-                </a>
-
-                <div class="mt-4 mb-3">
-                    <p class="text-xs font-medium text-muted-foreground uppercase tracking-wider px-2 py-1">管理功能</p>
-                </div>
                 <a href="project-management.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
                     <div class="w-4 h-4 flex items-center justify-center">
                         <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
@@ -214,6 +339,18 @@
                         </svg>
                     </div>
                     <span class="text-sm font-medium">项目管理</span>
+                </a>
+
+                <div class="mt-4 mb-3">
+                    <p class="text-xs font-medium text-muted-foreground uppercase tracking-wider px-2 py-1">管理功能</p>
+                </div>
+                <a href="ai-coding-assistant.html" class="nav-item flex items-center space-x-2 px-2 py-2 rounded-md hover:bg-accent hover:text-accent-foreground">
+                    <div class="w-4 h-4 flex items-center justify-center">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <span class="text-sm font-medium">AI编码助手管理</span>
                 </a>
 
                 <!-- 开发资源管理 - 二级菜单 -->
@@ -330,11 +467,8 @@
                             <button class="py-2 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground text-sm" data-tab="requirement-approval">
                                 需求审批
                             </button>
-                            <button class="py-2 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground text-sm" data-tab="requirement-list">
-                                需求列表
-                            </button>
-                            <button class="py-2 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground text-sm" data-tab="dev-requirements">
-                                研发需求
+                            <button class="py-2 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground text-sm" data-tab="requirement-breakdown">
+                                需求拆分
                             </button>
                         </div>
                     </nav>
@@ -346,15 +480,30 @@
                             <!-- 模块1：需求来源与分类 -->
                             <div class="bg-card border border-border rounded-lg p-4">
                                 <h3 class="text-base font-medium mb-4 text-foreground">需求来源与分类</h3>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-6">
+                                    <!-- 归属项目 -->
+                                    <div>
+                                        <label class="block text-sm font-medium mb-2">归属项目</label>
+                                        <select class="w-full px-3 py-2 border border-border rounded-md" id="requirement-project">
+                                            <option value="">请选择项目</option>
+                                            <option value="project-001">AI开发平台</option>
+                                            <option value="project-002">用户管理系统</option>
+                                            <option value="project-003">数据分析平台</option>
+                                            <option value="project-004">移动端应用</option>
+                                            <option value="project-005">企业门户网站</option>
+                                        </select>
+                                    </div>
                                     <!-- 需求来源 -->
                                     <div>
                                         <label class="block text-sm font-medium mb-2">需求来源</label>
-                                        <select class="w-full px-3 py-2 border border-border rounded-md">
-                                            <option>客户反馈</option>
-                                            <option>市场调研</option>
-                                            <option>内部需求</option>
-                                            <option>竞品分析</option>
+                                        <select class="w-full px-3 py-2 border border-border rounded-md" id="requirement-source">
+                                            <option value="">请选择来源</option>
+                                            <option value="customer">客户反馈</option>
+                                            <option value="market">市场调研</option>
+                                            <option value="internal">内部需求</option>
+                                            <option value="competitor">竞品分析</option>
+                                            <option value="operation">运营需求</option>
+                                            <option value="technical">技术优化</option>
                                         </select>
                                     </div>
                                     <!-- 需求分类 -->
@@ -370,24 +519,46 @@
                                 </div>
                             </div>
 
-                            <!-- 模块2：基础需求信息 -->
+                            <!-- 模块2：需求描述 -->
                             <div class="bg-card border border-border rounded-lg p-4">
-                                <h3 class="text-base font-medium mb-4 text-foreground">基础需求信息</h3>
+                                <h3 class="text-base font-medium mb-4 text-foreground">需求描述</h3>
                                 <div class="space-y-4">
-                                    <!-- 需求标题 - 独占一行 -->
+                                    <!-- EasyMDE Markdown编辑器 -->
                                     <div>
-                                        <label class="block text-sm font-medium mb-3">需求标题</label>
-                                        <input type="text" class="w-full px-4 py-3 border border-border rounded-md text-lg" placeholder="请输入需求标题...">
-                                    </div>
+                                        <label class="block text-sm font-medium mb-3">详细描述 <span class="text-muted-foreground">(支持Markdown格式)</span></label>
+                                        <div class="border border-border rounded-md overflow-hidden">
+                                            <textarea id="requirement-description" style="display: none;">## 功能概述
+简要说明需求的核心功能
 
-                                    <!-- 需求描述 - 独占一行 -->
-                                    <div>
-                                        <label class="block text-sm font-medium mb-3">需求描述</label>
-                                        <div class="relative">
-                                            <textarea class="w-full h-48 px-4 py-3 border border-border rounded-md resize-none text-base leading-relaxed" placeholder="请详细描述您的需求，包括功能要求、使用场景、预期效果等..."></textarea>
-                                            <button class="absolute bottom-3 right-3 p-2 bg-primary text-primary-foreground rounded-md hover:bg-gray-800 text-sm" data-action="voice-input">
-                                                🎤 语音输入
-                                            </button>
+## 详细需求
+- 功能点1：具体描述
+- 功能点2：具体描述
+
+## 使用场景
+描述具体的使用场景和用户故事
+
+## 验收标准
+- [ ] 验收条件1
+- [ ] 验收条件2
+
+## 技术要求
+如有特殊技术要求请在此说明
+
+## 参考资料
+相关的参考链接或文档</textarea>
+                                        </div>
+                                        <!-- 编辑器底部状态栏 -->
+                                        <div class="bg-muted border border-t-0 border-border px-3 py-2 flex items-center justify-between text-xs text-muted-foreground rounded-b-md">
+                                            <div class="flex items-center space-x-4">
+                                                <span id="char-count">字符数: 0</span>
+                                                <span id="word-count">单词数: 0</span>
+                                            </div>
+                                            <div class="flex items-center space-x-2">
+                                                <span>支持Markdown语法</span>
+                                                <button class="text-primary hover:underline" onclick="showMarkdownHelp()">
+                                                    语法帮助
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -456,128 +627,74 @@
                         </div>
                     </div>
 
-                    <!-- 需求列表界面 -->
-                    <div class="hidden" data-tab-content="requirement-list">
-                        <div class="bg-card border border-border rounded-lg p-4">
-                            <div class="flex items-center justify-between mb-4">
-                                <h2 class="text-lg font-semibold">需求列表</h2>
-                                <!-- 状态切换按钮组 -->
-                                <div class="flex bg-muted rounded-md p-1">
-                                    <button class="px-3 py-1.5 bg-primary text-primary-foreground rounded text-sm font-medium" data-list-filter="pending">
-                                        待审批需求
-                                    </button>
-                                    <button class="px-3 py-1.5 text-muted-foreground rounded text-sm" data-list-filter="approved">
-                                        已通过需求
-                                    </button>
-                                </div>
-                            </div>
 
-                            <!-- 待审批需求列表 -->
-                            <div class="space-y-3" data-list-content="pending">
-                                <div class="p-3 border border-border rounded hover:bg-accent cursor-pointer hover-card" data-requirement-id="req-001">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex-1">
-                                            <p class="text-sm font-medium">用户登录优化需求</p>
-                                            <p class="text-xs text-muted-foreground mt-1">ABC公司 | 张销售 | 2小时前</p>
-                                            <p class="text-xs text-muted-foreground mt-1">用户希望能够通过手机号快速登录系统，提升登录体验和安全性...</p>
-                                        </div>
-                                        <span class="px-2 py-1 bg-warning text-warning-foreground text-xs rounded">待审批</span>
-                                    </div>
-                                </div>
-                                <div class="p-3 border border-border rounded hover:bg-accent cursor-pointer hover-card" data-requirement-id="req-005">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex-1">
-                                            <p class="text-sm font-medium">消息推送功能</p>
-                                            <p class="text-xs text-muted-foreground mt-1">JKL科技 | 陈经理 | 1天前</p>
-                                            <p class="text-xs text-muted-foreground mt-1">需要实现实时消息推送，包括系统通知、业务提醒等...</p>
-                                        </div>
-                                        <span class="px-2 py-1 bg-warning text-warning-foreground text-xs rounded">待审批</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- 已通过需求列表 -->
-                            <div class="space-y-3 hidden" data-list-content="approved">
-                                <div class="p-3 border border-border rounded hover:bg-accent" data-requirement-id="req-002">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex-1">
-                                            <p class="text-sm font-medium">支付功能增强</p>
-                                            <p class="text-xs text-muted-foreground mt-1">XYZ集团 | 李售前 | 1天前</p>
-                                            <p class="text-xs text-muted-foreground mt-1">需要增加多种支付方式，包括微信、支付宝、银联等...</p>
-                                            <div class="flex items-center space-x-2 mt-2">
-                                                <span class="px-2 py-1 bg-success text-success-foreground text-xs rounded">已通过</span>
-                                                <span class="px-2 py-1 bg-muted text-muted-foreground text-xs rounded">支付模块</span>
-                                            </div>
-                                        </div>
-                                        <div class="flex flex-col space-y-2 ml-4">
-                                            <div class="relative">
-                                                <button class="px-3 py-1 bg-primary text-primary-foreground text-xs rounded hover:bg-gray-800" data-action="breakdown-requirement" data-requirement-id="req-002">
-                                                    拆解
-                                                </button>
-                                                <!-- 拆解选择下拉菜单 -->
-                                                <div class="absolute right-0 top-full mt-1 bg-card border border-border rounded-md shadow-lg z-10 hidden min-w-[120px]" data-breakdown-menu="req-002">
-                                                    <button class="block w-full px-3 py-2 text-left text-xs hover:bg-accent whitespace-nowrap" data-action="ai-breakdown" data-requirement-id="req-002">
-                                                        🤖 AI拆解
-                                                    </button>
-                                                    <button class="block w-full px-3 py-2 text-left text-xs hover:bg-accent whitespace-nowrap" data-action="manual-breakdown" data-requirement-id="req-002">
-                                                        👤 人工拆解
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="p-3 border border-border rounded hover:bg-accent" data-requirement-id="req-004">
-                                    <div class="flex items-center justify-between">
-                                        <div class="flex-1">
-                                            <p class="text-sm font-medium">移动端适配</p>
-                                            <p class="text-xs text-muted-foreground mt-1">GHI企业 | 赵总监 | 5天前</p>
-                                            <p class="text-xs text-muted-foreground mt-1">系统需要支持移动端访问，响应式设计...</p>
-                                            <div class="flex items-center space-x-2 mt-2">
-                                                <span class="px-2 py-1 bg-success text-success-foreground text-xs rounded">已通过</span>
-                                                <span class="px-2 py-1 bg-muted text-muted-foreground text-xs rounded">前端模块</span>
-                                            </div>
-                                        </div>
-                                        <div class="flex flex-col space-y-2 ml-4">
-                                            <div class="relative">
-                                                <button class="px-3 py-1 bg-primary text-primary-foreground text-xs rounded hover:bg-gray-800" data-action="breakdown-requirement" data-requirement-id="req-004">
-                                                    拆解
-                                                </button>
-                                                <!-- 拆解选择下拉菜单 -->
-                                                <div class="absolute right-0 top-full mt-1 bg-card border border-border rounded-md shadow-lg z-10 hidden min-w-[120px]" data-breakdown-menu="req-004">
-                                                    <button class="block w-full px-3 py-2 text-left text-xs hover:bg-accent whitespace-nowrap" data-action="ai-breakdown" data-requirement-id="req-004">
-                                                        🤖 AI拆解
-                                                    </button>
-                                                    <button class="block w-full px-3 py-2 text-left text-xs hover:bg-accent whitespace-nowrap" data-action="manual-breakdown" data-requirement-id="req-004">
-                                                        👤 人工拆解
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="flex justify-between items-center mt-4 pt-4 border-t">
-                                <div class="text-sm text-muted-foreground" data-count-text="pending">共 2 个待审批需求</div>
-                                <div class="text-sm text-muted-foreground hidden" data-count-text="approved">共 2 个已通过需求</div>
-                                <div class="flex space-x-2">
-                                    <button class="px-3 py-1.5 border border-border rounded text-sm hover:bg-accent" data-action="export-list">导出列表</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     <!-- 需求审批界面 -->
                     <div class="hidden" data-tab-content="requirement-approval">
                         <div class="bg-card border border-border rounded-lg p-4">
-                            <h2 class="text-base font-semibold mb-3">待审批需求</h2>
-                            <div class="space-y-3">
-                                <div class="p-4 border border-border rounded hover:bg-accent cursor-pointer hover-card" data-requirement-id="req-001">
+                            <div class="flex items-center justify-between mb-4">
+                                <h2 class="text-lg font-semibold">需求审批</h2>
+                                <!-- Button Group 组件 -->
+                                <div class="flex bg-muted rounded-md p-1">
+                                    <button class="px-3 py-1.5 bg-primary text-primary-foreground rounded text-sm font-medium" data-approval-filter="pending">
+                                        待审批需求
+                                    </button>
+                                    <button class="px-3 py-1.5 text-muted-foreground hover:text-foreground rounded text-sm font-medium" data-approval-filter="approved">
+                                        已审批需求
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- 筛选器区域 -->
+                            <div class="bg-muted/30 border border-border rounded-lg p-4 mb-4">
+                                <h3 class="text-sm font-medium mb-3 text-foreground">筛选条件</h3>
+                                <div class="space-y-4">
+                                    <!-- 归属项目筛选 -->
+                                    <div>
+                                        <label class="block text-xs font-medium mb-2 text-muted-foreground">归属项目</label>
+                                        <select class="w-full px-3 py-2 border border-border rounded-md text-sm" id="approval-project-filter">
+                                            <option value="">全部项目</option>
+                                            <option value="project-001">AI开发平台</option>
+                                            <option value="project-002">用户管理系统</option>
+                                            <option value="project-003">数据分析平台</option>
+                                            <option value="project-004">移动端应用</option>
+                                            <option value="project-005">企业门户网站</option>
+                                        </select>
+                                    </div>
+                                    <!-- 需求来源筛选 -->
+                                    <div>
+                                        <label class="block text-xs font-medium mb-2 text-muted-foreground">需求来源</label>
+                                        <select class="w-full px-3 py-2 border border-border rounded-md text-sm" id="approval-source-filter">
+                                            <option value="">全部来源</option>
+                                            <option value="customer">客户反馈</option>
+                                            <option value="market">市场调研</option>
+                                            <option value="internal">内部需求</option>
+                                            <option value="competitor">竞品分析</option>
+                                            <option value="operation">运营需求</option>
+                                            <option value="technical">技术优化</option>
+                                        </select>
+                                    </div>
+                                    <!-- 需求分类筛选 -->
+                                    <div>
+                                        <label class="block text-xs font-medium mb-2 text-muted-foreground">需求分类</label>
+                                        <div class="flex flex-wrap gap-2">
+                                            <button class="px-2 py-1 bg-primary text-primary-foreground rounded text-xs" data-category-filter="all">全部</button>
+                                            <button class="px-2 py-1 bg-muted text-muted-foreground rounded text-xs hover:bg-accent" data-category-filter="functional">功能需求</button>
+                                            <button class="px-2 py-1 bg-muted text-muted-foreground rounded text-xs hover:bg-accent" data-category-filter="performance">性能需求</button>
+                                            <button class="px-2 py-1 bg-muted text-muted-foreground rounded text-xs hover:bg-accent" data-category-filter="ui">界面需求</button>
+                                            <button class="px-2 py-1 bg-muted text-muted-foreground rounded text-xs hover:bg-accent" data-category-filter="integration">集成需求</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 待审批需求列表 -->
+                            <div class="space-y-3" data-approval-content="pending">
+                                <div class="p-4 border border-border rounded hover:bg-accent cursor-pointer hover-card" data-requirement-id="req-001" data-project="project-002" data-source="customer" data-category="functional">
                                     <div class="flex items-start justify-between">
                                         <div class="flex-1">
                                             <h3 class="font-medium text-sm">用户登录优化需求</h3>
-                                            <p class="text-xs text-muted-foreground mt-1">提交人: 张销售 | 客户: ABC公司 | 提交时间: 2小时前</p>
+                                            <p class="text-xs text-muted-foreground mt-1">提交人: 张销售 | 项目: 用户管理系统 | 来源: 客户反馈 | 提交时间: 2小时前</p>
                                             <p class="text-sm mt-2">用户希望能够通过手机号快速登录系统，提升登录体验和安全性。包括手机号验证、短信验证码、登录状态管理等功能。</p>
                                             <div class="flex items-center space-x-2 mt-2">
                                                 <span class="px-2 py-1 bg-primary text-primary-foreground text-xs rounded">功能需求</span>
@@ -591,189 +708,563 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="p-4 border border-border rounded hover:bg-accent cursor-pointer hover-card" data-requirement-id="req-002" data-project="project-005" data-source="market" data-category="functional">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <h3 class="font-medium text-sm">支付功能增强</h3>
+                                            <p class="text-xs text-muted-foreground mt-1">提交人: 李产品 | 项目: 企业门户网站 | 来源: 市场调研 | 提交时间: 1天前</p>
+                                            <p class="text-sm mt-2">增加多种支付方式，支持微信、支付宝等第三方支付平台，提升用户支付体验和成功率。</p>
+                                            <div class="flex items-center space-x-2 mt-2">
+                                                <span class="px-2 py-1 bg-primary text-primary-foreground text-xs rounded">功能需求</span>
+                                                <span class="px-2 py-1 bg-destructive text-destructive-foreground text-xs rounded">🔴 高优先级</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col space-y-2 ml-4">
+                                            <button class="px-3 py-1 bg-success text-success-foreground text-xs rounded hover:bg-green-600" data-action="approve-requirement" data-requirement-id="req-002">✅ 通过</button>
+                                            <button class="px-3 py-1 bg-destructive text-destructive-foreground text-xs rounded hover:bg-red-600" data-action="reject-requirement" data-requirement-id="req-002">❌ 拒绝</button>
+                                            <button class="px-3 py-1 border border-border text-xs rounded hover:bg-accent" data-action="edit-requirement" data-requirement-id="req-002">📝 编辑</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-4 border border-border rounded hover:bg-accent cursor-pointer hover-card" data-requirement-id="req-003" data-project="project-003" data-source="internal" data-category="performance">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <h3 class="font-medium text-sm">数据统计报表功能</h3>
+                                            <p class="text-xs text-muted-foreground mt-1">提交人: 王运营 | 项目: 数据分析平台 | 来源: 内部需求 | 提交时间: 3天前</p>
+                                            <p class="text-sm mt-2">增加数据统计报表功能，支持多维度数据分析和导出，帮助运营团队更好地分析业务数据。</p>
+                                            <div class="flex items-center space-x-2 mt-2">
+                                                <span class="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded">性能需求</span>
+                                                <span class="px-2 py-1 bg-muted text-muted-foreground text-xs rounded">🟢 低优先级</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col space-y-2 ml-4">
+                                            <button class="px-3 py-1 bg-success text-success-foreground text-xs rounded hover:bg-green-600" data-action="approve-requirement" data-requirement-id="req-003">✅ 通过</button>
+                                            <button class="px-3 py-1 bg-destructive text-destructive-foreground text-xs rounded hover:bg-red-600" data-action="reject-requirement" data-requirement-id="req-003">❌ 拒绝</button>
+                                            <button class="px-3 py-1 border border-border text-xs rounded hover:bg-accent" data-action="edit-requirement" data-requirement-id="req-003">📝 编辑</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
+                            <!-- 已审批需求列表 -->
+                            <div class="space-y-3 hidden" data-approval-content="approved">
+                                <div class="p-4 border border-border rounded hover:bg-accent cursor-pointer" data-requirement-id="req-004" data-project="project-002" data-source="internal" data-category="functional">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <h3 class="font-medium text-sm">用户权限管理系统</h3>
+                                            <p class="text-xs text-muted-foreground mt-1">提交人: 赵管理员 | 项目: 用户管理系统 | 来源: 内部需求 | 审批时间: 2024-01-17 15:30</p>
+                                            <p class="text-sm mt-2">完善用户权限管理系统，支持角色分配和权限控制，提升系统安全性和管理效率。</p>
+                                            <div class="flex items-center space-x-2 mt-2">
+                                                <span class="px-2 py-1 bg-primary text-primary-foreground text-xs rounded">功能需求</span>
+                                                <span class="px-2 py-1 bg-success/10 text-success text-xs rounded">已通过</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2 ml-4">
+                                            <span class="text-xs text-muted-foreground">审批人：技术总监</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-4 border border-border rounded hover:bg-accent cursor-pointer" data-requirement-id="req-005" data-project="project-004" data-source="competitor" data-category="ui">
+                                    <div class="flex items-start justify-between">
+                                        <div class="flex-1">
+                                            <h3 class="font-medium text-sm">移动端适配优化</h3>
+                                            <p class="text-xs text-muted-foreground mt-1">提交人: 陈前端 | 项目: 移动端应用 | 来源: 竞品分析 | 审批时间: 2024-01-16 11:45</p>
+                                            <p class="text-sm mt-2">优化移动端页面适配，提升移动端用户体验，支持响应式布局和触摸操作。</p>
+                                            <div class="flex items-center space-x-2 mt-2">
+                                                <span class="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded">界面需求</span>
+                                                <span class="px-2 py-1 bg-success/10 text-success text-xs rounded">已通过</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center space-x-2 ml-4">
+                                            <span class="text-xs text-muted-foreground">审批人：产品总监</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 统计信息 -->
                             <div class="flex justify-between items-center mt-4 pt-4 border-t">
-                                <div class="text-sm text-muted-foreground">共 1 个待审批需求</div>
+                                <div class="text-sm text-muted-foreground" data-approval-count-text="pending">共 3 个待审批需求</div>
+                                <div class="text-sm text-muted-foreground hidden" data-approval-count-text="approved">共 2 个已审批需求</div>
                                 <div class="flex space-x-2">
                                     <button class="px-3 py-1.5 border border-border rounded text-sm hover:bg-accent" data-action="batch-approve">批量通过</button>
-                                    <button class="px-3 py-1.5 border border-border rounded text-sm hover:bg-accent" data-action="batch-reject">批量拒绝</button>
+                                    <button class="px-3 py-1.5 border border-border rounded text-sm hover:bg-accent" data-action="export-approval-list">导出列表</button>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-
-
-                    <!-- 研发需求界面 -->
-                    <div class="hidden" data-tab-content="dev-requirements">
-                        <div class="bg-card border border-border rounded-lg p-4">
-                            <div class="flex items-center justify-between mb-4">
-                                <h2 class="text-lg font-semibold">研发需求</h2>
-                                <!-- 状态切换按钮组 -->
-                                <div class="flex bg-muted rounded-md p-1">
-                                    <button class="px-3 py-1.5 bg-primary text-primary-foreground rounded text-sm font-medium" data-dev-filter="pending">
-                                        待审批
-                                    </button>
-                                    <button class="px-3 py-1.5 text-muted-foreground rounded text-sm" data-dev-filter="approved">
-                                        已通过
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- 待审批研发需求 -->
-                            <div class="space-y-4" data-dev-content="pending">
-                                <!-- 支付模块 -->
-                                <div class="border border-border rounded-lg p-4">
-                                    <div class="flex items-center justify-between mb-3">
-                                        <h3 class="font-medium text-base">支付模块</h3>
-                                        <span class="px-2 py-1 bg-muted text-muted-foreground text-xs rounded">来源: 支付功能增强</span>
+                    <!-- 需求拆分界面 -->
+                    <div class="hidden" data-tab-content="requirement-breakdown">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
+                            <!-- 左侧面板：已审批需求列表 -->
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h2 class="text-lg font-semibold">已审批需求</h2>
+                                    <div class="text-sm text-muted-foreground">
+                                        共 <span id="approved-requirements-count">2</span> 个需求
                                     </div>
-                                    <div class="space-y-2">
-                                        <div class="p-3 border border-border rounded bg-muted/50">
-                                            <div class="flex items-center justify-between">
-                                                <div class="flex-1">
-                                                    <h4 class="font-medium text-sm">微信支付集成</h4>
-                                                    <p class="text-xs text-muted-foreground mt-1">集成微信支付SDK，实现支付、退款功能</p>
-                                                    <div class="flex items-center space-x-2 mt-2">
-                                                        <span class="px-2 py-1 bg-warning text-warning-foreground text-xs rounded">待审批</span>
-                                                        <span class="text-xs text-muted-foreground">预估: 3天</span>
-                                                    </div>
+                                </div>
+
+                                <!-- 搜索框 -->
+                                <div class="mb-4">
+                                    <input type="text" placeholder="搜索需求..." class="w-full px-3 py-2 border border-border rounded-md text-sm" id="requirement-search">
+                                </div>
+
+                                <!-- 已审批需求列表 -->
+                                <div class="space-y-3 max-h-96 overflow-y-auto" id="approved-requirements-list">
+                                    <div class="p-3 border border-border rounded requirement-item active" data-requirement-id="req-004" data-requirement-name="用户权限管理系统">
+                                        <div class="flex items-start justify-between">
+                                            <div class="flex-1 p-2 rounded hover:bg-muted/50 transition-colors" title="点击选中此需求">
+                                                <h3 class="font-medium text-sm">用户权限管理系统</h3>
+                                                <p class="text-xs text-muted-foreground mt-1">提交人: 赵管理员 | 项目: 用户管理系统 | 来源: 内部需求 | 审批时间: 2024-01-17 15:30</p>
+                                                <div class="flex items-center space-x-2 mt-2">
+                                                    <span class="px-2 py-1 bg-primary text-primary-foreground text-xs rounded">功能需求</span>
+                                                    <span class="px-2 py-1 bg-success/10 text-success text-xs rounded">已通过</span>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="p-3 border border-border rounded bg-muted/50">
-                                            <div class="flex items-center justify-between">
-                                                <div class="flex-1">
-                                                    <h4 class="font-medium text-sm">支付宝支付集成</h4>
-                                                    <p class="text-xs text-muted-foreground mt-1">集成支付宝SDK，实现支付、退款功能</p>
-                                                    <div class="flex items-center space-x-2 mt-2">
-                                                        <span class="px-2 py-1 bg-warning text-warning-foreground text-xs rounded">待审批</span>
-                                                        <span class="text-xs text-muted-foreground">预估: 3天</span>
-                                                    </div>
-                                                </div>
+                                            <div class="flex flex-col items-end space-y-2 ml-2" onclick="event.stopPropagation();">
+                                                <span class="text-xs text-muted-foreground">子需求: <span class="font-medium">3</span></span>
+                                                <button class="px-2 py-1 border border-border rounded text-xs hover:bg-accent" data-action="view-requirement-detail" data-requirement-id="req-004">
+                                                    查看详情
+                                                </button>
                                             </div>
                                         </div>
-                                        <div class="p-3 border border-border rounded bg-muted/50">
-                                            <div class="flex items-center justify-between">
-                                                <div class="flex-1">
-                                                    <h4 class="font-medium text-sm">银联支付集成</h4>
-                                                    <p class="text-xs text-muted-foreground mt-1">集成银联支付接口，支持银行卡支付</p>
-                                                    <div class="flex items-center space-x-2 mt-2">
-                                                        <span class="px-2 py-1 bg-warning text-warning-foreground text-xs rounded">待审批</span>
-                                                        <span class="text-xs text-muted-foreground">预估: 4天</span>
-                                                    </div>
+                                    </div>
+
+                                    <div class="p-3 border border-border rounded requirement-item" data-requirement-id="req-005" data-requirement-name="移动端适配优化">
+                                        <div class="flex items-start justify-between">
+                                            <div class="flex-1 p-2 rounded hover:bg-muted/50 transition-colors" title="点击选中此需求">
+                                                <h3 class="font-medium text-sm">移动端适配优化</h3>
+                                                <p class="text-xs text-muted-foreground mt-1">提交人: 陈前端 | 项目: 移动端应用 | 来源: 竞品分析 | 审批时间: 2024-01-16 11:45</p>
+                                                <div class="flex items-center space-x-2 mt-2">
+                                                    <span class="px-2 py-1 bg-secondary text-secondary-foreground text-xs rounded">界面需求</span>
+                                                    <span class="px-2 py-1 bg-success/10 text-success text-xs rounded">已通过</span>
                                                 </div>
+                                            </div>
+                                            <div class="flex flex-col items-end space-y-2 ml-2" onclick="event.stopPropagation();">
+                                                <span class="text-xs text-muted-foreground">子需求: <span class="font-medium">2</span></span>
+                                                <button class="px-2 py-1 border border-border rounded text-xs hover:bg-accent" data-action="view-requirement-detail" data-requirement-id="req-005">
+                                                    查看详情
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- 已通过研发需求 -->
-                            <div class="space-y-4 hidden" data-dev-content="approved">
-                                <!-- 前端模块 -->
-                                <div class="border border-border rounded-lg p-4">
-                                    <div class="flex items-center justify-between mb-3">
-                                        <h3 class="font-medium text-base">前端模块</h3>
-                                        <div class="flex items-center space-x-2">
-                                            <span class="px-2 py-1 bg-muted text-muted-foreground text-xs rounded">来源: 移动端适配</span>
-                                            <button class="px-3 py-1 bg-primary text-primary-foreground text-xs rounded hover:bg-gray-800" data-action="assign-dev-task" data-module="frontend">
-                                                分配研发任务
-                                            </button>
-                                        </div>
+                            <!-- 右侧面板：子需求管理 -->
+                            <div class="bg-card border border-border rounded-lg p-4">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h2 class="text-lg font-semibold">子需求管理</h2>
+                                    <div class="flex space-x-2">
+                                        <button class="px-3 py-2 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 text-sm" id="ai-breakdown-btn">
+                                            🤖 AI辅助拆分
+                                        </button>
+                                        <button class="px-3 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/80 text-sm" id="add-sub-requirement-btn">
+                                            新增子需求
+                                        </button>
                                     </div>
-                                    <div class="space-y-2">
-                                        <div class="p-3 border border-border rounded">
-                                            <div class="flex items-center justify-between">
-                                                <div class="flex-1">
-                                                    <input type="checkbox" class="mr-2" data-dev-requirement="frontend-responsive">
-                                                    <label class="inline">
-                                                        <span class="font-medium text-sm">响应式布局优化</span>
-                                                        <p class="text-xs text-muted-foreground mt-1">优化页面布局，适配移动端屏幕</p>
-                                                        <div class="flex items-center space-x-2 mt-2">
-                                                            <span class="px-2 py-1 bg-success text-success-foreground text-xs rounded">已通过</span>
-                                                            <span class="text-xs text-muted-foreground">预估: 2天</span>
-                                                        </div>
-                                                    </label>
+                                </div>
+
+                                <!-- 当前选中需求信息 -->
+                                <div class="mb-4 p-3 bg-muted rounded-lg" id="selected-requirement-info">
+                                    <h3 class="font-medium text-sm mb-1" id="selected-requirement-name">用户权限管理系统</h3>
+                                    <p class="text-xs text-muted-foreground" id="selected-requirement-desc">完善用户权限管理系统，支持角色分配和权限控制，提升系统安全性和管理效率。</p>
+                                </div>
+
+                                <!-- 子需求列表 -->
+                                <div class="space-y-3 max-h-96 overflow-y-auto" id="sub-requirements-list">
+                                    <div class="p-3 border border-border rounded" data-sub-requirement-id="sub-req-001">
+                                        <div class="flex items-start justify-between">
+                                            <div class="flex-1">
+                                                <h4 class="font-medium text-sm">用户角色管理模块</h4>
+                                                <p class="text-xs text-muted-foreground mt-1">实现用户角色的创建、编辑、删除功能，支持角色权限配置</p>
+                                                <div class="flex items-center space-x-2 mt-2">
+                                                    <span class="px-2 py-1 bg-warning text-warning-foreground text-xs rounded">🟡 中优先级</span>
+                                                    <span class="text-xs text-muted-foreground">预估工时: 5天</span>
                                                 </div>
                                             </div>
+                                            <div class="flex space-x-2 ml-2">
+                                                <button class="px-2 py-1 border border-border rounded text-xs hover:bg-accent" data-action="edit-sub-requirement" data-sub-requirement-id="sub-req-001">
+                                                    编辑
+                                                </button>
+                                                <button class="px-2 py-1 border border-destructive text-destructive rounded text-xs hover:bg-destructive/10" data-action="delete-sub-requirement" data-sub-requirement-id="sub-req-001">
+                                                    删除
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div class="p-3 border border-border rounded">
-                                            <div class="flex items-center justify-between">
-                                                <div class="flex-1">
-                                                    <input type="checkbox" class="mr-2" data-dev-requirement="frontend-interaction">
-                                                    <label class="inline">
-                                                        <span class="font-medium text-sm">移动端交互优化</span>
-                                                        <p class="text-xs text-muted-foreground mt-1">优化触摸交互，提升移动端用户体验</p>
-                                                        <div class="flex items-center space-x-2 mt-2">
-                                                            <span class="px-2 py-1 bg-success text-success-foreground text-xs rounded">已通过</span>
-                                                            <span class="text-xs text-muted-foreground">预估: 3天</span>
-                                                        </div>
-                                                    </label>
+                                    </div>
+
+                                    <div class="p-3 border border-border rounded" data-sub-requirement-id="sub-req-002">
+                                        <div class="flex items-start justify-between">
+                                            <div class="flex-1">
+                                                <h4 class="font-medium text-sm">权限控制模块</h4>
+                                                <p class="text-xs text-muted-foreground mt-1">实现细粒度权限控制，支持菜单权限、操作权限、数据权限</p>
+                                                <div class="flex items-center space-x-2 mt-2">
+                                                    <span class="px-2 py-1 bg-destructive text-destructive-foreground text-xs rounded">🔴 高优先级</span>
+                                                    <span class="text-xs text-muted-foreground">预估工时: 8天</span>
                                                 </div>
+                                            </div>
+                                            <div class="flex space-x-2 ml-2">
+                                                <button class="px-2 py-1 border border-border rounded text-xs hover:bg-accent" data-action="edit-sub-requirement" data-sub-requirement-id="sub-req-002">
+                                                    编辑
+                                                </button>
+                                                <button class="px-2 py-1 border border-destructive text-destructive rounded text-xs hover:bg-destructive/10" data-action="delete-sub-requirement" data-sub-requirement-id="sub-req-002">
+                                                    删除
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="p-3 border border-border rounded" data-sub-requirement-id="sub-req-003">
+                                        <div class="flex items-start justify-between">
+                                            <div class="flex-1">
+                                                <h4 class="font-medium text-sm">用户管理界面</h4>
+                                                <p class="text-xs text-muted-foreground mt-1">设计和开发用户管理界面，支持用户信息维护和角色分配</p>
+                                                <div class="flex items-center space-x-2 mt-2">
+                                                    <span class="px-2 py-1 bg-muted text-muted-foreground text-xs rounded">🟢 低优先级</span>
+                                                    <span class="text-xs text-muted-foreground">预估工时: 3天</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex space-x-2 ml-2">
+                                                <button class="px-2 py-1 border border-border rounded text-xs hover:bg-accent" data-action="edit-sub-requirement" data-sub-requirement-id="sub-req-003">
+                                                    编辑
+                                                </button>
+                                                <button class="px-2 py-1 border border-destructive text-destructive rounded text-xs hover:bg-destructive/10" data-action="delete-sub-requirement" data-sub-requirement-id="sub-req-003">
+                                                    删除
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- 支付模块 -->
-                                <div class="border border-border rounded-lg p-4">
-                                    <div class="flex items-center justify-between mb-3">
-                                        <h3 class="font-medium text-base">支付模块</h3>
-                                        <div class="flex items-center space-x-2">
-                                            <span class="px-2 py-1 bg-muted text-muted-foreground text-xs rounded">来源: 支付功能增强</span>
-                                            <button class="px-3 py-1 bg-primary text-primary-foreground text-xs rounded hover:bg-gray-800" data-action="assign-dev-task" data-module="payment">
-                                                分配研发任务
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="space-y-2">
-                                        <div class="p-3 border border-border rounded">
-                                            <div class="flex items-center justify-between">
-                                                <div class="flex-1">
-                                                    <input type="checkbox" class="mr-2" data-dev-requirement="payment-wechat">
-                                                    <label class="inline">
-                                                        <span class="font-medium text-sm">微信支付集成</span>
-                                                        <p class="text-xs text-muted-foreground mt-1">集成微信支付SDK，实现支付、退款功能</p>
-                                                        <div class="flex items-center space-x-2 mt-2">
-                                                            <span class="px-2 py-1 bg-success text-success-foreground text-xs rounded">已通过</span>
-                                                            <span class="text-xs text-muted-foreground">预估: 3天</span>
-                                                        </div>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="p-3 border border-border rounded">
-                                            <div class="flex items-center justify-between">
-                                                <div class="flex-1">
-                                                    <input type="checkbox" class="mr-2" data-dev-requirement="payment-alipay">
-                                                    <label class="inline">
-                                                        <span class="font-medium text-sm">支付宝支付集成</span>
-                                                        <p class="text-xs text-muted-foreground mt-1">集成支付宝SDK，实现支付、退款功能</p>
-                                                        <div class="flex items-center space-x-2 mt-2">
-                                                            <span class="px-2 py-1 bg-success text-success-foreground text-xs rounded">已通过</span>
-                                                            <span class="text-xs text-muted-foreground">预估: 3天</span>
-                                                        </div>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
+                                <!-- 统计信息 -->
+                                <div class="mt-4 pt-4 border-t">
+                                    <div class="flex justify-between items-center text-sm text-muted-foreground">
+                                        <span>共 <span id="sub-requirements-count">3</span> 个子需求</span>
+                                        <span>总预估工时: <span id="total-estimated-hours">16</span> 天</span>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
 
-                            <div class="flex justify-between items-center mt-4 pt-4 border-t">
-                                <div class="text-sm text-muted-foreground" data-dev-count-text="pending">共 3 个待审批研发需求</div>
-                                <div class="text-sm text-muted-foreground hidden" data-dev-count-text="approved">共 2 个已通过研发需求</div>
-                                <div class="flex space-x-2">
-                                    <button class="px-3 py-1.5 border border-border rounded text-sm hover:bg-accent" data-action="batch-approve-dev">批量审批</button>
-                                    <button class="px-3 py-1.5 border border-border rounded text-sm hover:bg-accent" data-action="export-dev-list">导出列表</button>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- AI辅助拆分模态框 -->
+    <div class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden" id="ai-breakdown-modal">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-card border border-border rounded-lg w-full max-w-4xl max-h-[90vh] overflow-hidden">
+                <!-- 模态框头部 -->
+                <div class="flex items-center justify-between p-4 border-b border-border">
+                    <h3 class="text-lg font-semibold">🤖 AI辅助需求拆分</h3>
+                    <button class="p-2 hover:bg-accent rounded-md" id="close-ai-breakdown-modal">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- 模态框内容 -->
+                <div class="p-6 max-h-[70vh] overflow-y-auto">
+                    <!-- 需求信息展示 -->
+                    <div class="mb-6 p-4 bg-muted rounded-lg">
+                        <h4 class="font-medium text-sm mb-2">当前需求</h4>
+                        <h5 class="font-medium text-base mb-2" id="ai-breakdown-requirement-name">用户权限管理系统</h5>
+                        <p class="text-sm text-muted-foreground" id="ai-breakdown-requirement-desc">完善用户权限管理系统，支持角色分配和权限控制，提升系统安全性和管理效率。</p>
+                    </div>
+
+                    <!-- AI拆分配置 -->
+                    <div class="mb-6">
+                        <h4 class="font-medium text-sm mb-3">拆分配置</h4>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">拆分粒度</label>
+                                <select id="ai-breakdown-granularity" class="w-full px-3 py-2 border border-border rounded-md">
+                                    <option value="coarse">粗粒度（3-5个子需求）</option>
+                                    <option value="medium" selected>中粒度（5-8个子需求）</option>
+                                    <option value="fine">细粒度（8-12个子需求）</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">技术栈偏好</label>
+                                <select id="ai-breakdown-tech-stack" class="w-full px-3 py-2 border border-border rounded-md">
+                                    <option value="general">通用技术栈</option>
+                                    <option value="java-spring" selected>Java + Spring</option>
+                                    <option value="nodejs">Node.js + Express</option>
+                                    <option value="python-django">Python + Django</option>
+                                    <option value="dotnet">C# + .NET</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 额外说明 -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium mb-2">额外说明（可选）</label>
+                        <textarea id="ai-breakdown-additional-info" rows="3"
+                                  class="w-full px-3 py-2 border border-border rounded-md resize-none"
+                                  placeholder="请输入任何额外的需求说明、技术约束或特殊要求..."></textarea>
+                    </div>
+
+                    <!-- AI拆分结果展示区域 -->
+                    <div class="mb-6" id="ai-breakdown-result-section" style="display: none;">
+                        <div class="flex items-center justify-between mb-3">
+                            <h4 class="font-medium text-sm">AI拆分结果</h4>
+                            <div class="flex space-x-2">
+                                <button class="px-3 py-1 border border-border rounded text-xs hover:bg-accent" id="regenerate-breakdown">
+                                    🔄 重新生成
+                                </button>
+                                <button class="px-3 py-1 bg-primary text-primary-foreground rounded text-xs hover:bg-primary/80" id="apply-breakdown">
+                                    ✅ 应用拆分
+                                </button>
+                            </div>
+                        </div>
+                        <div class="space-y-3" id="ai-breakdown-results">
+                            <!-- AI生成的子需求将在这里显示 -->
+                        </div>
+                    </div>
+
+                    <!-- 加载状态 -->
+                    <div class="text-center py-8 hidden" id="ai-breakdown-loading">
+                        <div class="inline-flex items-center space-x-2">
+                            <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+                            <span class="text-sm text-muted-foreground">AI正在分析需求并生成拆分方案...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 模态框底部 -->
+                <div class="flex justify-between items-center p-4 border-t border-border">
+                    <div class="text-sm text-muted-foreground">
+                        💡 AI将根据需求描述和配置自动生成合理的子需求拆分方案
+                    </div>
+                    <div class="flex space-x-3">
+                        <button type="button" class="px-4 py-2 border border-border rounded-md hover:bg-accent" id="cancel-ai-breakdown">
+                            取消
+                        </button>
+                        <button type="button" class="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/80" id="start-ai-breakdown">
+                            开始AI拆分
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 需求详情模态框 -->
+    <div class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden" id="requirement-detail-modal">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-card border border-border rounded-lg w-full max-w-3xl max-h-[90vh] overflow-hidden">
+                <!-- 模态框头部 -->
+                <div class="flex items-center justify-between p-4 border-b border-border">
+                    <h3 class="text-lg font-semibold">需求详情</h3>
+                    <button class="p-2 hover:bg-accent rounded-md" id="close-requirement-detail-modal">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- 模态框内容 -->
+                <div class="p-6 max-h-[70vh] overflow-y-auto">
+                    <div class="space-y-6">
+                        <!-- 基本信息 -->
+                        <div>
+                            <h4 class="font-medium text-base mb-3" id="detail-requirement-name">用户权限管理系统</h4>
+                            <div class="grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <span class="text-muted-foreground">提交人：</span>
+                                    <span id="detail-submitter">赵管理员</span>
+                                </div>
+                                <div>
+                                    <span class="text-muted-foreground">审批时间：</span>
+                                    <span id="detail-approval-time">2024-01-17 15:30</span>
+                                </div>
+                                <div>
+                                    <span class="text-muted-foreground">需求类型：</span>
+                                    <span id="detail-requirement-type">功能需求</span>
+                                </div>
+                                <div>
+                                    <span class="text-muted-foreground">优先级：</span>
+                                    <span id="detail-priority">🟡 中优先级</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 需求描述 -->
+                        <div>
+                            <h5 class="font-medium text-sm mb-2">需求描述</h5>
+                            <div class="p-3 bg-muted rounded-lg text-sm" id="detail-description">
+                                完善用户权限管理系统，支持角色分配和权限控制，提升系统安全性和管理效率。包括用户角色管理、权限控制模块、用户管理界面等核心功能。
+                            </div>
+                        </div>
+
+                        <!-- 业务背景 -->
+                        <div>
+                            <h5 class="font-medium text-sm mb-2">业务背景</h5>
+                            <div class="p-3 bg-muted rounded-lg text-sm" id="detail-background">
+                                随着系统用户数量增长，需要建立完善的权限管理体系，确保不同角色用户只能访问相应的功能模块，提升系统安全性。
+                            </div>
+                        </div>
+
+                        <!-- 验收标准 -->
+                        <div>
+                            <h5 class="font-medium text-sm mb-2">验收标准</h5>
+                            <div class="space-y-2" id="detail-acceptance-criteria">
+                                <div class="flex items-start space-x-2">
+                                    <span class="text-muted-foreground text-xs mt-1">•</span>
+                                    <span class="text-sm">支持创建、编辑、删除用户角色</span>
+                                </div>
+                                <div class="flex items-start space-x-2">
+                                    <span class="text-muted-foreground text-xs mt-1">•</span>
+                                    <span class="text-sm">实现菜单权限、操作权限、数据权限控制</span>
+                                </div>
+                                <div class="flex items-start space-x-2">
+                                    <span class="text-muted-foreground text-xs mt-1">•</span>
+                                    <span class="text-sm">提供用户管理界面，支持角色分配</span>
+                                </div>
+                                <div class="flex items-start space-x-2">
+                                    <span class="text-muted-foreground text-xs mt-1">•</span>
+                                    <span class="text-sm">权限变更实时生效，无需重新登录</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 子需求统计 -->
+                        <div>
+                            <h5 class="font-medium text-sm mb-2">拆分情况</h5>
+                            <div class="grid grid-cols-3 gap-4 text-center">
+                                <div class="p-3 bg-muted rounded-lg">
+                                    <div class="text-lg font-bold" id="detail-sub-count">3</div>
+                                    <div class="text-xs text-muted-foreground">子需求数量</div>
+                                </div>
+                                <div class="p-3 bg-muted rounded-lg">
+                                    <div class="text-lg font-bold" id="detail-total-hours">16</div>
+                                    <div class="text-xs text-muted-foreground">总预估工时(天)</div>
+                                </div>
+                                <div class="p-3 bg-muted rounded-lg">
+                                    <div class="text-lg font-bold" id="detail-progress">0%</div>
+                                    <div class="text-xs text-muted-foreground">完成进度</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </main>
+
+                <!-- 模态框底部 -->
+                <div class="flex justify-end space-x-3 p-4 border-t border-border">
+                    <button type="button" class="px-4 py-2 border border-border rounded-md hover:bg-accent" id="close-detail-modal">
+                        关闭
+                    </button>
+                    <button type="button" class="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/80" id="goto-breakdown">
+                        进入拆分
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增子需求模态框 -->
+    <div class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden" id="add-sub-requirement-modal">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-card border border-border rounded-lg w-full max-w-2xl">
+                <!-- 模态框头部 -->
+                <div class="flex items-center justify-between p-4 border-b border-border">
+                    <h3 class="text-lg font-semibold">新增子需求</h3>
+                    <button class="p-2 hover:bg-accent rounded-md" id="close-sub-requirement-modal">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- 模态框内容 -->
+                <div class="p-6">
+                    <form id="sub-requirement-form" class="space-y-4">
+                        <!-- 父需求信息 -->
+                        <div class="p-3 bg-muted rounded-lg">
+                            <h4 class="font-medium text-sm mb-1">父需求</h4>
+                            <p class="text-sm" id="parent-requirement-name">用户权限管理系统</p>
+                        </div>
+
+                        <!-- 子需求名称 -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2" for="sub-requirement-name">
+                                需求名称 <span class="text-destructive">*</span>
+                            </label>
+                            <input type="text" id="sub-requirement-name" name="name" required
+                                   class="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                                   placeholder="请输入子需求名称">
+                        </div>
+
+                        <!-- 需求详细描述 -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2" for="sub-requirement-description">
+                                详细描述 <span class="text-destructive">*</span>
+                            </label>
+                            <textarea id="sub-requirement-description" name="description" required rows="4"
+                                      class="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                                      placeholder="请详细描述子需求的功能和要求..."></textarea>
+                        </div>
+
+                        <!-- 优先级 -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2" for="sub-requirement-priority">优先级</label>
+                            <select id="sub-requirement-priority" name="priority"
+                                    class="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                                <option value="low">🟢 低优先级</option>
+                                <option value="medium" selected>🟡 中优先级</option>
+                                <option value="high">🔴 高优先级</option>
+                            </select>
+                        </div>
+
+                        <!-- 预估工时 -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2" for="sub-requirement-hours">预估工时（天）</label>
+                            <input type="number" id="sub-requirement-hours" name="hours" min="0.5" step="0.5" value="1"
+                                   class="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                                   placeholder="请输入预估工时">
+                        </div>
+
+                        <!-- 负责人 -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2" for="sub-requirement-assignee">负责人</label>
+                            <select id="sub-requirement-assignee" name="assignee"
+                                    class="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                                <option value="">请选择负责人</option>
+                                <option value="zhang-pm">张项目经理</option>
+                                <option value="li-frontend">李前端开发</option>
+                                <option value="wang-backend">王后端开发</option>
+                                <option value="zhao-ui">赵UI设计师</option>
+                                <option value="chen-test">陈测试工程师</option>
+                            </select>
+                        </div>
+
+                        <!-- 标签 -->
+                        <div>
+                            <label class="block text-sm font-medium mb-2" for="sub-requirement-tags">标签</label>
+                            <input type="text" id="sub-requirement-tags" name="tags"
+                                   class="w-full px-3 py-2 border border-border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
+                                   placeholder="请输入标签，多个标签用逗号分隔">
+                        </div>
+                    </form>
+                </div>
+
+                <!-- 模态框底部 -->
+                <div class="flex justify-end space-x-3 p-4 border-t border-border">
+                    <button type="button" class="px-4 py-2 border border-border rounded-md hover:bg-accent" id="cancel-sub-requirement">
+                        取消
+                    </button>
+                    <button type="submit" form="sub-requirement-form" class="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/80">
+                        保存
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1430,6 +1921,313 @@
                 });
             });
 
+            // 需求审批页面筛选功能
+            const approvalProjectFilter = document.getElementById('approval-project-filter');
+            const approvalSourceFilter = document.getElementById('approval-source-filter');
+            const categoryFilterButtons = document.querySelectorAll('[data-category-filter]');
+
+            // 筛选器变更事件
+            if (approvalProjectFilter) {
+                approvalProjectFilter.addEventListener('change', filterRequirements);
+            }
+            if (approvalSourceFilter) {
+                approvalSourceFilter.addEventListener('change', filterRequirements);
+            }
+
+            // 分类筛选按钮事件
+            categoryFilterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // 更新按钮状态
+                    categoryFilterButtons.forEach(btn => {
+                        btn.classList.remove('bg-primary', 'text-primary-foreground');
+                        btn.classList.add('bg-muted', 'text-muted-foreground');
+                    });
+                    this.classList.remove('bg-muted', 'text-muted-foreground');
+                    this.classList.add('bg-primary', 'text-primary-foreground');
+
+                    // 执行筛选
+                    filterRequirements();
+                });
+            });
+
+            // 筛选需求函数
+            function filterRequirements() {
+                const projectFilter = approvalProjectFilter ? approvalProjectFilter.value : '';
+                const sourceFilter = approvalSourceFilter ? approvalSourceFilter.value : '';
+                const categoryFilter = document.querySelector('[data-category-filter].bg-primary')?.dataset.categoryFilter || 'all';
+
+                // 获取当前显示的需求列表
+                const currentContent = document.querySelector('[data-approval-content]:not(.hidden)');
+                if (!currentContent) return;
+
+                const requirements = currentContent.querySelectorAll('[data-requirement-id]');
+                let visibleCount = 0;
+
+                requirements.forEach(requirement => {
+                    const projectMatch = !projectFilter || requirement.dataset.project === projectFilter;
+                    const sourceMatch = !sourceFilter || requirement.dataset.source === sourceFilter;
+                    const categoryMatch = categoryFilter === 'all' || requirement.dataset.category === categoryFilter;
+
+                    if (projectMatch && sourceMatch && categoryMatch) {
+                        requirement.style.display = '';
+                        visibleCount++;
+                    } else {
+                        requirement.style.display = 'none';
+                    }
+                });
+
+                // 更新统计信息
+                updateFilteredCount(visibleCount);
+            }
+
+            // 更新筛选后的统计信息
+            function updateFilteredCount(count) {
+                const currentCountText = document.querySelector('[data-approval-count-text]:not(.hidden)');
+                if (currentCountText) {
+                    const isApproved = currentCountText.dataset.approvalCountText === 'approved';
+                    const text = isApproved ? `共 ${count} 个已审批需求` : `共 ${count} 个待审批需求`;
+                    currentCountText.textContent = text;
+                }
+            }
+
+            // 重置筛选器
+            function resetFilters() {
+                if (approvalProjectFilter) approvalProjectFilter.value = '';
+                if (approvalSourceFilter) approvalSourceFilter.value = '';
+
+                // 重置分类筛选按钮
+                categoryFilterButtons.forEach(btn => {
+                    btn.classList.remove('bg-primary', 'text-primary-foreground');
+                    btn.classList.add('bg-muted', 'text-muted-foreground');
+                });
+                const allButton = document.querySelector('[data-category-filter="all"]');
+                if (allButton) {
+                    allButton.classList.remove('bg-muted', 'text-muted-foreground');
+                    allButton.classList.add('bg-primary', 'text-primary-foreground');
+                }
+
+                filterRequirements();
+            }
+
+            // 审批状态切换时重置筛选器
+            const originalApprovalFilterButtons = document.querySelectorAll('[data-approval-filter]');
+            originalApprovalFilterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    setTimeout(() => {
+                        resetFilters();
+                    }, 100);
+                });
+            });
+
+            // EasyMDE Markdown编辑器初始化
+            let easyMDE = null;
+
+            // 初始化EasyMDE编辑器
+            function initializeMarkdownEditor() {
+                const textarea = document.getElementById('requirement-description');
+                if (!textarea || easyMDE) return;
+
+                easyMDE = new EasyMDE({
+                    element: textarea,
+                    placeholder: '请详细描述您的需求...',
+                    spellChecker: false,
+                    autofocus: false,
+                    minHeight: '400px',
+                    maxHeight: '600px',
+                    toolbar: [
+                        'bold',
+                        'italic',
+                        'strikethrough',
+                        'heading',
+                        '|',
+                        'quote',
+                        'unordered-list',
+                        'ordered-list',
+                        'clean-block',
+                        '|',
+                        'link',
+                        'image',
+                        'table',
+                        'horizontal-rule',
+                        '|',
+                        'code',
+                        'preview',
+                        'side-by-side',
+                        'fullscreen',
+                        '|',
+                        'undo',
+                        'redo',
+                        '|',
+                        'guide'
+                    ],
+                    shortcuts: {
+                        'toggleBold': 'Cmd-B',
+                        'toggleItalic': 'Cmd-I',
+                        'toggleStrikethrough': 'Cmd-Alt-S',
+                        'toggleCodeBlock': 'Cmd-Alt-C',
+                        'togglePreview': 'Cmd-P',
+                        'toggleSideBySide': 'F9',
+                        'toggleFullScreen': 'F11'
+                    },
+                    status: false, // 禁用底部状态栏，我们使用自定义的
+                    renderingConfig: {
+                        singleLineBreaks: false,
+                        codeSyntaxHighlighting: true
+                    },
+                    previewRender: function(plainText) {
+                        // 自定义预览渲染
+                        return this.parent.markdown(plainText);
+                    },
+                    tabSize: 4,
+                    indentWithTabs: false,
+                    lineWrapping: true,
+                    autoDownloadFontAwesome: false
+                });
+
+                // 监听内容变化，更新统计信息
+                easyMDE.codemirror.on('change', function() {
+                    updateWordCount();
+                    autoSave();
+                });
+
+                // 加载草稿
+                loadDraft();
+
+                // 设置定时自动保存
+                setInterval(autoSave, 30000); // 每30秒自动保存一次
+            }
+
+            // 更新字符和单词统计
+            function updateWordCount() {
+                if (!easyMDE) return;
+
+                const content = easyMDE.value();
+                const charCount = content.length;
+                const wordCount = content.trim() ? content.trim().split(/\s+/).length : 0;
+
+                const charCountEl = document.getElementById('char-count');
+                const wordCountEl = document.getElementById('word-count');
+
+                if (charCountEl) charCountEl.textContent = `字符数: ${charCount}`;
+                if (wordCountEl) wordCountEl.textContent = `单词数: ${wordCount}`;
+            }
+
+            // 自动保存功能
+            function autoSave() {
+                if (!easyMDE) return;
+
+                const content = easyMDE.value();
+                if (content) {
+                    localStorage.setItem('requirement-draft', content);
+                }
+            }
+
+            // 加载草稿
+            function loadDraft() {
+                const draft = localStorage.getItem('requirement-draft');
+                if (draft && easyMDE) {
+                    easyMDE.value(draft);
+                    updateWordCount();
+                }
+            }
+
+            // 清除草稿
+            function clearDraft() {
+                localStorage.removeItem('requirement-draft');
+            }
+
+            // 导出内容
+            function exportContent() {
+                if (!easyMDE) return;
+
+                const content = easyMDE.value();
+                const blob = new Blob([content], { type: 'text/markdown' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = '需求描述.md';
+                a.click();
+                URL.revokeObjectURL(url);
+            }
+
+            // Markdown语法帮助
+            function showMarkdownHelp() {
+                const helpContent = `
+# Markdown语法帮助
+
+## 标题
+# 一级标题
+## 二级标题
+### 三级标题
+
+## 文本格式
+**粗体文本**
+*斜体文本*
+~~删除线~~
+\`行内代码\`
+
+## 列表
+- 无序列表项1
+- 无序列表项2
+
+1. 有序列表项1
+2. 有序列表项2
+
+## 任务列表
+- [ ] 未完成任务
+- [x] 已完成任务
+
+## 链接和图片
+[链接文本](URL)
+![图片描述](图片URL)
+
+## 表格
+| 列1 | 列2 | 列3 |
+|-----|-----|-----|
+| 内容1 | 内容2 | 内容3 |
+
+## 代码块
+\`\`\`javascript
+function hello() {
+    console.log('Hello World!');
+}
+\`\`\`
+
+## 引用
+> 这是一个引用文本
+
+## 快捷键
+- Ctrl/Cmd + B: 粗体
+- Ctrl/Cmd + I: 斜体
+- Ctrl/Cmd + P: 预览
+- F9: 分屏预览
+- F11: 全屏
+                `;
+
+                alert(helpContent);
+            }
+
+            // 在需求录入标签页激活时初始化编辑器
+            document.addEventListener('DOMContentLoaded', function() {
+                // 监听标签页切换
+                const tabButtons = document.querySelectorAll('[data-tab]');
+                tabButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const tabName = this.dataset.tab;
+                        if (tabName === 'requirement-entry') {
+                            // 延迟初始化，确保DOM已渲染
+                            setTimeout(initializeMarkdownEditor, 100);
+                        }
+                    });
+                });
+
+                // 如果默认显示需求录入页面，立即初始化
+                const activeTab = document.querySelector('[data-tab-content="requirement-entry"]:not(.hidden)');
+                if (activeTab) {
+                    setTimeout(initializeMarkdownEditor, 100);
+                }
+            });
+
             // 优先级按钮切换
             const priorityButtons = document.querySelectorAll('[data-priority]');
             priorityButtons.forEach(button => {
@@ -1472,6 +2270,738 @@
                     }
                 });
             });
+
+            // 需求审批Button Group切换功能
+            const approvalFilterButtons = document.querySelectorAll('[data-approval-filter]');
+            const approvalContents = document.querySelectorAll('[data-approval-content]');
+            const approvalCountTexts = document.querySelectorAll('[data-approval-count-text]');
+
+            approvalFilterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const filter = this.dataset.approvalFilter;
+
+                    // 更新按钮状态
+                    approvalFilterButtons.forEach(btn => {
+                        btn.classList.remove('bg-primary', 'text-primary-foreground');
+                        btn.classList.add('text-muted-foreground', 'hover:text-foreground');
+                    });
+                    this.classList.remove('text-muted-foreground', 'hover:text-foreground');
+                    this.classList.add('bg-primary', 'text-primary-foreground');
+
+                    // 更新内容显示
+                    approvalContents.forEach(content => {
+                        if (content.dataset.approvalContent === filter) {
+                            content.classList.remove('hidden');
+                        } else {
+                            content.classList.add('hidden');
+                        }
+                    });
+
+                    // 更新统计文本
+                    approvalCountTexts.forEach(text => {
+                        if (text.dataset.approvalCountText === filter) {
+                            text.classList.remove('hidden');
+                        } else {
+                            text.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            // 需求拆分功能
+            let currentSelectedRequirement = 'req-004'; // 默认选中第一个需求
+
+            // 需求项选中功能 - 只处理需求项的主要内容区域点击
+            function selectRequirement(requirementId, requirementName) {
+                console.log('选中需求:', requirementId, requirementName); // 调试信息
+
+                // 移除其他项的active状态
+                document.querySelectorAll('.requirement-item').forEach(i => i.classList.remove('active'));
+                // 添加当前项的active状态
+                document.querySelector(`[data-requirement-id="${requirementId}"]`).classList.add('active');
+
+                // 更新选中的需求
+                currentSelectedRequirement = requirementId;
+
+                // 更新右侧面板的需求信息
+                updateSelectedRequirementInfo(requirementId, requirementName);
+
+                // 加载对应的子需求列表
+                loadSubRequirements(requirementId);
+            }
+
+            // 需求项点击事件（仅选中，不展示详情）
+            document.querySelectorAll('.requirement-item').forEach(item => {
+                // 为需求项的主要内容区域添加点击事件
+                const mainContent = item.querySelector('.flex-1');
+                if (mainContent) {
+                    mainContent.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const requirementId = item.dataset.requirementId;
+                        const requirementName = item.dataset.requirementName;
+                        selectRequirement(requirementId, requirementName);
+                    });
+                }
+            });
+
+            // 查看需求详情按钮事件 - 使用更精确的事件绑定
+            document.querySelectorAll('[data-action="view-requirement-detail"]').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.stopPropagation(); // 阻止事件冒泡到父元素
+                    e.preventDefault();  // 阻止默认行为
+
+                    const requirementId = this.dataset.requirementId;
+                    console.log('查看需求详情:', requirementId); // 调试信息
+                    showRequirementDetail(requirementId);
+                });
+            });
+
+            // 更新选中需求信息
+            function updateSelectedRequirementInfo(requirementId, requirementName) {
+                const requirementData = getRequirementDetailData(requirementId);
+                document.getElementById('selected-requirement-name').textContent = requirementName;
+                document.getElementById('selected-requirement-desc').textContent = requirementData.description;
+            }
+
+            // 获取需求详细数据
+            function getRequirementDetailData(requirementId) {
+                const mockData = {
+                    'req-004': {
+                        name: '用户权限管理系统',
+                        description: '完善用户权限管理系统，支持角色分配和权限控制，提升系统安全性和管理效率。',
+                        submitter: '赵管理员',
+                        approvalTime: '2024-01-17 15:30',
+                        type: '功能需求',
+                        priority: '🟡 中优先级',
+                        background: '随着系统用户数量增长，需要建立完善的权限管理体系，确保不同角色用户只能访问相应的功能模块，提升系统安全性。',
+                        acceptanceCriteria: [
+                            '支持创建、编辑、删除用户角色',
+                            '实现菜单权限、操作权限、数据权限控制',
+                            '提供用户管理界面，支持角色分配',
+                            '权限变更实时生效，无需重新登录'
+                        ]
+                    },
+                    'req-005': {
+                        name: '移动端适配优化',
+                        description: '优化移动端页面适配，提升移动端用户体验，支持响应式布局和触摸操作。',
+                        submitter: '陈前端',
+                        approvalTime: '2024-01-16 11:45',
+                        type: '优化需求',
+                        priority: '🟢 低优先级',
+                        background: '随着移动端用户增长，现有系统在移动设备上的体验不佳，需要进行专门的移动端适配优化。',
+                        acceptanceCriteria: [
+                            '支持主流移动设备屏幕适配',
+                            '优化触摸交互体验',
+                            '提升移动端页面加载速度',
+                            '确保核心功能在移动端正常使用'
+                        ]
+                    }
+                };
+                return mockData[requirementId] || {
+                    name: '未知需求',
+                    description: '需求描述不可用',
+                    submitter: '未知',
+                    approvalTime: '未知',
+                    type: '功能需求',
+                    priority: '🟡 中优先级',
+                    background: '暂无背景信息',
+                    acceptanceCriteria: []
+                };
+            }
+
+            // 显示需求详情
+            function showRequirementDetail(requirementId) {
+                const requirementData = getRequirementDetailData(requirementId);
+                const subRequirementsData = getSubRequirementsData(requirementId);
+
+                // 填充基本信息
+                document.getElementById('detail-requirement-name').textContent = requirementData.name;
+                document.getElementById('detail-submitter').textContent = requirementData.submitter;
+                document.getElementById('detail-approval-time').textContent = requirementData.approvalTime;
+                document.getElementById('detail-requirement-type').textContent = requirementData.type;
+                document.getElementById('detail-priority').textContent = requirementData.priority;
+                document.getElementById('detail-description').textContent = requirementData.description;
+                document.getElementById('detail-background').textContent = requirementData.background;
+
+                // 填充验收标准
+                const criteriaContainer = document.getElementById('detail-acceptance-criteria');
+                criteriaContainer.innerHTML = '';
+                requirementData.acceptanceCriteria.forEach(criteria => {
+                    const div = document.createElement('div');
+                    div.className = 'flex items-start space-x-2';
+                    div.innerHTML = `
+                        <span class="text-muted-foreground text-xs mt-1">•</span>
+                        <span class="text-sm">${criteria}</span>
+                    `;
+                    criteriaContainer.appendChild(div);
+                });
+
+                // 填充子需求统计
+                const totalHours = subRequirementsData.reduce((sum, req) => sum + req.hours, 0);
+                document.getElementById('detail-sub-count').textContent = subRequirementsData.length;
+                document.getElementById('detail-total-hours').textContent = totalHours;
+                document.getElementById('detail-progress').textContent = '0%'; // 这里可以根据实际进度计算
+
+                // 显示模态框
+                document.getElementById('requirement-detail-modal').classList.remove('hidden');
+            }
+
+            // 需求详情模态框控制
+            const requirementDetailModal = document.getElementById('requirement-detail-modal');
+            const closeRequirementDetailModal = document.getElementById('close-requirement-detail-modal');
+            const closeDetailModal = document.getElementById('close-detail-modal');
+            const gotoBreakdown = document.getElementById('goto-breakdown');
+
+            // 关闭详情模态框
+            function closeRequirementDetailModalHandler() {
+                requirementDetailModal.classList.add('hidden');
+            }
+
+            closeRequirementDetailModal.addEventListener('click', closeRequirementDetailModalHandler);
+            closeDetailModal.addEventListener('click', closeRequirementDetailModalHandler);
+
+            // 点击模态框外部关闭
+            requirementDetailModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeRequirementDetailModalHandler();
+                }
+            });
+
+            // 进入拆分按钮
+            gotoBreakdown.addEventListener('click', function() {
+                // 关闭详情模态框
+                closeRequirementDetailModalHandler();
+
+                // 这里可以添加切换到拆分视图的逻辑
+                // 例如：滚动到对应的需求项，或者高亮显示等
+                showSuccessMessage('已进入需求拆分模式');
+            });
+
+            // 加载子需求列表
+            function loadSubRequirements(requirementId) {
+                const subRequirementsData = getSubRequirementsData(requirementId);
+                const container = document.getElementById('sub-requirements-list');
+
+                // 显示加载状态
+                container.innerHTML = '<div class="text-center py-4 text-muted-foreground">加载中...</div>';
+
+                // 模拟异步加载
+                setTimeout(() => {
+                    container.innerHTML = '';
+
+                    if (subRequirementsData.length === 0) {
+                        container.innerHTML = '<div class="text-center py-8 text-muted-foreground">暂无子需求，点击"新增子需求"开始添加</div>';
+                    } else {
+                        subRequirementsData.forEach(subReq => {
+                            const subReqElement = createSubRequirementElement(subReq);
+                            container.appendChild(subReqElement);
+                        });
+                    }
+
+                    // 更新统计信息
+                    updateSubRequirementsStats(subRequirementsData);
+                }, 300);
+            }
+
+            // 获取子需求数据
+            function getSubRequirementsData(requirementId) {
+                const mockData = {
+                    'req-004': [
+                        {
+                            id: 'sub-req-001',
+                            name: '用户角色管理模块',
+                            description: '实现用户角色的创建、编辑、删除功能，支持角色权限配置',
+                            priority: 'medium',
+                            hours: 5
+                        },
+                        {
+                            id: 'sub-req-002',
+                            name: '权限控制模块',
+                            description: '实现细粒度权限控制，支持菜单权限、操作权限、数据权限',
+                            priority: 'high',
+                            hours: 8
+                        },
+                        {
+                            id: 'sub-req-003',
+                            name: '用户管理界面',
+                            description: '设计和开发用户管理界面，支持用户信息维护和角色分配',
+                            priority: 'low',
+                            hours: 3
+                        }
+                    ],
+                    'req-005': [
+                        {
+                            id: 'sub-req-004',
+                            name: '响应式布局优化',
+                            description: '优化页面布局，适配移动端屏幕尺寸',
+                            priority: 'high',
+                            hours: 4
+                        },
+                        {
+                            id: 'sub-req-005',
+                            name: '触摸交互优化',
+                            description: '优化移动端触摸交互体验，支持手势操作',
+                            priority: 'medium',
+                            hours: 3
+                        }
+                    ]
+                };
+                return mockData[requirementId] || [];
+            }
+
+            // 创建子需求元素
+            function createSubRequirementElement(subReq) {
+                const div = document.createElement('div');
+                div.className = 'p-3 border border-border rounded';
+                div.dataset.subRequirementId = subReq.id;
+
+                const priorityMap = {
+                    'low': '🟢 低优先级',
+                    'medium': '🟡 中优先级',
+                    'high': '🔴 高优先级'
+                };
+
+                const priorityClass = {
+                    'low': 'bg-muted text-muted-foreground',
+                    'medium': 'bg-warning text-warning-foreground',
+                    'high': 'bg-destructive text-destructive-foreground'
+                };
+
+                div.innerHTML = `
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <h4 class="font-medium text-sm">${subReq.name}</h4>
+                            <p class="text-xs text-muted-foreground mt-1">${subReq.description}</p>
+                            <div class="flex items-center space-x-2 mt-2">
+                                <span class="px-2 py-1 ${priorityClass[subReq.priority]} text-xs rounded">${priorityMap[subReq.priority]}</span>
+                                <span class="text-xs text-muted-foreground">预估工时: ${subReq.hours}天</span>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2 ml-2">
+                            <button class="px-2 py-1 border border-border rounded text-xs hover:bg-accent" data-action="edit-sub-requirement" data-sub-requirement-id="${subReq.id}">
+                                编辑
+                            </button>
+                            <button class="px-2 py-1 border border-destructive text-destructive rounded text-xs hover:bg-destructive/10" data-action="delete-sub-requirement" data-sub-requirement-id="${subReq.id}">
+                                删除
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                return div;
+            }
+
+            // 更新子需求统计信息
+            function updateSubRequirementsStats(subRequirements) {
+                const count = subRequirements.length;
+                const totalHours = subRequirements.reduce((sum, req) => sum + req.hours, 0);
+
+                document.getElementById('sub-requirements-count').textContent = count;
+                document.getElementById('total-estimated-hours').textContent = totalHours;
+            }
+
+            // AI辅助拆分功能
+            const aiBreakdownBtn = document.getElementById('ai-breakdown-btn');
+            const aiBreakdownModal = document.getElementById('ai-breakdown-modal');
+            const closeAiBreakdownModal = document.getElementById('close-ai-breakdown-modal');
+            const cancelAiBreakdown = document.getElementById('cancel-ai-breakdown');
+            const startAiBreakdown = document.getElementById('start-ai-breakdown');
+            const regenerateBreakdown = document.getElementById('regenerate-breakdown');
+            const applyBreakdown = document.getElementById('apply-breakdown');
+
+            // 打开AI辅助拆分模态框
+            aiBreakdownBtn.addEventListener('click', function() {
+                // 更新当前需求信息
+                const selectedRequirementName = document.getElementById('selected-requirement-name').textContent;
+                const selectedRequirementDesc = document.getElementById('selected-requirement-desc').textContent;
+
+                document.getElementById('ai-breakdown-requirement-name').textContent = selectedRequirementName;
+                document.getElementById('ai-breakdown-requirement-desc').textContent = selectedRequirementDesc;
+
+                // 重置状态
+                document.getElementById('ai-breakdown-result-section').style.display = 'none';
+                document.getElementById('ai-breakdown-loading').classList.add('hidden');
+
+                // 显示模态框
+                aiBreakdownModal.classList.remove('hidden');
+            });
+
+            // 关闭AI拆分模态框
+            function closeAiBreakdownModalHandler() {
+                aiBreakdownModal.classList.add('hidden');
+            }
+
+            closeAiBreakdownModal.addEventListener('click', closeAiBreakdownModalHandler);
+            cancelAiBreakdown.addEventListener('click', closeAiBreakdownModalHandler);
+
+            // 点击模态框外部关闭
+            aiBreakdownModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeAiBreakdownModalHandler();
+                }
+            });
+
+            // 开始AI拆分
+            startAiBreakdown.addEventListener('click', function() {
+                performAiBreakdown();
+            });
+
+            // 重新生成拆分
+            regenerateBreakdown.addEventListener('click', function() {
+                performAiBreakdown();
+            });
+
+            // 应用拆分结果
+            applyBreakdown.addEventListener('click', function() {
+                applyAiBreakdownResults();
+            });
+
+            // 执行AI拆分
+            function performAiBreakdown() {
+                // 显示加载状态
+                document.getElementById('ai-breakdown-loading').classList.remove('hidden');
+                document.getElementById('ai-breakdown-result-section').style.display = 'none';
+
+                // 获取配置参数
+                const granularity = document.getElementById('ai-breakdown-granularity').value;
+                const techStack = document.getElementById('ai-breakdown-tech-stack').value;
+                const additionalInfo = document.getElementById('ai-breakdown-additional-info').value;
+                const requirementName = document.getElementById('ai-breakdown-requirement-name').textContent;
+                const requirementDesc = document.getElementById('ai-breakdown-requirement-desc').textContent;
+
+                // 模拟AI调用（实际项目中这里应该调用真实的AI API）
+                setTimeout(() => {
+                    const aiResults = generateAiBreakdownResults(requirementName, requirementDesc, granularity, techStack, additionalInfo);
+                    displayAiBreakdownResults(aiResults);
+
+                    // 隐藏加载状态，显示结果
+                    document.getElementById('ai-breakdown-loading').classList.add('hidden');
+                    document.getElementById('ai-breakdown-result-section').style.display = 'block';
+                }, 2000 + Math.random() * 2000); // 模拟2-4秒的AI处理时间
+            }
+
+            // 生成AI拆分结果（模拟AI大模型的响应）
+            function generateAiBreakdownResults(requirementName, requirementDesc, granularity, techStack, additionalInfo) {
+                const baseResults = {
+                    '用户权限管理系统': [
+                        {
+                            name: '用户角色管理模块',
+                            description: '实现用户角色的创建、编辑、删除功能，支持角色权限配置和角色继承机制',
+                            priority: 'high',
+                            estimatedHours: 8,
+                            techDetails: '使用Spring Security实现角色管理，支持RBAC权限模型'
+                        },
+                        {
+                            name: '权限控制核心引擎',
+                            description: '实现细粒度权限控制，支持菜单权限、操作权限、数据权限的统一管理',
+                            priority: 'high',
+                            estimatedHours: 12,
+                            techDetails: '基于AOP实现权限拦截，支持注解式权限控制'
+                        },
+                        {
+                            name: '用户管理界面',
+                            description: '设计和开发用户管理界面，支持用户信息维护、角色分配和权限查看',
+                            priority: 'medium',
+                            estimatedHours: 6,
+                            techDetails: '使用Vue.js构建响应式用户界面，集成权限树组件'
+                        },
+                        {
+                            name: '权限缓存机制',
+                            description: '实现权限信息的缓存机制，提升权限验证性能和系统响应速度',
+                            priority: 'medium',
+                            estimatedHours: 4,
+                            techDetails: '使用Redis缓存用户权限信息，支持权限变更时的缓存刷新'
+                        },
+                        {
+                            name: '权限审计日志',
+                            description: '记录权限变更和访问日志，支持权限审计和安全监控',
+                            priority: 'low',
+                            estimatedHours: 5,
+                            techDetails: '基于AOP记录权限操作日志，支持日志查询和导出'
+                        }
+                    ],
+                    '移动端适配优化': [
+                        {
+                            name: '响应式布局重构',
+                            description: '重构现有页面布局，实现完全响应式设计，适配各种移动设备屏幕',
+                            priority: 'high',
+                            estimatedHours: 10,
+                            techDetails: '使用CSS Grid和Flexbox实现响应式布局，支持断点适配'
+                        },
+                        {
+                            name: '触摸交互优化',
+                            description: '优化移动端触摸交互体验，支持手势操作和触摸反馈',
+                            priority: 'high',
+                            estimatedHours: 8,
+                            techDetails: '集成Hammer.js处理手势事件，优化触摸区域大小'
+                        },
+                        {
+                            name: '移动端性能优化',
+                            description: '优化移动端页面加载速度和运行性能，减少资源消耗',
+                            priority: 'medium',
+                            estimatedHours: 6,
+                            techDetails: '实现懒加载、图片压缩和代码分割，优化首屏加载时间'
+                        },
+                        {
+                            name: '移动端组件库',
+                            description: '开发移动端专用组件库，提供一致的移动端用户体验',
+                            priority: 'medium',
+                            estimatedHours: 12,
+                            techDetails: '基于Vue.js开发移动端组件库，支持主题定制'
+                        }
+                    ]
+                };
+
+                let results = baseResults[requirementName] || baseResults['用户权限管理系统'];
+
+                // 根据粒度调整结果数量
+                if (granularity === 'coarse') {
+                    results = results.slice(0, 3);
+                } else if (granularity === 'fine') {
+                    // 为细粒度添加更多子需求
+                    results = [...results, {
+                        name: '权限配置管理',
+                        description: '提供权限配置的可视化管理界面，支持权限模板和批量配置',
+                        priority: 'low',
+                        estimatedHours: 4,
+                        techDetails: '使用拖拽式界面设计权限配置流程'
+                    }];
+                }
+
+                return results;
+            }
+
+            // 显示AI拆分结果
+            function displayAiBreakdownResults(results) {
+                const container = document.getElementById('ai-breakdown-results');
+                container.innerHTML = '';
+
+                results.forEach((result, index) => {
+                    const resultElement = document.createElement('div');
+                    resultElement.className = 'p-4 border border-border rounded-lg bg-muted/30 ai-breakdown-result';
+
+                    const priorityMap = {
+                        'low': { text: '🟢 低优先级', class: 'bg-muted text-muted-foreground' },
+                        'medium': { text: '🟡 中优先级', class: 'bg-warning text-warning-foreground' },
+                        'high': { text: '🔴 高优先级', class: 'bg-destructive text-destructive-foreground' }
+                    };
+
+                    const priority = priorityMap[result.priority];
+
+                    resultElement.innerHTML = `
+                        <div class="flex items-start justify-between mb-3">
+                            <h5 class="font-medium text-sm">${result.name}</h5>
+                            <div class="flex items-center space-x-2">
+                                <span class="px-2 py-1 ${priority.class} text-xs rounded">${priority.text}</span>
+                                <span class="text-xs text-muted-foreground">${result.estimatedHours}天</span>
+                            </div>
+                        </div>
+                        <p class="text-sm text-muted-foreground mb-2">${result.description}</p>
+                        <div class="text-xs text-muted-foreground bg-muted p-2 rounded">
+                            <strong>技术实现：</strong>${result.techDetails}
+                        </div>
+                    `;
+
+                    container.appendChild(resultElement);
+                });
+            }
+
+            // 应用AI拆分结果
+            function applyAiBreakdownResults() {
+                const results = document.querySelectorAll('#ai-breakdown-results > div');
+                const subRequirements = [];
+
+                results.forEach((resultElement, index) => {
+                    const name = resultElement.querySelector('h5').textContent;
+                    const description = resultElement.querySelector('p').textContent;
+                    const priorityText = resultElement.querySelector('.px-2.py-1').textContent;
+                    const hours = parseInt(resultElement.querySelector('.text-xs.text-muted-foreground:last-of-type').textContent);
+
+                    let priority = 'medium';
+                    if (priorityText.includes('高优先级')) priority = 'high';
+                    else if (priorityText.includes('低优先级')) priority = 'low';
+
+                    const subRequirement = {
+                        id: 'ai-sub-req-' + Date.now() + '-' + index,
+                        name: name,
+                        description: description,
+                        priority: priority,
+                        hours: hours,
+                        source: 'AI生成'
+                    };
+
+                    subRequirements.push(subRequirement);
+                });
+
+                // 清空现有子需求列表
+                const container = document.getElementById('sub-requirements-list');
+                container.innerHTML = '';
+
+                // 添加AI生成的子需求
+                subRequirements.forEach(subReq => {
+                    const subReqElement = createSubRequirementElement(subReq);
+                    container.appendChild(subReqElement);
+                });
+
+                // 更新统计信息
+                updateSubRequirementsStats(subRequirements);
+
+                // 更新左侧需求项的子需求数量
+                updateRequirementItemCount(currentSelectedRequirement, subRequirements.length);
+
+                // 关闭模态框
+                closeAiBreakdownModalHandler();
+
+                // 显示成功提示
+                showSuccessMessage(`AI成功生成了 ${subRequirements.length} 个子需求`);
+            }
+
+            // 新增子需求模态框功能
+            const addSubRequirementBtn = document.getElementById('add-sub-requirement-btn');
+            const addSubRequirementModal = document.getElementById('add-sub-requirement-modal');
+            const closeSubRequirementModal = document.getElementById('close-sub-requirement-modal');
+            const cancelSubRequirement = document.getElementById('cancel-sub-requirement');
+            const subRequirementForm = document.getElementById('sub-requirement-form');
+
+            // 打开新增子需求模态框
+            addSubRequirementBtn.addEventListener('click', function() {
+                // 更新父需求名称
+                const selectedRequirementName = document.getElementById('selected-requirement-name').textContent;
+                document.getElementById('parent-requirement-name').textContent = selectedRequirementName;
+
+                // 重置表单
+                subRequirementForm.reset();
+
+                // 显示模态框
+                addSubRequirementModal.classList.remove('hidden');
+            });
+
+            // 关闭模态框
+            function closeSubRequirementModalHandler() {
+                addSubRequirementModal.classList.add('hidden');
+            }
+
+            closeSubRequirementModal.addEventListener('click', closeSubRequirementModalHandler);
+            cancelSubRequirement.addEventListener('click', closeSubRequirementModalHandler);
+
+            // 点击模态框外部关闭
+            addSubRequirementModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeSubRequirementModalHandler();
+                }
+            });
+
+            // 提交子需求表单
+            subRequirementForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const formData = new FormData(this);
+                const subRequirement = {
+                    id: 'sub-req-' + Date.now(),
+                    name: formData.get('name'),
+                    description: formData.get('description'),
+                    priority: formData.get('priority'),
+                    hours: parseFloat(formData.get('hours')) || 1,
+                    assignee: formData.get('assignee'),
+                    tags: formData.get('tags')
+                };
+
+                // 验证必填字段
+                if (!subRequirement.name.trim() || !subRequirement.description.trim()) {
+                    alert('请填写必填字段');
+                    return;
+                }
+
+                // 添加子需求到列表
+                addSubRequirementToList(subRequirement);
+
+                // 关闭模态框
+                closeSubRequirementModalHandler();
+
+                // 显示成功提示
+                showSuccessMessage('子需求添加成功');
+            });
+
+            // 添加子需求到列表
+            function addSubRequirementToList(subRequirement) {
+                const container = document.getElementById('sub-requirements-list');
+
+                // 如果是空状态，清空容器
+                if (container.querySelector('.text-center')) {
+                    container.innerHTML = '';
+                }
+
+                // 创建并添加新的子需求元素
+                const subReqElement = createSubRequirementElement(subRequirement);
+                container.appendChild(subReqElement);
+
+                // 更新统计信息
+                const currentSubReqs = getSubRequirementsData(currentSelectedRequirement);
+                currentSubReqs.push(subRequirement);
+                updateSubRequirementsStats(currentSubReqs);
+
+                // 更新左侧需求项的子需求数量
+                updateRequirementItemCount(currentSelectedRequirement, currentSubReqs.length);
+            }
+
+            // 更新需求项的子需求数量
+            function updateRequirementItemCount(requirementId, count) {
+                const requirementItem = document.querySelector(`[data-requirement-id="${requirementId}"]`);
+                if (requirementItem) {
+                    const countElement = requirementItem.querySelector('.font-medium');
+                    if (countElement) {
+                        countElement.textContent = count;
+                    }
+                }
+            }
+
+            // 显示成功消息
+            function showSuccessMessage(message) {
+                // 创建临时提示元素
+                const toast = document.createElement('div');
+                toast.className = 'fixed top-4 right-4 bg-success text-success-foreground px-4 py-2 rounded-md shadow-lg z-50';
+                toast.textContent = message;
+                document.body.appendChild(toast);
+
+                // 3秒后自动移除
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 3000);
+            }
+
+            // 子需求搜索功能
+            const requirementSearch = document.getElementById('requirement-search');
+            requirementSearch.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const requirementItems = document.querySelectorAll('.requirement-item');
+
+                requirementItems.forEach(item => {
+                    const name = item.dataset.requirementName.toLowerCase();
+                    const description = item.querySelector('.text-xs.text-muted-foreground:last-of-type').textContent.toLowerCase();
+
+                    if (name.includes(searchTerm) || description.includes(searchTerm)) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+
+            // 初始化需求拆分页面
+            if (document.querySelector('[data-tab-content="requirement-breakdown"]')) {
+                // 默认加载第一个需求的子需求
+                loadSubRequirements(currentSelectedRequirement);
+            }
+
+            // 测试函数 - 验证事件处理是否正确
+            window.testRequirementInteraction = function() {
+                console.log('=== 需求拆分交互测试 ===');
+                console.log('当前选中需求:', currentSelectedRequirement);
+                console.log('需求项数量:', document.querySelectorAll('.requirement-item').length);
+                console.log('详情按钮数量:', document.querySelectorAll('[data-action="view-requirement-detail"]').length);
+                console.log('主要内容区域数量:', document.querySelectorAll('.requirement-item .flex-1').length);
+                console.log('=== 测试完成 ===');
+            };
         });
     </script>
 </body>
