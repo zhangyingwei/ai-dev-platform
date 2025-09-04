@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目管理测试页面</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/variables.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        border: "hsl(var(--border))",
+                        input: "hsl(var(--input))",
+                        ring: "hsl(var(--ring))",
+                        background: "hsl(var(--background))",
+                        foreground: "hsl(var(--foreground))",
+                        primary: {
+                            DEFAULT: "hsl(var(--primary))",
+                            foreground: "hsl(var(--primary-foreground))"
+                        },
+                        secondary: {
+                            DEFAULT: "hsl(var(--secondary))",
+                            foreground: "hsl(var(--secondary-foreground))"
+                        },
+                        destructive: {
+                            DEFAULT: "hsl(var(--destructive))",
+                            foreground: "hsl(var(--destructive-foreground))"
+                        },
+                        muted: {
+                            DEFAULT: "hsl(var(--muted))",
+                            foreground: "hsl(var(--muted-foreground))"
+                        },
+                        accent: {
+                            DEFAULT: "hsl(var(--accent))",
+                            foreground: "hsl(var(--accent-foreground))"
+                        },
+                        popover: {
+                            DEFAULT: "hsl(var(--popover))",
+                            foreground: "hsl(var(--popover-foreground))"
+                        },
+                        card: {
+                            DEFAULT: "hsl(var(--card))",
+                            foreground: "hsl(var(--card-foreground))"
+                        },
+                        success: '#10b981',
+                        warning: '#f59e0b',
+                        blue: '#3b82f6',
+                        green: '#10b981',
+                        red: '#ef4444',
+                        yellow: '#f59e0b',
+                        purple: '#8b5cf6',
+                        gray: '#6b7280',
+                        'success-foreground': '#ffffff',
+                        'warning-foreground': '#ffffff',
+                        'destructive-foreground': '#ffffff'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-foreground p-6">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-2xl font-bold mb-6">项目管理功能测试</h1>
+        
+        <!-- 项目统计 - 紧凑显示 -->
+        <div class="bg-card border border-border rounded-lg p-4 mb-6">
+            <div class="flex items-center justify-between">
+                <h2 class="text-lg font-semibold">项目概览</h2>
+                <div class="flex items-center space-x-8">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-blue">24</div>
+                        <div class="text-xs text-muted-foreground">总项目</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-yellow">8</div>
+                        <div class="text-xs text-muted-foreground">进行中</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-green">12</div>
+                        <div class="text-xs text-muted-foreground">已完成</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-red">4</div>
+                        <div class="text-xs text-muted-foreground">暂停中</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 项目列表 -->
+        <div class="bg-card border border-border rounded-lg">
+            <div class="p-6 border-b border-border">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-semibold">项目列表</h2>
+                    <button class="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/80">
+                        新建项目
+                    </button>
+                </div>
+            </div>
+            <div class="p-6">
+                <div class="space-y-4">
+                    <!-- AI开发平台项目 -->
+                    <div class="border border-border rounded-lg p-4">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-purple/10 rounded-lg flex items-center justify-center">
+                                    <span class="text-purple font-semibold text-lg">🤖</span>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-semibold cursor-pointer hover:text-primary" onclick="viewProjectDetails('ai-platform')">AI开发平台</h3>
+                                    <p class="text-sm text-muted-foreground">智能化开发工具平台，提供AI辅助编程功能</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="px-3 py-1 bg-green/10 text-green text-sm rounded-full">进行中</span>
+                                <div class="flex space-x-2">
+                                    <button class="px-3 py-1.5 border border-border rounded text-sm hover:bg-accent">编辑</button>
+                                    <button class="px-3 py-1.5 bg-primary text-primary-foreground rounded text-sm hover:bg-primary/80" onclick="viewProjectDetails('ai-platform')">查看详情</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                            <div class="text-center p-3 bg-muted rounded-lg">
+                                <div class="text-sm text-muted-foreground">项目负责人</div>
+                                <div class="font-medium">张项目经理</div>
+                            </div>
+                            <div class="text-center p-3 bg-muted rounded-lg">
+                                <div class="text-sm text-muted-foreground">创建时间</div>
+                                <div class="font-medium">2024-01-15</div>
+                            </div>
+                            <div class="text-center p-3 bg-muted rounded-lg">
+                                <div class="text-sm text-muted-foreground">最后更新</div>
+                                <div class="font-medium">2024-01-21</div>
+                            </div>
+                            <div class="text-center p-3 bg-muted rounded-lg">
+                                <div class="text-sm text-muted-foreground">项目进度</div>
+                                <div class="font-medium">75%</div>
+                            </div>
+                        </div>
+
+                        <div class="w-full bg-muted rounded-full h-2">
+                            <div class="bg-green h-2 rounded-full" style="width: 75%"></div>
+                        </div>
+                    </div>
+
+                    <!-- 支付系统项目 -->
+                    <div class="border border-border rounded-lg p-4">
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-12 h-12 bg-green/10 rounded-lg flex items-center justify-center">
+                                    <span class="text-green font-semibold text-lg">💳</span>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-semibold cursor-pointer hover:text-primary" onclick="viewProjectDetails('payment-system')">支付系统</h3>
+                                    <p class="text-sm text-muted-foreground">多渠道支付集成系统，支持微信、支付宝等</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="px-3 py-1 bg-yellow/10 text-yellow text-sm rounded-full">开发中</span>
+                                <div class="flex space-x-2">
+                                    <button class="px-3 py-1.5 border border-border rounded text-sm hover:bg-accent">编辑</button>
+                                    <button class="px-3 py-1.5 bg-primary text-primary-foreground rounded text-sm hover:bg-primary/80" onclick="viewProjectDetails('payment-system')">查看详情</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                            <div class="text-center p-3 bg-muted rounded-lg">
+                                <div class="text-sm text-muted-foreground">项目负责人</div>
+                                <div class="font-medium">李技术总监</div>
+                            </div>
+                            <div class="text-center p-3 bg-muted rounded-lg">
+                                <div class="text-sm text-muted-foreground">创建时间</div>
+                                <div class="font-medium">2024-01-10</div>
+                            </div>
+                            <div class="text-center p-3 bg-muted rounded-lg">
+                                <div class="text-sm text-muted-foreground">最后更新</div>
+                                <div class="font-medium">2024-01-21</div>
+                            </div>
+                            <div class="text-center p-3 bg-muted rounded-lg">
+                                <div class="text-sm text-muted-foreground">项目进度</div>
+                                <div class="font-medium">45%</div>
+                            </div>
+                        </div>
+
+                        <div class="w-full bg-muted rounded-full h-2">
+                            <div class="bg-yellow h-2 rounded-full" style="width: 45%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 测试按钮 -->
+        <div class="mt-6 space-x-4">
+            <button onclick="viewProjectDetails('ai-platform')" class="px-4 py-2 bg-blue text-white rounded-md hover:bg-blue/80">
+                测试AI平台详情
+            </button>
+            <button onclick="viewProjectDetails('payment-system')" class="px-4 py-2 bg-green text-white rounded-md hover:bg-green/80">
+                测试支付系统详情
+            </button>
+            <button onclick="viewProjectDetails('mobile-app')" class="px-4 py-2 bg-purple text-white rounded-md hover:bg-purple/80">
+                测试移动应用详情
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function viewProjectDetails(projectId) {
+            alert(`点击查看项目详情: ${projectId}\n\n这个功能在完整的项目管理页面中可以正常工作。\n\n项目详情包括：\n- 基本信息\n- 需求管理\n- 开发任务\n- 人员管理\n- 部署管理\n- 资源管理`);
+        }
+    </script>
+</body>
+</html>

@@ -267,32 +267,26 @@
                         <p class="text-muted-foreground">管理开发项目的生命周期，跟踪项目进度和资源分配</p>
                     </div>
 
-                    <!-- 项目统计 -->
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                        <div class="bg-card border border-border rounded-lg p-6">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-muted-foreground">总项目数</p>
-                                    <p class="text-2xl font-bold">24</p>
+                    <!-- 项目统计 - 紧凑显示 -->
+                    <div class="bg-card border border-border rounded-lg p-4 mb-6">
+                        <div class="flex items-center justify-between">
+                            <h2 class="text-lg font-semibold">项目概览</h2>
+                            <div class="flex items-center space-x-8">
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-blue">24</div>
+                                    <div class="text-xs text-muted-foreground">总项目</div>
                                 </div>
-                                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                                    <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
-                                        <path fill-rule="evenodd" d="M4 5a2 2 0 012-2v1a2 2 0 00-2 2v6a2 2 0 002 2h8a2 2 0 002-2V6a2 2 0 00-2-2V3a2 2 0 012-2v1a2 2 0 00-2 2H6a2 2 0 00-2 2z" clip-rule="evenodd"/>
-                                    </svg>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-yellow">8</div>
+                                    <div class="text-xs text-muted-foreground">进行中</div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="bg-card border border-border rounded-lg p-6">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-sm text-muted-foreground">进行中</p>
-                                    <p class="text-2xl font-bold">8</p>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-green">12</div>
+                                    <div class="text-xs text-muted-foreground">已完成</div>
                                 </div>
-                                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                                    <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                    </svg>
+                                <div class="text-center">
+                                    <div class="text-2xl font-bold text-red">4</div>
+                                    <div class="text-xs text-muted-foreground">暂停中</div>
                                 </div>
                             </div>
                         </div>
@@ -329,16 +323,16 @@
                                 <div class="border border-border rounded-lg p-4">
                                     <div class="flex items-center justify-between mb-4">
                                         <div class="flex items-center space-x-4">
-                                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                                                <span class="text-purple-600 font-semibold text-lg">🤖</span>
+                                            <div class="w-12 h-12 bg-purple/10 rounded-lg flex items-center justify-center">
+                                                <span class="text-purple font-semibold text-lg">🤖</span>
                                             </div>
                                             <div>
-                                                <h3 class="text-lg font-semibold">AI开发平台</h3>
+                                                <h3 class="text-lg font-semibold cursor-pointer hover:text-primary" onclick="viewProjectDetails('ai-platform')">AI开发平台</h3>
                                                 <p class="text-sm text-muted-foreground">智能化开发工具平台，提供AI辅助编程功能</p>
                                             </div>
                                         </div>
                                         <div class="flex items-center space-x-3">
-                                            <span class="px-3 py-1 bg-green-100 text-green-800 text-sm rounded-full">进行中</span>
+                                            <span class="px-3 py-1 bg-green/10 text-green text-sm rounded-full">进行中</span>
                                             <div class="flex space-x-2">
                                                 <button class="px-3 py-1.5 border border-border rounded text-sm hover:bg-accent">编辑</button>
                                                 <button class="px-3 py-1.5 bg-primary text-primary-foreground rounded text-sm hover:bg-gray-800" onclick="viewProjectDetails('ai-platform')">查看详情</button>
@@ -374,16 +368,16 @@
                                 <div class="border border-border rounded-lg p-4">
                                     <div class="flex items-center justify-between mb-4">
                                         <div class="flex items-center space-x-4">
-                                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                                                <span class="text-green-600 font-semibold text-lg">💳</span>
+                                            <div class="w-12 h-12 bg-green/10 rounded-lg flex items-center justify-center">
+                                                <span class="text-green font-semibold text-lg">💳</span>
                                             </div>
                                             <div>
-                                                <h3 class="text-lg font-semibold">支付系统</h3>
+                                                <h3 class="text-lg font-semibold cursor-pointer hover:text-primary" onclick="viewProjectDetails('payment-system')">支付系统</h3>
                                                 <p class="text-sm text-muted-foreground">多渠道支付集成系统，支持微信、支付宝等</p>
                                             </div>
                                         </div>
                                         <div class="flex items-center space-x-3">
-                                            <span class="px-3 py-1 bg-yellow-100 text-yellow-800 text-sm rounded-full">开发中</span>
+                                            <span class="px-3 py-1 bg-yellow/10 text-yellow text-sm rounded-full">开发中</span>
                                             <div class="flex space-x-2">
                                                 <button class="px-3 py-1.5 border border-border rounded text-sm hover:bg-accent">编辑</button>
                                                 <button class="px-3 py-1.5 bg-primary text-primary-foreground rounded text-sm hover:bg-gray-800" onclick="viewProjectDetails('payment-system')">查看详情</button>
@@ -419,16 +413,16 @@
                                 <div class="border border-border rounded-lg p-4">
                                     <div class="flex items-center justify-between mb-4">
                                         <div class="flex items-center space-x-4">
-                                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                                                <span class="text-blue-600 font-semibold text-lg">📱</span>
+                                            <div class="w-12 h-12 bg-blue/10 rounded-lg flex items-center justify-center">
+                                                <span class="text-blue font-semibold text-lg">📱</span>
                                             </div>
                                             <div>
-                                                <h3 class="text-lg font-semibold">移动应用</h3>
+                                                <h3 class="text-lg font-semibold cursor-pointer hover:text-primary" onclick="viewProjectDetails('mobile-app')">移动应用</h3>
                                                 <p class="text-sm text-muted-foreground">跨平台移动应用开发，支持iOS和Android</p>
                                             </div>
                                         </div>
                                         <div class="flex items-center space-x-3">
-                                            <span class="px-3 py-1 bg-gray-100 text-gray-800 text-sm rounded-full">已完成</span>
+                                            <span class="px-3 py-1 bg-green/10 text-green text-sm rounded-full">已完成</span>
                                             <div class="flex space-x-2">
                                                 <button class="px-3 py-1.5 border border-border rounded text-sm hover:bg-accent">编辑</button>
                                                 <button class="px-3 py-1.5 bg-primary text-primary-foreground rounded text-sm hover:bg-gray-800" onclick="viewProjectDetails('mobile-app')">查看详情</button>
@@ -983,6 +977,489 @@
         </div>
     </div>
 
+    <!-- 项目详情模态框 -->
+    <div id="project-detail-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-card border border-border rounded-lg w-full max-w-6xl max-h-[90vh] overflow-hidden">
+                <!-- 模态框头部 -->
+                <div class="flex items-center justify-between p-6 border-b border-border">
+                    <div class="flex items-center space-x-4">
+                        <div id="project-icon" class="w-12 h-12 bg-purple/10 rounded-lg flex items-center justify-center">
+                            <span class="text-purple font-semibold text-lg">🤖</span>
+                        </div>
+                        <div>
+                            <h2 id="project-title" class="text-xl font-bold">AI开发平台</h2>
+                            <p id="project-description" class="text-sm text-muted-foreground">智能化开发工具平台，提供AI辅助编程功能</p>
+                        </div>
+                    </div>
+                    <button onclick="closeProjectDetail()" class="p-2 hover:bg-accent rounded-lg">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- 模态框内容 -->
+                <div class="overflow-y-auto max-h-[calc(90vh-120px)]">
+                    <!-- 标签页导航 -->
+                    <nav class="border-b border-border px-6">
+                        <div class="flex space-x-8">
+                            <button class="py-3 px-1 border-b-2 border-primary text-primary font-medium text-sm" data-detail-tab="basic-info">
+                                基本信息
+                            </button>
+                            <button class="py-3 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground text-sm" data-detail-tab="requirements">
+                                需求管理
+                            </button>
+                            <button class="py-3 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground text-sm" data-detail-tab="tasks">
+                                开发任务
+                            </button>
+                            <button class="py-3 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground text-sm" data-detail-tab="team">
+                                人员管理
+                            </button>
+                            <button class="py-3 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground text-sm" data-detail-tab="deployment">
+                                部署管理
+                            </button>
+                            <button class="py-3 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground text-sm" data-detail-tab="resources">
+                                资源管理
+                            </button>
+                        </div>
+                    </nav>
+
+                    <!-- 标签页内容 -->
+                    <div class="p-6">
+                        <!-- 基本信息 -->
+                        <div id="basic-info-content" class="detail-tab-content">
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <!-- 项目基本信息 -->
+                                <div class="space-y-6">
+                                    <div class="bg-muted rounded-lg p-4">
+                                        <h3 class="text-lg font-semibold mb-4">项目信息</h3>
+                                        <div class="space-y-3">
+                                            <div class="flex justify-between">
+                                                <span class="text-muted-foreground">项目名称:</span>
+                                                <span id="detail-project-name">AI开发平台</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-muted-foreground">项目状态:</span>
+                                                <span id="detail-project-status" class="px-2 py-1 bg-green/10 text-green text-sm rounded">进行中</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-muted-foreground">项目负责人:</span>
+                                                <span id="detail-project-manager">张项目经理</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-muted-foreground">创建时间:</span>
+                                                <span id="detail-create-time">2024-01-15</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-muted-foreground">最后更新:</span>
+                                                <span id="detail-update-time">2024-01-21</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-muted-foreground">项目进度:</span>
+                                                <span id="detail-progress">75%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-muted rounded-lg p-4">
+                                        <h3 class="text-lg font-semibold mb-4">技术栈</h3>
+                                        <div class="flex flex-wrap gap-2" id="detail-tech-stack">
+                                            <span class="px-3 py-1 bg-blue/10 text-blue text-sm rounded-full">React</span>
+                                            <span class="px-3 py-1 bg-green/10 text-green text-sm rounded-full">Node.js</span>
+                                            <span class="px-3 py-1 bg-yellow/10 text-yellow text-sm rounded-full">MongoDB</span>
+                                            <span class="px-3 py-1 bg-purple/10 text-purple text-sm rounded-full">Docker</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- 项目统计 -->
+                                <div class="space-y-6">
+                                    <div class="bg-muted rounded-lg p-4">
+                                        <h3 class="text-lg font-semibold mb-4">项目统计</h3>
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <div class="text-center p-3 bg-card rounded-lg">
+                                                <div class="text-2xl font-bold text-blue">24</div>
+                                                <div class="text-xs text-muted-foreground">总需求数</div>
+                                            </div>
+                                            <div class="text-center p-3 bg-card rounded-lg">
+                                                <div class="text-2xl font-bold text-green">18</div>
+                                                <div class="text-xs text-muted-foreground">已完成</div>
+                                            </div>
+                                            <div class="text-center p-3 bg-card rounded-lg">
+                                                <div class="text-2xl font-bold text-yellow">4</div>
+                                                <div class="text-xs text-muted-foreground">进行中</div>
+                                            </div>
+                                            <div class="text-center p-3 bg-card rounded-lg">
+                                                <div class="text-2xl font-bold text-red">2</div>
+                                                <div class="text-xs text-muted-foreground">待处理</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-muted rounded-lg p-4">
+                                        <h3 class="text-lg font-semibold mb-4">里程碑</h3>
+                                        <div class="space-y-3">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-3 h-3 bg-green rounded-full"></div>
+                                                <div class="flex-1">
+                                                    <div class="text-sm font-medium">需求分析完成</div>
+                                                    <div class="text-xs text-muted-foreground">2024-01-15</div>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-3 h-3 bg-green rounded-full"></div>
+                                                <div class="flex-1">
+                                                    <div class="text-sm font-medium">原型设计完成</div>
+                                                    <div class="text-xs text-muted-foreground">2024-01-18</div>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-3 h-3 bg-yellow rounded-full"></div>
+                                                <div class="flex-1">
+                                                    <div class="text-sm font-medium">核心功能开发</div>
+                                                    <div class="text-xs text-muted-foreground">进行中</div>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center space-x-3">
+                                                <div class="w-3 h-3 bg-gray rounded-full"></div>
+                                                <div class="flex-1">
+                                                    <div class="text-sm font-medium">测试与部署</div>
+                                                    <div class="text-xs text-muted-foreground">待开始</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 需求管理 -->
+                        <div id="requirements-content" class="detail-tab-content hidden">
+                            <div class="space-y-6">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-lg font-semibold">项目需求列表</h3>
+                                    <button class="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/80">
+                                        新增需求
+                                    </button>
+                                </div>
+
+                                <div class="space-y-4">
+                                    <div class="border border-border rounded-lg p-4">
+                                        <div class="flex items-center justify-between mb-3">
+                                            <div class="flex items-center space-x-3">
+                                                <span class="px-2 py-1 bg-blue/10 text-blue text-xs rounded">功能需求</span>
+                                                <h4 class="font-medium">AI聊天功能</h4>
+                                            </div>
+                                            <span class="px-2 py-1 bg-green/10 text-green text-xs rounded">已完成</span>
+                                        </div>
+                                        <p class="text-sm text-muted-foreground mb-3">实现智能AI聊天功能，支持多轮对话和上下文理解</p>
+                                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                                            <div>
+                                                <span class="text-muted-foreground">优先级:</span>
+                                                <span class="ml-1 text-red">高</span>
+                                            </div>
+                                            <div>
+                                                <span class="text-muted-foreground">负责人:</span>
+                                                <span class="ml-1">李开发</span>
+                                            </div>
+                                            <div>
+                                                <span class="text-muted-foreground">预计工时:</span>
+                                                <span class="ml-1">40小时</span>
+                                            </div>
+                                            <div>
+                                                <span class="text-muted-foreground">完成时间:</span>
+                                                <span class="ml-1">2024-01-20</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="border border-border rounded-lg p-4">
+                                        <div class="flex items-center justify-between mb-3">
+                                            <div class="flex items-center space-x-3">
+                                                <span class="px-2 py-1 bg-green/10 text-green text-xs rounded">优化需求</span>
+                                                <h4 class="font-medium">界面优化</h4>
+                                            </div>
+                                            <span class="px-2 py-1 bg-yellow/10 text-yellow text-xs rounded">进行中</span>
+                                        </div>
+                                        <p class="text-sm text-muted-foreground mb-3">优化用户界面设计，提升用户体验</p>
+                                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                                            <div>
+                                                <span class="text-muted-foreground">优先级:</span>
+                                                <span class="ml-1 text-yellow">中</span>
+                                            </div>
+                                            <div>
+                                                <span class="text-muted-foreground">负责人:</span>
+                                                <span class="ml-1">王设计</span>
+                                            </div>
+                                            <div>
+                                                <span class="text-muted-foreground">预计工时:</span>
+                                                <span class="ml-1">24小时</span>
+                                            </div>
+                                            <div>
+                                                <span class="text-muted-foreground">预计完成:</span>
+                                                <span class="ml-1">2024-01-25</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 开发任务管理 -->
+                        <div id="tasks-content" class="detail-tab-content hidden">
+                            <div class="space-y-6">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-lg font-semibold">开发任务</h3>
+                                    <button class="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/80">
+                                        新建任务
+                                    </button>
+                                </div>
+
+                                <!-- 任务统计 -->
+                                <div class="grid grid-cols-4 gap-4">
+                                    <div class="text-center p-3 bg-muted rounded-lg">
+                                        <div class="text-xl font-bold text-blue">12</div>
+                                        <div class="text-xs text-muted-foreground">总任务</div>
+                                    </div>
+                                    <div class="text-center p-3 bg-muted rounded-lg">
+                                        <div class="text-xl font-bold text-yellow">4</div>
+                                        <div class="text-xs text-muted-foreground">进行中</div>
+                                    </div>
+                                    <div class="text-center p-3 bg-muted rounded-lg">
+                                        <div class="text-xl font-bold text-green">7</div>
+                                        <div class="text-xs text-muted-foreground">已完成</div>
+                                    </div>
+                                    <div class="text-center p-3 bg-muted rounded-lg">
+                                        <div class="text-xl font-bold text-red">1</div>
+                                        <div class="text-xs text-muted-foreground">待分配</div>
+                                    </div>
+                                </div>
+
+                                <!-- 任务列表 -->
+                                <div class="space-y-4">
+                                    <div class="border border-border rounded-lg p-4">
+                                        <div class="flex items-center justify-between mb-3">
+                                            <div class="flex items-center space-x-3">
+                                                <span class="px-2 py-1 bg-blue/10 text-blue text-xs rounded">前端</span>
+                                                <h4 class="font-medium">用户界面开发</h4>
+                                            </div>
+                                            <span class="px-2 py-1 bg-yellow/10 text-yellow text-xs rounded">进行中</span>
+                                        </div>
+                                        <p class="text-sm text-muted-foreground mb-3">开发用户登录、注册、个人中心等界面</p>
+                                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mb-3">
+                                            <div>
+                                                <span class="text-muted-foreground">负责人:</span>
+                                                <span class="ml-1">李前端</span>
+                                            </div>
+                                            <div>
+                                                <span class="text-muted-foreground">优先级:</span>
+                                                <span class="ml-1 text-red">高</span>
+                                            </div>
+                                            <div>
+                                                <span class="text-muted-foreground">预计工时:</span>
+                                                <span class="ml-1">32小时</span>
+                                            </div>
+                                            <div>
+                                                <span class="text-muted-foreground">截止时间:</span>
+                                                <span class="ml-1">2024-01-25</span>
+                                            </div>
+                                        </div>
+                                        <div class="w-full bg-muted rounded-full h-2">
+                                            <div class="bg-yellow h-2 rounded-full" style="width: 60%"></div>
+                                        </div>
+                                        <div class="text-xs text-muted-foreground mt-1">进度: 60%</div>
+                                    </div>
+
+                                    <div class="border border-border rounded-lg p-4">
+                                        <div class="flex items-center justify-between mb-3">
+                                            <div class="flex items-center space-x-3">
+                                                <span class="px-2 py-1 bg-green/10 text-green text-xs rounded">后端</span>
+                                                <h4 class="font-medium">API接口开发</h4>
+                                            </div>
+                                            <span class="px-2 py-1 bg-green/10 text-green text-xs rounded">已完成</span>
+                                        </div>
+                                        <p class="text-sm text-muted-foreground mb-3">开发用户管理、权限控制等API接口</p>
+                                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mb-3">
+                                            <div>
+                                                <span class="text-muted-foreground">负责人:</span>
+                                                <span class="ml-1">王后端</span>
+                                            </div>
+                                            <div>
+                                                <span class="text-muted-foreground">优先级:</span>
+                                                <span class="ml-1 text-red">高</span>
+                                            </div>
+                                            <div>
+                                                <span class="text-muted-foreground">实际工时:</span>
+                                                <span class="ml-1">28小时</span>
+                                            </div>
+                                            <div>
+                                                <span class="text-muted-foreground">完成时间:</span>
+                                                <span class="ml-1">2024-01-20</span>
+                                            </div>
+                                        </div>
+                                        <div class="w-full bg-muted rounded-full h-2">
+                                            <div class="bg-green h-2 rounded-full" style="width: 100%"></div>
+                                        </div>
+                                        <div class="text-xs text-muted-foreground mt-1">进度: 100%</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="team-content" class="detail-tab-content hidden">
+                            <div class="space-y-6">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-lg font-semibold">团队成员</h3>
+                                    <button class="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/80">
+                                        添加成员
+                                    </button>
+                                </div>
+
+                                <!-- 团队统计 -->
+                                <div class="grid grid-cols-4 gap-4">
+                                    <div class="text-center p-3 bg-muted rounded-lg">
+                                        <div class="text-xl font-bold text-blue">8</div>
+                                        <div class="text-xs text-muted-foreground">总成员</div>
+                                    </div>
+                                    <div class="text-center p-3 bg-muted rounded-lg">
+                                        <div class="text-xl font-bold text-green">6</div>
+                                        <div class="text-xs text-muted-foreground">活跃成员</div>
+                                    </div>
+                                    <div class="text-center p-3 bg-muted rounded-lg">
+                                        <div class="text-xl font-bold text-yellow">2</div>
+                                        <div class="text-xs text-muted-foreground">请假中</div>
+                                    </div>
+                                    <div class="text-center p-3 bg-muted rounded-lg">
+                                        <div class="text-xl font-bold text-purple">85%</div>
+                                        <div class="text-xs text-muted-foreground">工作负载</div>
+                                    </div>
+                                </div>
+
+                                <!-- 成员列表 -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <div class="border border-border rounded-lg p-4">
+                                        <div class="flex items-center space-x-3 mb-3">
+                                            <div class="w-10 h-10 bg-blue/10 rounded-full flex items-center justify-center">
+                                                <span class="text-blue font-semibold">张</span>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-medium">张项目经理</h4>
+                                                <p class="text-sm text-muted-foreground">项目经理</p>
+                                            </div>
+                                        </div>
+                                        <div class="space-y-2 text-sm">
+                                            <div class="flex justify-between">
+                                                <span class="text-muted-foreground">工作负载:</span>
+                                                <span class="text-yellow">90%</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-muted-foreground">当前任务:</span>
+                                                <span>3个</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-muted-foreground">状态:</span>
+                                                <span class="text-green">在线</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="border border-border rounded-lg p-4">
+                                        <div class="flex items-center space-x-3 mb-3">
+                                            <div class="w-10 h-10 bg-green/10 rounded-full flex items-center justify-center">
+                                                <span class="text-green font-semibold">李</span>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-medium">李前端开发</h4>
+                                                <p class="text-sm text-muted-foreground">前端开发工程师</p>
+                                            </div>
+                                        </div>
+                                        <div class="space-y-2 text-sm">
+                                            <div class="flex justify-between">
+                                                <span class="text-muted-foreground">工作负载:</span>
+                                                <span class="text-green">75%</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-muted-foreground">当前任务:</span>
+                                                <span>2个</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-muted-foreground">状态:</span>
+                                                <span class="text-green">在线</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="border border-border rounded-lg p-4">
+                                        <div class="flex items-center space-x-3 mb-3">
+                                            <div class="w-10 h-10 bg-purple/10 rounded-full flex items-center justify-center">
+                                                <span class="text-purple font-semibold">王</span>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-medium">王后端开发</h4>
+                                                <p class="text-sm text-muted-foreground">后端开发工程师</p>
+                                            </div>
+                                        </div>
+                                        <div class="space-y-2 text-sm">
+                                            <div class="flex justify-between">
+                                                <span class="text-muted-foreground">工作负载:</span>
+                                                <span class="text-red">95%</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-muted-foreground">当前任务:</span>
+                                                <span>4个</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-muted-foreground">状态:</span>
+                                                <span class="text-green">在线</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="border border-border rounded-lg p-4">
+                                        <div class="flex items-center space-x-3 mb-3">
+                                            <div class="w-10 h-10 bg-yellow/10 rounded-full flex items-center justify-center">
+                                                <span class="text-yellow font-semibold">赵</span>
+                                            </div>
+                                            <div>
+                                                <h4 class="font-medium">赵UI设计师</h4>
+                                                <p class="text-sm text-muted-foreground">UI/UX设计师</p>
+                                            </div>
+                                        </div>
+                                        <div class="space-y-2 text-sm">
+                                            <div class="flex justify-between">
+                                                <span class="text-muted-foreground">工作负载:</span>
+                                                <span class="text-yellow">80%</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-muted-foreground">当前任务:</span>
+                                                <span>2个</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span class="text-muted-foreground">状态:</span>
+                                                <span class="text-gray">离线</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="deployment-content" class="detail-tab-content hidden">
+                            <h3 class="text-lg font-semibold mb-4">自动化部署</h3>
+                            <p class="text-muted-foreground">部署管理功能正在开发中...</p>
+                        </div>
+
+                        <div id="resources-content" class="detail-tab-content hidden">
+                            <h3 class="text-lg font-semibold mb-4">关联开发资源</h3>
+                            <p class="text-muted-foreground">资源管理功能正在开发中...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // 二级菜单交互功能
         document.addEventListener('DOMContentLoaded', function() {
@@ -1050,6 +1527,182 @@
         function createPipeline() {
             alert('新建流水线功能开发中...');
         }
+
+        // 项目详情功能
+        function viewProjectDetails(projectId) {
+            const modal = document.getElementById('project-detail-modal');
+            const projectData = getProjectData(projectId);
+
+            if (projectData) {
+                // 更新模态框内容
+                updateProjectDetailModal(projectData);
+                // 显示模态框
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeProjectDetail() {
+            const modal = document.getElementById('project-detail-modal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function getProjectData(projectId) {
+            const projects = {
+                'ai-platform': {
+                    id: 'ai-platform',
+                    name: 'AI开发平台',
+                    description: '智能化开发工具平台，提供AI辅助编程功能',
+                    status: '进行中',
+                    statusColor: 'green',
+                    manager: '张项目经理',
+                    createTime: '2024-01-15',
+                    updateTime: '2024-01-21',
+                    progress: '75%',
+                    icon: '🤖',
+                    iconBg: 'purple',
+                    techStack: ['React', 'Node.js', 'MongoDB', 'Docker'],
+                    requirements: {
+                        total: 24,
+                        completed: 18,
+                        inProgress: 4,
+                        pending: 2
+                    },
+                    milestones: [
+                        { name: '需求分析完成', date: '2024-01-15', status: 'completed' },
+                        { name: '原型设计完成', date: '2024-01-18', status: 'completed' },
+                        { name: '核心功能开发', date: '进行中', status: 'inProgress' },
+                        { name: '测试与部署', date: '待开始', status: 'pending' }
+                    ]
+                },
+                'payment-system': {
+                    id: 'payment-system',
+                    name: '支付系统',
+                    description: '多渠道支付集成系统，支持微信、支付宝等',
+                    status: '开发中',
+                    statusColor: 'yellow',
+                    manager: '李技术总监',
+                    createTime: '2024-01-10',
+                    updateTime: '2024-01-21',
+                    progress: '45%',
+                    icon: '💳',
+                    iconBg: 'green',
+                    techStack: ['Java', 'Spring Boot', 'MySQL', 'Redis'],
+                    requirements: {
+                        total: 18,
+                        completed: 8,
+                        inProgress: 6,
+                        pending: 4
+                    },
+                    milestones: [
+                        { name: '架构设计完成', date: '2024-01-12', status: 'completed' },
+                        { name: '支付接口开发', date: '进行中', status: 'inProgress' },
+                        { name: '安全测试', date: '待开始', status: 'pending' },
+                        { name: '上线部署', date: '待开始', status: 'pending' }
+                    ]
+                },
+                'mobile-app': {
+                    id: 'mobile-app',
+                    name: '移动应用',
+                    description: '跨平台移动应用开发，支持iOS和Android',
+                    status: '已完成',
+                    statusColor: 'green',
+                    manager: '王移动开发',
+                    createTime: '2023-12-01',
+                    updateTime: '2024-01-15',
+                    progress: '100%',
+                    icon: '📱',
+                    iconBg: 'blue',
+                    techStack: ['React Native', 'TypeScript', 'Firebase', 'Redux'],
+                    requirements: {
+                        total: 32,
+                        completed: 32,
+                        inProgress: 0,
+                        pending: 0
+                    },
+                    milestones: [
+                        { name: '需求分析完成', date: '2023-12-05', status: 'completed' },
+                        { name: 'UI设计完成', date: '2023-12-15', status: 'completed' },
+                        { name: '功能开发完成', date: '2024-01-10', status: 'completed' },
+                        { name: '测试发布完成', date: '2024-01-15', status: 'completed' }
+                    ]
+                }
+            };
+
+            return projects[projectId] || null;
+        }
+
+        function updateProjectDetailModal(projectData) {
+            // 颜色映射
+            const colorClasses = {
+                blue: { bg: 'bg-blue/10', text: 'text-blue' },
+                green: { bg: 'bg-green/10', text: 'text-green' },
+                yellow: { bg: 'bg-yellow/10', text: 'text-yellow' },
+                purple: { bg: 'bg-purple/10', text: 'text-purple' },
+                red: { bg: 'bg-red/10', text: 'text-red' },
+                indigo: { bg: 'bg-indigo/10', text: 'text-indigo' }
+            };
+
+            // 更新基本信息
+            const iconColor = colorClasses[projectData.iconBg] || colorClasses.purple;
+            document.getElementById('project-icon').innerHTML = `<span class="${iconColor.text} font-semibold text-lg">${projectData.icon}</span>`;
+            document.getElementById('project-icon').className = `w-12 h-12 ${iconColor.bg} rounded-lg flex items-center justify-center`;
+            document.getElementById('project-title').textContent = projectData.name;
+            document.getElementById('project-description').textContent = projectData.description;
+
+            // 更新详情页面内容
+            document.getElementById('detail-project-name').textContent = projectData.name;
+            document.getElementById('detail-project-status').textContent = projectData.status;
+            const statusColor = colorClasses[projectData.statusColor] || colorClasses.green;
+            document.getElementById('detail-project-status').className = `px-2 py-1 ${statusColor.bg} ${statusColor.text} text-sm rounded`;
+            document.getElementById('detail-project-manager').textContent = projectData.manager;
+            document.getElementById('detail-create-time').textContent = projectData.createTime;
+            document.getElementById('detail-update-time').textContent = projectData.updateTime;
+            document.getElementById('detail-progress').textContent = projectData.progress;
+
+            // 更新技术栈
+            const techStackContainer = document.getElementById('detail-tech-stack');
+            const colors = ['blue', 'green', 'yellow', 'purple', 'red', 'indigo'];
+            techStackContainer.innerHTML = projectData.techStack.map((tech, index) => {
+                const colorKey = colors[index % colors.length];
+                const color = colorClasses[colorKey];
+                return `<span class="px-3 py-1 ${color.bg} ${color.text} text-sm rounded-full">${tech}</span>`;
+            }).join('');
+        }
+
+        // 详情页面标签页切换
+        document.addEventListener('DOMContentLoaded', function() {
+            const detailTabs = document.querySelectorAll('[data-detail-tab]');
+            const detailContents = document.querySelectorAll('.detail-tab-content');
+
+            detailTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const targetTab = this.dataset.detailTab;
+
+                    // 更新标签页样式
+                    detailTabs.forEach(t => {
+                        t.classList.remove('border-primary', 'text-primary');
+                        t.classList.add('border-transparent', 'text-muted-foreground');
+                    });
+                    this.classList.remove('border-transparent', 'text-muted-foreground');
+                    this.classList.add('border-primary', 'text-primary');
+
+                    // 显示对应内容
+                    detailContents.forEach(content => {
+                        content.classList.add('hidden');
+                    });
+                    document.getElementById(targetTab + '-content').classList.remove('hidden');
+                });
+            });
+
+            // 点击模态框外部关闭
+            document.getElementById('project-detail-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeProjectDetail();
+                }
+            });
+        });
     </script>
 </body>
 </html>
