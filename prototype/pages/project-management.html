@@ -296,17 +296,7 @@
             <!-- 页面内容 -->
             <main class="flex-1 overflow-auto p-6">
 
-                    <!-- 标签页导航 -->
-                    <nav class="border-b border-border mb-6">
-                        <div class="flex space-x-8">
-                            <button class="py-2 px-1 border-b-2 border-primary text-primary font-medium text-sm" data-tab="project-list">
-                                项目列表
-                            </button>
-                            <button class="py-2 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground text-sm" data-tab="requirement-management">
-                                项目需求管理
-                            </button>
-                        </div>
-                    </nav>
+
 
                     <!-- 项目列表 -->
                     <div data-tab-content="project-list">
@@ -437,257 +427,6 @@
                     </div>
 
 
-                    <!-- 项目需求管理 -->
-                    <div class="hidden bg-card border border-border rounded-lg" data-tab-content="requirement-management">
-                        <div class="p-6 border-b border-border">
-                            <div class="flex items-center justify-between">
-                                <h2 class="text-lg font-semibold">项目需求管理</h2>
-                                <button class="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-gray-800" onclick="createNewRequirement()">
-                                    新建需求
-                                </button>
-                            </div>
-                        </div>
-                        <div class="p-6">
-                            <div class="space-y-6">
-                                <!-- 需求录入和分类管理 -->
-                                <div class="border border-border rounded-lg p-4">
-                                    <h3 class="text-lg font-semibold mb-4">需求录入和分类管理</h3>
-
-                                    <!-- 需求分类统计 -->
-                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                                        <div class="text-center p-3 bg-muted rounded-lg">
-                                            <div class="text-2xl font-bold text-primary">24</div>
-                                            <div class="text-xs text-muted-foreground">总需求数</div>
-                                        </div>
-                                        <div class="text-center p-3 bg-muted rounded-lg">
-                                            <div class="text-2xl font-bold text-blue-600">8</div>
-                                            <div class="text-xs text-muted-foreground">功能需求</div>
-                                        </div>
-                                        <div class="text-center p-3 bg-muted rounded-lg">
-                                            <div class="text-2xl font-bold text-green-600">6</div>
-                                            <div class="text-xs text-muted-foreground">性能需求</div>
-                                        </div>
-                                        <div class="text-center p-3 bg-muted rounded-lg">
-                                            <div class="text-2xl font-bold text-purple-600">10</div>
-                                            <div class="text-xs text-muted-foreground">界面需求</div>
-                                        </div>
-                                    </div>
-
-                                    <!-- 需求列表 -->
-                                    <div class="space-y-3">
-                                        <!-- 高优先级需求 -->
-                                        <div class="border border-destructive rounded-lg p-4 bg-red-50">
-                                            <div class="flex items-center justify-between mb-3">
-                                                <div class="flex items-center space-x-3">
-                                                    <h4 class="font-medium">AI聊天功能</h4>
-                                                    <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">功能需求</span>
-                                                    <span class="px-2 py-1 bg-destructive text-destructive-foreground text-xs rounded">🔴 高优先级</span>
-                                                    <span class="px-2 py-1 bg-warning text-warning-foreground text-xs rounded">开发中</span>
-                                                </div>
-                                                <div class="text-xs text-muted-foreground">创建时间: 2024-01-15</div>
-                                            </div>
-                                            <p class="text-sm text-muted-foreground mb-3">实现智能AI聊天功能，支持多轮对话和上下文理解</p>
-
-                                            <!-- 需求详情 -->
-                                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
-                                                <div class="text-sm">
-                                                    <span class="text-muted-foreground">需求来源:</span>
-                                                    <span class="ml-1">产品经理</span>
-                                                </div>
-                                                <div class="text-sm">
-                                                    <span class="text-muted-foreground">预估工时:</span>
-                                                    <span class="ml-1">5天</span>
-                                                </div>
-                                                <div class="text-sm">
-                                                    <span class="text-muted-foreground">负责人:</span>
-                                                    <span class="ml-1">张开发</span>
-                                                </div>
-                                                <div class="text-sm">
-                                                    <span class="text-muted-foreground">截止时间:</span>
-                                                    <span class="ml-1">2024-02-20</span>
-                                                </div>
-                                            </div>
-
-                                            <!-- 操作按钮 -->
-                                            <div class="flex space-x-2">
-                                                <button class="px-3 py-1.5 border border-border rounded text-sm hover:bg-accent">查看详情</button>
-                                                <button class="px-3 py-1.5 bg-primary text-primary-foreground rounded text-sm hover:bg-gray-800">编辑需求</button>
-                                                <button class="px-3 py-1.5 bg-success text-success-foreground rounded text-sm hover:bg-green-600">变更申请</button>
-                                            </div>
-                                        </div>
-
-                                        <!-- 中优先级需求 -->
-                                        <div class="border border-border rounded-lg p-4">
-                                            <div class="flex items-center justify-between mb-3">
-                                                <div class="flex items-center space-x-3">
-                                                    <h4 class="font-medium">响应式界面优化</h4>
-                                                    <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">界面需求</span>
-                                                    <span class="px-2 py-1 bg-warning text-warning-foreground text-xs rounded">🟡 中优先级</span>
-                                                    <span class="px-2 py-1 bg-muted text-muted-foreground text-xs rounded">待开发</span>
-                                                </div>
-                                                <div class="text-xs text-muted-foreground">创建时间: 2024-01-18</div>
-                                            </div>
-                                            <p class="text-sm text-muted-foreground mb-3">优化移动端界面适配，提升用户体验</p>
-
-                                            <!-- 需求详情 -->
-                                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
-                                                <div class="text-sm">
-                                                    <span class="text-muted-foreground">需求来源:</span>
-                                                    <span class="ml-1">用户反馈</span>
-                                                </div>
-                                                <div class="text-sm">
-                                                    <span class="text-muted-foreground">预估工时:</span>
-                                                    <span class="ml-1">3天</span>
-                                                </div>
-                                                <div class="text-sm">
-                                                    <span class="text-muted-foreground">负责人:</span>
-                                                    <span class="ml-1">李前端</span>
-                                                </div>
-                                                <div class="text-sm">
-                                                    <span class="text-muted-foreground">截止时间:</span>
-                                                    <span class="ml-1">2024-02-25</span>
-                                                </div>
-                                            </div>
-
-                                            <!-- 操作按钮 -->
-                                            <div class="flex space-x-2">
-                                                <button class="px-3 py-1.5 border border-border rounded text-sm hover:bg-accent">查看详情</button>
-                                                <button class="px-3 py-1.5 bg-primary text-primary-foreground rounded text-sm hover:bg-gray-800">编辑需求</button>
-                                                <button class="px-3 py-1.5 bg-warning text-warning-foreground rounded text-sm hover:bg-yellow-600">开始开发</button>
-                                            </div>
-                                        </div>
-
-                                        <!-- 已完成需求 -->
-                                        <div class="border border-border rounded-lg p-4 bg-green-50">
-                                            <div class="flex items-center justify-between mb-3">
-                                                <div class="flex items-center space-x-3">
-                                                    <h4 class="font-medium">数据库性能优化</h4>
-                                                    <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">性能需求</span>
-                                                    <span class="px-2 py-1 bg-muted text-muted-foreground text-xs rounded">🟢 低优先级</span>
-                                                    <span class="px-2 py-1 bg-success text-success-foreground text-xs rounded">已完成</span>
-                                                </div>
-                                                <div class="text-xs text-muted-foreground">完成时间: 2024-01-20</div>
-                                            </div>
-                                            <p class="text-sm text-muted-foreground mb-3">优化数据库查询性能，提升系统响应速度</p>
-
-                                            <!-- 需求详情 -->
-                                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
-                                                <div class="text-sm">
-                                                    <span class="text-muted-foreground">需求来源:</span>
-                                                    <span class="ml-1">技术团队</span>
-                                                </div>
-                                                <div class="text-sm">
-                                                    <span class="text-muted-foreground">实际工时:</span>
-                                                    <span class="ml-1">2天</span>
-                                                </div>
-                                                <div class="text-sm">
-                                                    <span class="text-muted-foreground">完成人:</span>
-                                                    <span class="ml-1">王后端</span>
-                                                </div>
-                                                <div class="text-sm">
-                                                    <span class="text-muted-foreground">验收状态:</span>
-                                                    <span class="ml-1 text-green-600">已验收</span>
-                                                </div>
-                                            </div>
-
-                                            <!-- 操作按钮 -->
-                                            <div class="flex space-x-2">
-                                                <button class="px-3 py-1.5 border border-border rounded text-sm hover:bg-accent">查看详情</button>
-                                                <button class="px-3 py-1.5 border border-border rounded text-sm hover:bg-accent">验收报告</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- 需求变更申请和审批流程 -->
-                                <div class="border border-border rounded-lg p-4">
-                                    <h3 class="text-lg font-semibold mb-4">需求变更申请和审批流程</h3>
-
-                                    <!-- 变更申请列表 -->
-                                    <div class="space-y-3">
-                                        <!-- 待审批变更 -->
-                                        <div class="border border-warning rounded-lg p-4 bg-yellow-50">
-                                            <div class="flex items-center justify-between mb-3">
-                                                <div class="flex items-center space-x-3">
-                                                    <h4 class="font-medium">AI聊天功能增加语音输入</h4>
-                                                    <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">功能增强</span>
-                                                    <span class="px-2 py-1 bg-warning text-warning-foreground text-xs rounded">待审批</span>
-                                                </div>
-                                                <div class="text-xs text-muted-foreground">申请时间: 2024-01-21</div>
-                                            </div>
-                                            <p class="text-sm text-muted-foreground mb-3">在现有AI聊天功能基础上增加语音输入功能，提升用户交互体验</p>
-
-                                            <!-- 变更详情 -->
-                                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
-                                                <div class="text-sm">
-                                                    <span class="text-muted-foreground">申请人:</span>
-                                                    <span class="ml-1">产品经理</span>
-                                                </div>
-                                                <div class="text-sm">
-                                                    <span class="text-muted-foreground">影响范围:</span>
-                                                    <span class="ml-1">前端+后端</span>
-                                                </div>
-                                                <div class="text-sm">
-                                                    <span class="text-muted-foreground">预估工时:</span>
-                                                    <span class="ml-1">+2天</span>
-                                                </div>
-                                                <div class="text-sm">
-                                                    <span class="text-muted-foreground">审批人:</span>
-                                                    <span class="ml-1">技术总监</span>
-                                                </div>
-                                            </div>
-
-                                            <!-- 审批操作 -->
-                                            <div class="flex space-x-2">
-                                                <button class="px-3 py-1.5 bg-success text-success-foreground rounded text-sm hover:bg-green-600">批准</button>
-                                                <button class="px-3 py-1.5 bg-destructive text-destructive-foreground rounded text-sm hover:bg-red-600">拒绝</button>
-                                                <button class="px-3 py-1.5 border border-border rounded text-sm hover:bg-accent">查看详情</button>
-                                            </div>
-                                        </div>
-
-                                        <!-- 已批准变更 -->
-                                        <div class="border border-border rounded-lg p-4 bg-green-50">
-                                            <div class="flex items-center justify-between mb-3">
-                                                <div class="flex items-center space-x-3">
-                                                    <h4 class="font-medium">界面主题色调整</h4>
-                                                    <span class="px-2 py-1 bg-purple-100 text-purple-800 text-xs rounded">界面优化</span>
-                                                    <span class="px-2 py-1 bg-success text-success-foreground text-xs rounded">已批准</span>
-                                                </div>
-                                                <div class="text-xs text-muted-foreground">批准时间: 2024-01-19</div>
-                                            </div>
-                                            <p class="text-sm text-muted-foreground mb-3">调整系统主题色彩，提升视觉效果和品牌一致性</p>
-
-                                            <!-- 变更详情 -->
-                                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3">
-                                                <div class="text-sm">
-                                                    <span class="text-muted-foreground">申请人:</span>
-                                                    <span class="ml-1">UI设计师</span>
-                                                </div>
-                                                <div class="text-sm">
-                                                    <span class="text-muted-foreground">影响范围:</span>
-                                                    <span class="ml-1">前端界面</span>
-                                                </div>
-                                                <div class="text-sm">
-                                                    <span class="text-muted-foreground">实际工时:</span>
-                                                    <span class="ml-1">1天</span>
-                                                </div>
-                                                <div class="text-sm">
-                                                    <span class="text-muted-foreground">执行状态:</span>
-                                                    <span class="ml-1 text-green-600">已完成</span>
-                                                </div>
-                                            </div>
-
-                                            <!-- 操作按钮 -->
-                                            <div class="flex space-x-2">
-                                                <button class="px-3 py-1.5 border border-border rounded text-sm hover:bg-accent">查看详情</button>
-                                                <button class="px-3 py-1.5 border border-border rounded text-sm hover:bg-accent">变更报告</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
 
 
@@ -695,6 +434,8 @@
             </main>
         </div>
     </div>
+
+
 
 
 
@@ -768,6 +509,8 @@
                     });
                 });
             });
+
+
         });
 
         // 全局函数
@@ -775,14 +518,11 @@
             alert('新建项目功能开发中...');
         }
 
-        function createNewRequirement() {
-            alert('新建需求功能开发中...');
-        }
+
 
         function createPipeline() {
             alert('新建流水线功能开发中...');
         }
-
 
     </script>
 </body>
