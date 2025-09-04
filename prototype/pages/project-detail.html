@@ -3815,59 +3815,89 @@ FROM user_logs;`,
             openVSCodeFile(fileName);
         }
 
+        // 拖拽调整功能
+        let isResizing = false;
+        let resizeType = null;
+        let startX = 0;
+        let startY = 0;
+        let startWidth = 0;
+        let startHeight = 0;
+
         // 侧边栏宽度调整功能
-        let isResizingSidebar = false;
-
         function startSidebarResize(e) {
-            isResizingSidebar = true;
-            document.addEventListener('mousemove', resizeSidebar);
-            document.addEventListener('mouseup', stopSidebarResize);
-            e.preventDefault();
-        }
-
-        function resizeSidebar(e) {
-            if (!isResizingSidebar) return;
+            console.log('开始调整侧边栏宽度');
+            isResizing = true;
+            resizeType = 'sidebar';
+            startX = e.clientX;
 
             const sidebar = document.getElementById('vscode-sidebar');
-            const newWidth = e.clientX - sidebar.offsetLeft;
+            startWidth = parseInt(window.getComputedStyle(sidebar).width, 10);
 
-            if (newWidth >= 200 && newWidth <= 600) {
-                sidebar.style.width = newWidth + 'px';
-            }
-        }
+            document.addEventListener('mousemove', handleResize);
+            document.addEventListener('mouseup', stopResize);
+            document.body.style.cursor = 'col-resize';
+            document.body.style.userSelect = 'none';
 
-        function stopSidebarResize() {
-            isResizingSidebar = false;
-            document.removeEventListener('mousemove', resizeSidebar);
-            document.removeEventListener('mouseup', stopSidebarResize);
+            e.preventDefault();
+            e.stopPropagation();
         }
 
         // 底部面板高度调整功能
-        let isResizingPanel = false;
-
         function startPanelResize(e) {
-            isResizingPanel = true;
-            document.addEventListener('mousemove', resizePanel);
-            document.addEventListener('mouseup', stopPanelResize);
+            console.log('开始调整底部面板高度');
+            isResizing = true;
+            resizeType = 'panel';
+            startY = e.clientY;
+
+            const panel = document.getElementById('vscode-bottom-panel');
+            startHeight = parseInt(window.getComputedStyle(panel).height, 10);
+
+            document.addEventListener('mousemove', handleResize);
+            document.addEventListener('mouseup', stopResize);
+            document.body.style.cursor = 'row-resize';
+            document.body.style.userSelect = 'none';
+
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        // 统一的拖拽处理函数
+        function handleResize(e) {
+            if (!isResizing) return;
+
+            if (resizeType === 'sidebar') {
+                const deltaX = e.clientX - startX;
+                const newWidth = startWidth + deltaX;
+
+                if (newWidth >= 200 && newWidth <= 600) {
+                    const sidebar = document.getElementById('vscode-sidebar');
+                    sidebar.style.width = newWidth + 'px';
+                    console.log('侧边栏宽度:', newWidth);
+                }
+            } else if (resizeType === 'panel') {
+                const deltaY = startY - e.clientY; // 注意这里是反向的
+                const newHeight = startHeight + deltaY;
+
+                if (newHeight >= 100 && newHeight <= 500) {
+                    const panel = document.getElementById('vscode-bottom-panel');
+                    panel.style.height = newHeight + 'px';
+                    console.log('面板高度:', newHeight);
+                }
+            }
+
             e.preventDefault();
         }
 
-        function resizePanel(e) {
-            if (!isResizingPanel) return;
+        // 停止拖拽
+        function stopResize() {
+            console.log('停止调整');
+            isResizing = false;
+            resizeType = null;
 
-            const panel = document.getElementById('vscode-bottom-panel');
-            const container = panel.parentElement;
-            const newHeight = container.offsetHeight - (e.clientY - container.offsetTop);
-
-            if (newHeight >= 100 && newHeight <= 500) {
-                panel.style.height = newHeight + 'px';
-            }
-        }
-
-        function stopPanelResize() {
-            isResizingPanel = false;
-            document.removeEventListener('mousemove', resizePanel);
-            document.removeEventListener('mouseup', stopPanelResize);
+            document.removeEventListener('mousemove', handleResize);
+            document.removeEventListener('mouseup', stopResize);
+            document.body.style.cursor = '';
+            document.body.style.userSelect = '';
         }
 
         // 更新initVSCodeInterface函数
