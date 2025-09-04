@@ -3798,6 +3798,78 @@ FROM user_logs;`,
             }, 5000); // 每5秒添加一条新日志
         }
 
+        // 文件选中功能
+        function selectVSCodeFile(element, fileName) {
+            // 清除所有文件的选中状态
+            const fileItems = document.querySelectorAll('.file-item');
+            fileItems.forEach(item => {
+                item.classList.remove('selected');
+                item.style.backgroundColor = 'transparent';
+            });
+
+            // 设置当前文件为选中状态
+            element.classList.add('selected');
+            element.style.backgroundColor = 'var(--vscode-list-active-bg)';
+
+            // 打开文件
+            openVSCodeFile(fileName);
+        }
+
+        // 侧边栏宽度调整功能
+        let isResizingSidebar = false;
+
+        function startSidebarResize(e) {
+            isResizingSidebar = true;
+            document.addEventListener('mousemove', resizeSidebar);
+            document.addEventListener('mouseup', stopSidebarResize);
+            e.preventDefault();
+        }
+
+        function resizeSidebar(e) {
+            if (!isResizingSidebar) return;
+
+            const sidebar = document.getElementById('vscode-sidebar');
+            const newWidth = e.clientX - sidebar.offsetLeft;
+
+            if (newWidth >= 200 && newWidth <= 600) {
+                sidebar.style.width = newWidth + 'px';
+            }
+        }
+
+        function stopSidebarResize() {
+            isResizingSidebar = false;
+            document.removeEventListener('mousemove', resizeSidebar);
+            document.removeEventListener('mouseup', stopSidebarResize);
+        }
+
+        // 底部面板高度调整功能
+        let isResizingPanel = false;
+
+        function startPanelResize(e) {
+            isResizingPanel = true;
+            document.addEventListener('mousemove', resizePanel);
+            document.addEventListener('mouseup', stopPanelResize);
+            e.preventDefault();
+        }
+
+        function resizePanel(e) {
+            if (!isResizingPanel) return;
+
+            const panel = document.getElementById('vscode-bottom-panel');
+            const container = panel.parentElement;
+            const newHeight = container.offsetHeight - (e.clientY - container.offsetTop);
+
+            if (newHeight >= 100 && newHeight <= 500) {
+                panel.style.height = newHeight + 'px';
+            }
+        }
+
+        function stopPanelResize() {
+            isResizingPanel = false;
+            document.removeEventListener('mousemove', resizePanel);
+            document.removeEventListener('mouseup', stopPanelResize);
+        }
+
         // 更新initVSCodeInterface函数
         function initVSCodeInterface() {
             // 设置默认激活的面板
@@ -3806,6 +3878,13 @@ FROM user_logs;`,
 
             // 设置当前文件
             window.currentVSCodeFile = 'user_logs_idx.sql';
+
+            // 设置默认选中的文件
+            const defaultFile = document.querySelector('.file-item');
+            if (defaultFile) {
+                defaultFile.classList.add('selected');
+                defaultFile.style.backgroundColor = 'var(--vscode-list-active-bg)';
+            }
 
             // 开始AI Agent日志模拟
             startAIAgentLogSimulation();
@@ -3965,26 +4044,7 @@ FROM user_logs;`,
                                 <div class="absolute left-0 top-0 w-0.5 h-full bg-white hidden" id="git-indicator"></div>
                                 <div class="absolute top-1 right-1 w-4 h-4 bg-blue-500 text-white text-xs rounded-full flex items-center justify-center">3</div>
                             </button>
-                            <button class="w-12 h-12 flex items-center justify-center relative transition-colors duration-150"
-                                    style="color: var(--vscode-activitybar-inactive-fg);"
-                                    onmouseover="this.style.backgroundColor='var(--vscode-list-hover-bg)'; this.style.color='var(--vscode-activitybar-fg)'"
-                                    onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--vscode-activitybar-inactive-fg)'"
-                                    onclick="switchVSCodePanel('debug')" id="debug-btn" title="运行和调试 (Ctrl+Shift+D)">
-                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M8 5v14l11-7z"/>
-                                </svg>
-                                <div class="absolute left-0 top-0 w-0.5 h-full bg-white hidden" id="debug-indicator"></div>
-                            </button>
-                            <button class="w-12 h-12 flex items-center justify-center relative transition-colors duration-150"
-                                    style="color: var(--vscode-activitybar-inactive-fg);"
-                                    onmouseover="this.style.backgroundColor='var(--vscode-list-hover-bg)'; this.style.color='var(--vscode-activitybar-fg)'"
-                                    onmouseout="this.style.backgroundColor='transparent'; this.style.color='var(--vscode-activitybar-inactive-fg)'"
-                                    onclick="switchVSCodePanel('extensions')" id="extensions-btn" title="扩展 (Ctrl+Shift+X)">
-                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M13.5 1.515a3 3 0 0 0-3 0L3 5.845a2 2 0 0 0-1 1.732v8.846a2 2 0 0 0 1 1.732l7.5 4.33a3 3 0 0 0 3 0l7.5-4.33a2 2 0 0 0 1-1.732V7.577a2 2 0 0 0-1-1.732L13.5 1.515z"/>
-                                </svg>
-                                <div class="absolute left-0 top-0 w-0.5 h-full bg-white hidden" id="extensions-indicator"></div>
-                            </button>
+
                         </div>
 
                         <!-- 底部功能按钮 -->
@@ -4005,7 +4065,7 @@ FROM user_logs;`,
                     </div>
 
                     <!-- 侧边栏面板 -->
-                    <div class="vscode-sidebar flex flex-col vscode-ui-font vscode-scrollbar" style="background-color: var(--vscode-sidebar-bg); border-right: 1px solid var(--vscode-sidebar-border); color: var(--vscode-sidebar-fg);" id="vscode-sidebar">
+                    <div class="flex flex-col vscode-ui-font vscode-scrollbar" style="width: 300px; background-color: var(--vscode-sidebar-bg); color: var(--vscode-sidebar-fg);" id="vscode-sidebar">
                         <!-- 资源管理器面板 -->
                         <div id="explorer-panel" class="flex-1 flex flex-col">
                             <div class="flex items-center justify-between p-3 border-b border-gray-700 bg-gray-800">
@@ -4037,52 +4097,80 @@ FROM user_logs;`,
                                 <!-- 项目文件树 -->
                                 <div class="p-2">
                                     <div class="text-xs text-gray-400 uppercase tracking-wide mb-2">AI开发平台</div>
-                                    <div class="space-y-1" id="vscode-file-tree">
-                                        <div class="flex items-center space-x-1 py-1 px-2 hover:bg-gray-700 rounded cursor-pointer" onclick="toggleVSCodeFolder(this)">
-                                            <svg class="w-3 h-3 text-gray-400 folder-icon" fill="currentColor" viewBox="0 0 20 20">
+                                    <div class="space-y-0" id="vscode-file-tree">
+                                        <div class="flex items-center space-x-1 py-1 px-2 cursor-pointer transition-colors duration-150"
+                                             style="color: var(--vscode-sidebar-fg);"
+                                             onmouseover="this.style.backgroundColor='var(--vscode-list-hover-bg)'"
+                                             onmouseout="this.style.backgroundColor='transparent'"
+                                             onclick="toggleVSCodeFolder(this)">
+                                            <svg class="w-3 h-3 folder-icon" style="color: var(--vscode-activitybar-inactive-fg);" fill="currentColor" viewBox="0 0 20 20">
                                                 <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/>
                                             </svg>
-                                            <span class="text-sm text-gray-300">src</span>
+                                            <span class="text-sm">src</span>
                                         </div>
-                                        <div class="folder-content ml-4 space-y-1">
-                                            <div class="flex items-center space-x-1 py-1 px-2 hover:bg-gray-700 rounded cursor-pointer" onclick="openVSCodeFile('user_logs_idx.sql')">
+                                        <div class="folder-content ml-4 space-y-0">
+                                            <div class="flex items-center space-x-1 py-1 px-2 cursor-pointer transition-colors duration-150 file-item"
+                                                 style="color: var(--vscode-sidebar-fg);"
+                                                 onmouseover="this.style.backgroundColor='var(--vscode-list-hover-bg)'"
+                                                 onmouseout="if(!this.classList.contains('selected')) this.style.backgroundColor='transparent'"
+                                                 onclick="selectVSCodeFile(this, 'user_logs_idx.sql')">
                                                 <svg class="w-3 h-3 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                                                     <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm0 2h12v8H4V6z" clip-rule="evenodd"/>
                                                 </svg>
-                                                <span class="text-sm text-gray-300">user_logs_idx.sql</span>
+                                                <span class="text-sm">user_logs_idx.sql</span>
                                             </div>
-                                            <div class="flex items-center space-x-1 py-1 px-2 hover:bg-gray-700 rounded cursor-pointer" onclick="openVSCodeFile('optimized_queries.sql')">
+                                            <div class="flex items-center space-x-1 py-1 px-2 cursor-pointer transition-colors duration-150 file-item"
+                                                 style="color: var(--vscode-sidebar-fg);"
+                                                 onmouseover="this.style.backgroundColor='var(--vscode-list-hover-bg)'"
+                                                 onmouseout="if(!this.classList.contains('selected')) this.style.backgroundColor='transparent'"
+                                                 onclick="selectVSCodeFile(this, 'optimized_queries.sql')">
                                                 <svg class="w-3 h-3 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                                                     <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm0 2h12v8H4V6z" clip-rule="evenodd"/>
                                                 </svg>
-                                                <span class="text-sm text-gray-300">optimized_queries.sql</span>
+                                                <span class="text-sm">optimized_queries.sql</span>
                                             </div>
-                                            <div class="flex items-center space-x-1 py-1 px-2 hover:bg-gray-700 rounded cursor-pointer" onclick="openVSCodeFile('migration_001.sql')">
+                                            <div class="flex items-center space-x-1 py-1 px-2 cursor-pointer transition-colors duration-150 file-item"
+                                                 style="color: var(--vscode-sidebar-fg);"
+                                                 onmouseover="this.style.backgroundColor='var(--vscode-list-hover-bg)'"
+                                                 onmouseout="if(!this.classList.contains('selected')) this.style.backgroundColor='transparent'"
+                                                 onclick="selectVSCodeFile(this, 'migration_001.sql')">
                                                 <svg class="w-3 h-3 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                                                     <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm0 2h12v8H4V6z" clip-rule="evenodd"/>
                                                 </svg>
-                                                <span class="text-sm text-gray-300">migration_001.sql</span>
+                                                <span class="text-sm">migration_001.sql</span>
                                             </div>
                                         </div>
-                                        <div class="flex items-center space-x-1 py-1 px-2 hover:bg-gray-700 rounded cursor-pointer" onclick="toggleVSCodeFolder(this)">
-                                            <svg class="w-3 h-3 text-gray-400 folder-icon" fill="currentColor" viewBox="0 0 20 20">
+                                        <div class="flex items-center space-x-1 py-1 px-2 cursor-pointer transition-colors duration-150"
+                                             style="color: var(--vscode-sidebar-fg);"
+                                             onmouseover="this.style.backgroundColor='var(--vscode-list-hover-bg)'"
+                                             onmouseout="this.style.backgroundColor='transparent'"
+                                             onclick="toggleVSCodeFolder(this)">
+                                            <svg class="w-3 h-3 folder-icon" style="color: var(--vscode-activitybar-inactive-fg);" fill="currentColor" viewBox="0 0 20 20">
                                                 <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"/>
                                             </svg>
-                                            <span class="text-sm text-gray-300">tests</span>
+                                            <span class="text-sm">tests</span>
                                         </div>
-                                        <div class="folder-content ml-4 space-y-1 hidden">
-                                            <div class="flex items-center space-x-1 py-1 px-2 hover:bg-gray-700 rounded cursor-pointer" onclick="openVSCodeFile('test_queries.sql')">
+                                        <div class="folder-content ml-4 space-y-0 hidden">
+                                            <div class="flex items-center space-x-1 py-1 px-2 cursor-pointer transition-colors duration-150 file-item"
+                                                 style="color: var(--vscode-sidebar-fg);"
+                                                 onmouseover="this.style.backgroundColor='var(--vscode-list-hover-bg)'"
+                                                 onmouseout="if(!this.classList.contains('selected')) this.style.backgroundColor='transparent'"
+                                                 onclick="selectVSCodeFile(this, 'test_queries.sql')">
                                                 <svg class="w-3 h-3 text-green-400" fill="currentColor" viewBox="0 0 20 20">
                                                     <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm0 2h12v8H4V6z" clip-rule="evenodd"/>
                                                 </svg>
-                                                <span class="text-sm text-gray-300">test_queries.sql</span>
+                                                <span class="text-sm">test_queries.sql</span>
                                             </div>
                                         </div>
-                                        <div class="flex items-center space-x-1 py-1 px-2 hover:bg-gray-700 rounded cursor-pointer" onclick="openVSCodeFile('README.md')">
+                                        <div class="flex items-center space-x-1 py-1 px-2 cursor-pointer transition-colors duration-150 file-item"
+                                             style="color: var(--vscode-sidebar-fg);"
+                                             onmouseover="this.style.backgroundColor='var(--vscode-list-hover-bg)'"
+                                             onmouseout="if(!this.classList.contains('selected')) this.style.backgroundColor='transparent'"
+                                             onclick="selectVSCodeFile(this, 'README.md')">
                                             <svg class="w-3 h-3 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
                                                 <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2H4zm0 2h12v8H4V6z" clip-rule="evenodd"/>
                                             </svg>
-                                            <span class="text-sm text-gray-300">README.md</span>
+                                            <span class="text-sm">README.md</span>
                                         </div>
                                     </div>
                                 </div>
@@ -4125,53 +4213,25 @@ FROM user_logs;`,
                         </div>
                     </div>
 
+                    <!-- 可拖拽的垂直分隔条 -->
+                    <div class="w-1 cursor-col-resize hover:bg-blue-500 transition-colors duration-150"
+                         style="background-color: var(--vscode-sidebar-border);"
+                         id="sidebar-resizer"
+                         onmousedown="startSidebarResize(event)"></div>
+
                     <!-- 主编辑区域 -->
                     <div class="flex-1 flex flex-col">
-                        <!-- VSCode菜单栏 -->
-                        <div class="flex items-center justify-between h-8 px-4 bg-gray-800 border-b border-gray-700">
-                            <div class="flex items-center space-x-6">
-                                <div class="flex items-center space-x-4">
-                                    <button class="text-xs text-gray-300 hover:text-white hover:bg-gray-700 px-2 py-1 rounded" onclick="openVSCodeMenu('file')">文件</button>
-                                    <button class="text-xs text-gray-300 hover:text-white hover:bg-gray-700 px-2 py-1 rounded" onclick="openVSCodeMenu('edit')">编辑</button>
-                                    <button class="text-xs text-gray-300 hover:text-white hover:bg-gray-700 px-2 py-1 rounded" onclick="openVSCodeMenu('view')">查看</button>
-                                    <button class="text-xs text-gray-300 hover:text-white hover:bg-gray-700 px-2 py-1 rounded" onclick="openVSCodeMenu('go')">转到</button>
-                                    <button class="text-xs text-gray-300 hover:text-white hover:bg-gray-700 px-2 py-1 rounded" onclick="openVSCodeMenu('run')">运行</button>
-                                    <button class="text-xs text-gray-300 hover:text-white hover:bg-gray-700 px-2 py-1 rounded" onclick="openVSCodeMenu('terminal')">终端</button>
-                                    <button class="text-xs text-gray-300 hover:text-white hover:bg-gray-700 px-2 py-1 rounded" onclick="openVSCodeMenu('help')">帮助</button>
-                                </div>
-                            </div>
-                            <div class="flex items-center space-x-4">
-                                <div class="flex items-center space-x-2">
-                                    <span class="text-xs text-gray-400" id="editor-language">SQL</span>
-                                    <span class="text-xs text-gray-500">|</span>
-                                    <span class="text-xs text-gray-400">UTF-8</span>
-                                    <span class="text-xs text-gray-500">|</span>
-                                    <span class="text-xs text-gray-400">LF</span>
-                                </div>
-                                <div class="flex items-center space-x-1">
-                                    <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-200 hover:bg-gray-700 rounded" onclick="formatCode()" title="格式化代码 (Alt+Shift+F)">
-                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
-                                        </svg>
-                                    </button>
-                                    <button class="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-200 hover:bg-gray-700 rounded" onclick="saveVSCodeFile()" title="保存文件 (Ctrl+S)">
-                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h5v5.586l-1.293-1.293zM9 4a1 1 0 012 0v2H9V4z"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+
 
                         <!-- 编辑器标签页 -->
                         <div class="flex vscode-ui-font" style="background-color: var(--vscode-tab-inactive-bg); border-bottom: 1px solid var(--vscode-tab-border);" id="vscode-editor-tabs">
                             <div class="vscode-tab flex items-center px-3 py-2 cursor-pointer border-r"
-                                 style="background-color: var(--vscode-tab-active-bg); border-right: 1px solid var(--vscode-tab-border); color: var(--vscode-editor-fg);"
+                                 style="background-color: var(--vscode-tab-active-bg); border-right: 1px solid var(--vscode-tab-border); color: #ffffff;"
                                  onclick="switchVSCodeTab('user_logs_idx.sql')">
                                 <svg class="w-4 h-4 mr-2 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
                                 </svg>
-                                <span class="text-sm mr-2">user_logs_idx.sql</span>
+                                <span class="text-sm mr-2 text-white">user_logs_idx.sql</span>
                                 <button class="w-4 h-4 flex items-center justify-center rounded hover:bg-gray-600 transition-colors duration-150"
                                         style="color: var(--vscode-activitybar-inactive-fg);"
                                         onmouseover="this.style.backgroundColor='var(--vscode-list-hover-bg)'"
@@ -4190,8 +4250,14 @@ FROM user_logs;`,
                             <!-- Monaco Editor 将在这里初始化 -->
                         </div>
 
+                        <!-- 可拖拽的水平分隔条 -->
+                        <div class="h-1 cursor-row-resize hover:bg-blue-500 transition-colors duration-150"
+                             style="background-color: var(--vscode-panel-border);"
+                             id="panel-resizer"
+                             onmousedown="startPanelResize(event)"></div>
+
                         <!-- 底部面板 -->
-                        <div class="h-64 flex flex-col" style="background-color: var(--vscode-panel-bg); border-top: 1px solid var(--vscode-panel-border);" id="vscode-bottom-panel">
+                        <div class="flex flex-col" style="height: 250px; background-color: var(--vscode-panel-bg); border-top: 1px solid var(--vscode-panel-border);" id="vscode-bottom-panel">
                             <!-- 底部面板标签页 -->
                             <div class="flex vscode-ui-font" style="background-color: var(--vscode-tab-inactive-bg); border-bottom: 1px solid var(--vscode-tab-border);">
                                 <button class="px-4 py-2 text-sm transition-colors duration-150"
