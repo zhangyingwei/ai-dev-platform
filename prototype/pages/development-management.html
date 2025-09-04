@@ -309,18 +309,18 @@
                     <nav class="border-b border-border">
                         <div class="flex space-x-8">
                             <button class="py-2 px-1 border-b-2 border-primary text-primary font-medium text-sm" data-tab="dev-tasks">
-                                项目需求
+                                研发任务
                             </button>
                             <button class="py-2 px-1 border-b-2 border-transparent text-muted-foreground hover:text-foreground text-sm" data-tab="development-tasks">
-                                开发任务
+                                进行中任务
                             </button>
                         </div>
                     </nav>
 
-                    <!-- 项目需求界面 -->
+                    <!-- 研发任务界面 -->
                     <div class="bg-card border border-border rounded-lg p-4" data-tab-content="dev-tasks">
                         <div class="flex items-center justify-between mb-4">
-                            <h2 class="text-lg font-semibold">项目需求管理</h2>
+                            <h2 class="text-lg font-semibold">研发任务管理</h2>
                             <div class="flex items-center space-x-3">
                                 <!-- 项目筛选 -->
                                 <div class="flex items-center space-x-2">
@@ -495,11 +495,11 @@
 
 
 
-                    <!-- 开发任务界面 -->
+                    <!-- 进行中任务界面 -->
                     <div class="hidden" data-tab-content="development-tasks">
                         <div class="bg-card border border-border rounded-lg p-4">
                             <div class="flex items-center justify-between mb-4">
-                                <h2 class="text-lg font-semibold">开发任务管理</h2>
+                                <h2 class="text-lg font-semibold">进行中任务管理</h2>
                                 <!-- 状态切换按钮组 -->
                                 <div class="flex bg-muted rounded-md p-1">
                                     <button class="px-3 py-1.5 bg-primary text-primary-foreground rounded text-sm font-medium" data-dev-task-filter="developing">
@@ -912,13 +912,13 @@
         </div>
     </div>
 
-    <!-- 开发任务编排弹窗 -->
+    <!-- 进行中任务编排弹窗 -->
     <div class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden" id="development-orchestration-modal">
         <div class="flex items-center justify-center min-h-screen p-4">
             <div class="bg-card border border-border rounded-lg w-full max-w-7xl max-h-[95vh] overflow-hidden">
                 <!-- 弹窗头部 -->
                 <div class="flex items-center justify-between p-4 border-b border-border">
-                    <h3 class="text-lg font-semibold">开发任务编排</h3>
+                    <h3 class="text-lg font-semibold">进行中任务编排</h3>
                     <button class="p-2 hover:bg-accent rounded-md" id="close-orchestration-modal">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
