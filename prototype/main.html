@@ -398,44 +398,6 @@
     <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden hidden"></div>
 
     <script>
-        // 二级菜单交互功能
-        document.addEventListener('DOMContentLoaded', function() {
-            // 处理二级菜单展开/收起
-            const navToggles = document.querySelectorAll('.nav-toggle');
-            
-            navToggles.forEach(toggle => {
-                toggle.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    const targetId = this.dataset.target;
-                    const submenu = document.getElementById(targetId);
-                    const chevron = this.querySelector('.chevron-icon');
-                    
-                    if (submenu) {
-                        // 切换展开状态
-                        submenu.classList.toggle('expanded');
-                        submenu.classList.toggle('hidden');
-                        chevron.classList.toggle('rotated');
-                    }
-                });
-            });
-
-            // 移动端侧边栏切换
-            const sidebarToggle = document.getElementById('sidebar-toggle');
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebar-overlay');
-
-            sidebarToggle.addEventListener('click', function() {
-                sidebar.classList.toggle('-translate-x-full');
-                overlay.classList.toggle('hidden');
-            });
-
-            overlay.addEventListener('click', function() {
-                sidebar.classList.add('-translate-x-full');
-                overlay.classList.add('hidden');
-            });
-        });
-
         // 页面加载函数
         function loadPage(url) {
             const iframe = document.getElementById('content-frame');
@@ -529,6 +491,46 @@
             // 清理blob URL
             setTimeout(() => URL.revokeObjectURL(url), 1000);
         }
+
+        // 二级菜单交互功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 处理二级菜单展开/收起
+            const navToggles = document.querySelectorAll('.nav-toggle');
+            
+            navToggles.forEach(toggle => {
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.dataset.target;
+                    const submenu = document.getElementById(targetId);
+                    const chevron = this.querySelector('.chevron-icon');
+                    
+                    if (submenu) {
+                        // 切换展开状态
+                        submenu.classList.toggle('expanded');
+                        submenu.classList.toggle('hidden');
+                        chevron.classList.toggle('rotated');
+                    }
+                });
+            });
+
+            // 移动端侧边栏切换
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('-translate-x-full');
+                overlay.classList.toggle('hidden');
+            });
+
+            overlay.addEventListener('click', function() {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            });
+        });
+
+
     </script>
 </body>
 </html>
