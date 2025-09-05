@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试 Vditor</title>
+    <!-- Vditor CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/vditor@latest/dist/index.css">
+    <!-- Vditor JS -->
+    <script src="https://unpkg.com/vditor@latest/dist/index.min.js"></script>
+</head>
+<body>
+    <div style="padding: 20px;">
+        <h1>测试 Vditor</h1>
+        <div id="vditor-editor" style="border: 1px solid #ccc; border-radius: 4px; overflow: hidden;">
+        </div>
+        <div style="margin-top: 10px; font-size: 12px; color: #666;">
+            <span id="char-count">字符数: 0</span> | <span id="word-count">单词数: 0</span>
+        </div>
+    </div>
+
+    <script>
+        const defaultContent = `## 测试标题
+这是一个测试内容
+
+### 功能列表
+- 功能1
+- 功能2
+
+### 代码示例
+\`\`\`javascript
+console.log('Hello World!');
+\`\`\`
+`;
+
+        // 初始化Vditor编辑器
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('开始初始化Vditor...');
+            console.log('Vditor是否可用:', typeof Vditor !== 'undefined');
+
+            if (typeof Vditor === 'undefined') {
+                console.error('Vditor未加载');
+                return;
+            }
+
+            try {
+                const vditorEditor = new Vditor('vditor-editor', {
+                    height: 400,
+                    mode: 'sv', // 分屏预览模式
+                    placeholder: '请输入内容...',
+                    value: defaultContent,
+                    theme: 'classic',
+                    toolbar: [
+                        'emoji',
+                        'headings',
+                        'bold',
+                        'italic',
+                        'strike',
+                        '|',
+                        'line',
+                        'quote',
+                        'list',
+                        'ordered-list',
+                        'check',
+                        '|',
+                        'code',
+                        'inline-code',
+                        '|',
+                        'link',
+                        'table',
+                        '|',
+                        'undo',
+                        'redo',
+                        '|',
+                        'edit-mode',
+                        'preview',
+                        'fullscreen'
+                    ],
+                    cache: { enable: false },
+                    counter: { enable: false },
+                    input: function(value) {
+                        updateWordCount(value);
+                    },
+                    after: function() {
+                        console.log('Vditor编辑器初始化成功');
+                        updateWordCount(defaultContent);
+                    }
+                });
+            } catch (error) {
+                console.error('Vditor初始化失败:', error);
+            }
+        });
+
+        function updateWordCount(content) {
+            const charCount = content.length;
+            const wordCount = content.trim() ? content.trim().split(/\s+/).length : 0;
+
+            document.getElementById('char-count').textContent = `字符数: ${charCount}`;
+            document.getElementById('word-count').textContent = `单词数: ${wordCount}`;
+        }
+    </script>
+</body>
+</html>

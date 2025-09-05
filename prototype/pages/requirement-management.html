@@ -6,10 +6,10 @@
     <title>需求管理 - AI开发平台</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../css/styles.css">
-    <!-- EasyMDE CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
-    <!-- EasyMDE JS -->
-    <script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+    <!-- Vditor CSS -->
+    <link rel="stylesheet" href="../lib/vditor/index.css">
+    <!-- Vditor JS -->
+    <script src="../lib/vditor/index.min.js"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -236,61 +236,93 @@
             to { opacity: 0; }
         }
 
-        /* EasyMDE编辑器自定义样式 */
-        .EasyMDEContainer {
-            border: none !important;
+        /* Vditor编辑器自定义样式 */
+        .vditor {
+            border: 1px solid hsl(var(--border)) !important;
+            border-radius: 6px !important;
+            position: relative !important;
+            z-index: 1 !important;
+            pointer-events: auto !important;
         }
 
-        .EasyMDEContainer .editor-toolbar {
+        .vditor .vditor-toolbar {
             background-color: hsl(var(--muted)) !important;
+            border-bottom: 1px solid hsl(var(--border)) !important;
             border-top: none !important;
             border-left: none !important;
             border-right: none !important;
-            border-bottom: 1px solid hsl(var(--border)) !important;
+            pointer-events: auto !important;
         }
 
-        .EasyMDEContainer .editor-toolbar button {
+        .vditor .vditor-toolbar .vditor-toolbar__item {
             color: hsl(var(--foreground)) !important;
+            pointer-events: auto !important;
         }
 
-        .EasyMDEContainer .editor-toolbar button:hover {
+        .vditor .vditor-toolbar .vditor-toolbar__item:hover {
             background-color: hsl(var(--accent)) !important;
         }
 
-        .EasyMDEContainer .CodeMirror {
+        .vditor .vditor-content {
+            background-color: hsl(var(--background)) !important;
+            min-height: 350px !important;
+            pointer-events: auto !important;
+            position: relative !important;
+        }
+
+        .vditor .vditor-content .vditor-ir {
             background-color: hsl(var(--background)) !important;
             color: hsl(var(--foreground)) !important;
-            border: none !important;
+            min-height: 350px !important;
+            pointer-events: auto !important;
         }
 
-        .EasyMDEContainer .CodeMirror-cursor {
-            border-left: 1px solid hsl(var(--foreground)) !important;
+        .vditor .vditor-content .vditor-sv {
+            background-color: hsl(var(--background)) !important;
+            color: hsl(var(--foreground)) !important;
+            min-height: 350px !important;
+            pointer-events: auto !important;
         }
 
-        .EasyMDEContainer .editor-preview {
+        .vditor .vditor-content .vditor-wysiwyg {
+            background-color: hsl(var(--background)) !important;
+            color: hsl(var(--foreground)) !important;
+            min-height: 350px !important;
+            pointer-events: auto !important;
+        }
+
+        /* 确保编辑器内的文本区域可以交互 */
+        .vditor .vditor-content textarea,
+        .vditor .vditor-content .vditor-ir pre,
+        .vditor .vditor-content .vditor-sv .vditor-sv__textarea {
+            pointer-events: auto !important;
+            user-select: text !important;
+        }
+
+        .vditor .vditor-preview {
             background-color: hsl(var(--background)) !important;
             color: hsl(var(--foreground)) !important;
         }
 
-        .EasyMDEContainer .editor-preview h1,
-        .EasyMDEContainer .editor-preview h2,
-        .EasyMDEContainer .editor-preview h3,
-        .EasyMDEContainer .editor-preview h4,
-        .EasyMDEContainer .editor-preview h5,
-        .EasyMDEContainer .editor-preview h6 {
+        .vditor .vditor-preview h1,
+        .vditor .vditor-preview h2,
+        .vditor .vditor-preview h3,
+        .vditor .vditor-preview h4,
+        .vditor .vditor-preview h5,
+        .vditor .vditor-preview h6 {
             color: hsl(var(--foreground)) !important;
         }
 
-        .EasyMDEContainer .editor-preview code {
+        .vditor .vditor-preview code {
             background-color: hsl(var(--muted)) !important;
             color: hsl(var(--foreground)) !important;
         }
 
-        .EasyMDEContainer .editor-preview pre {
+        .vditor .vditor-preview pre {
             background-color: hsl(var(--muted)) !important;
         }
 
-        .EasyMDEContainer .editor-preview blockquote {
+        .vditor .vditor-preview blockquote {
             border-left: 4px solid hsl(var(--border)) !important;
             background-color: hsl(var(--muted)) !important;
         }
@@ -523,29 +555,10 @@
                             <div class="bg-card border border-border rounded-lg p-4">
                                 <h3 class="text-base font-medium mb-4 text-foreground">需求描述</h3>
                                 <div class="space-y-4">
-                                    <!-- EasyMDE Markdown编辑器 -->
+                                    <!-- Veditor Markdown编辑器 -->
                                     <div>
                                         <label class="block text-sm font-medium mb-3">详细描述 <span class="text-muted-foreground">(支持Markdown格式)</span></label>
-                                        <div class="border border-border rounded-md overflow-hidden">
-                                            <textarea id="requirement-description" style="display: none;">## 功能概述
-简要说明需求的核心功能
-
-## 详细需求
-- 功能点1：具体描述
-- 功能点2：具体描述
-
-## 使用场景
-描述具体的使用场景和用户故事
-
-## 验收标准
-- [ ] 验收条件1
-- [ ] 验收条件2
-
-## 技术要求
-如有特殊技术要求请在此说明
-
-## 参考资料
-相关的参考链接或文档</textarea>
+                                        <div id="vditor-editor" class="border border-border rounded-md" style="min-height: 400px; width: 100%; position: relative; z-index: 1;">
                                         </div>
                                         <!-- 编辑器底部状态栏 -->
                                         <div class="bg-muted border border-t-0 border-border px-3 py-2 flex items-center justify-between text-xs text-muted-foreground rounded-b-md">
@@ -1421,7 +1434,7 @@
 
     <!-- 引入JavaScript -->
     <script src="../js/modules.js"></script>
-    <script src="../js/requirement-management.js"></script>
+    <!-- <script src="../js/requirement-management.js"></script> -->
 
     <!-- 标签页切换功能 -->
     <script>
@@ -2019,89 +2032,69 @@
                 });
             });
 
-            // EasyMDE Markdown编辑器初始化
-            let easyMDE = null;
+            // Vditor编辑器初始化
+            let vditorEditor = null;
 
-            // 初始化EasyMDE编辑器
+            // 初始化Vditor编辑器
             function initializeMarkdownEditor() {
-                const textarea = document.getElementById('requirement-description');
-                if (!textarea || easyMDE) return;
+                console.log('开始初始化Vditor编辑器...');
 
-                easyMDE = new EasyMDE({
-                    element: textarea,
-                    placeholder: '请详细描述您的需求...',
-                    spellChecker: false,
-                    autofocus: false,
-                    minHeight: '400px',
-                    maxHeight: '600px',
-                    toolbar: [
-                        'bold',
-                        'italic',
-                        'strikethrough',
-                        'heading',
-                        '|',
-                        'quote',
-                        'unordered-list',
-                        'ordered-list',
-                        'clean-block',
-                        '|',
-                        'link',
-                        'image',
-                        'table',
-                        'horizontal-rule',
-                        '|',
-                        'code',
-                        'preview',
-                        'side-by-side',
-                        'fullscreen',
-                        '|',
-                        'undo',
-                        'redo',
-                        '|',
-                        'guide'
-                    ],
-                    shortcuts: {
-                        'toggleBold': 'Cmd-B',
-                        'toggleItalic': 'Cmd-I',
-                        'toggleStrikethrough': 'Cmd-Alt-S',
-                        'toggleCodeBlock': 'Cmd-Alt-C',
-                        'togglePreview': 'Cmd-P',
-                        'toggleSideBySide': 'F9',
-                        'toggleFullScreen': 'F11'
-                    },
-                    status: false, // 禁用底部状态栏，我们使用自定义的
-                    renderingConfig: {
-                        singleLineBreaks: false,
-                        codeSyntaxHighlighting: true
-                    },
-                    previewRender: function(plainText) {
-                        // 自定义预览渲染
-                        return this.parent.markdown(plainText);
-                    },
-                    tabSize: 4,
-                    indentWithTabs: false,
-                    lineWrapping: true,
-                    autoDownloadFontAwesome: false
-                });
+                // 检查Vditor是否已加载
+                if (typeof Vditor === 'undefined') {
+                    console.error('Vditor未加载');
+                    return;
+                }
 
-                // 监听内容变化，更新统计信息
-                easyMDE.codemirror.on('change', function() {
-                    updateWordCount();
-                    autoSave();
-                });
+                const editorContainer = document.getElementById('vditor-editor');
+                if (!editorContainer) {
+                    console.error('找不到vditor-editor容器');
+                    return;
+                }
 
-                // 加载草稿
-                loadDraft();
+                console.log('Vditor已加载，容器已找到，开始创建编辑器实例...');
 
-                // 设置定时自动保存
-                setInterval(autoSave, 30000); // 每30秒自动保存一次
+                const defaultContent = `## 功能概述
+简要说明需求的核心功能
+
+## 详细需求
+- 功能点1：具体描述
+- 功能点2：具体描述
+
+## 使用场景
+描述具体的使用场景和用户故事
+
+## 验收标准
+- [ ] 验收条件1
+- [ ] 验收条件2
+
+## 技术要求
+如有特殊技术要求请在此说明
+
+## 参考资料
+相关的参考链接或文档`;
+
+                try {
+                    // 初始化Vditor编辑器
+                    vditorEditor = new Vditor('vditor-editor', {
+                        height: 400,
+                        placeholder: '请详细描述您的需求...',
+                        value: defaultContent,
+                        toolbar: ['bold', 'italic', 'headings', 'list', 'link', 'preview'],
+                        after: function() {
+                            console.log('Vditor编辑器初始化成功！');
+                            updateWordCount(defaultContent);
+                        }
+                    });
+
+                } catch (error) {
+                    console.error('Vditor编辑器初始化失败:', error);
+                }
             }
 
             // 更新字符和单词统计
-            function updateWordCount() {
-                if (!easyMDE) return;
+            function updateWordCount(content) {
+                if (!content) content = '';
 
-                const content = easyMDE.value();
                 const charCount = content.length;
                 const wordCount = content.trim() ? content.trim().split(/\s+/).length : 0;
 
@@ -2113,10 +2106,7 @@
             }
 
             // 自动保存功能
-            function autoSave() {
-                if (!easyMDE) return;
-
-                const content = easyMDE.value();
+            function autoSave(content) {
                 if (content) {
                     localStorage.setItem('requirement-draft', content);
                 }
@@ -2125,22 +2115,25 @@
             // 加载草稿
             function loadDraft() {
                 const draft = localStorage.getItem('requirement-draft');
-                if (draft && easyMDE) {
-                    easyMDE.value(draft);
-                    updateWordCount();
+                if (draft && vditorEditor) {
+                    vditorEditor.setValue(draft);
+                    updateWordCount(draft);
                 }
             }
 
             // 清除草稿
             function clearDraft() {
                 localStorage.removeItem('requirement-draft');
+                if (vditorEditor) {
+                    vditorEditor.setValue('');
+                }
             }
 
             // 导出内容
             function exportContent() {
-                if (!easyMDE) return;
+                if (!vditorEditor) return;
 
-                const content = easyMDE.value();
+                const content = vditorEditor.getValue();
                 const blob = new Blob([content], { type: 'text/markdown' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
@@ -2207,25 +2200,14 @@ function hello() {
                 alert(helpContent);
             }
 
-            // 在需求录入标签页激活时初始化编辑器
-            document.addEventListener('DOMContentLoaded', function() {
-                // 监听标签页切换
-                const tabButtons = document.querySelectorAll('[data-tab]');
-                tabButtons.forEach(button => {
-                    button.addEventListener('click', function() {
-                        const tabName = this.dataset.tab;
-                        if (tabName === 'requirement-entry') {
-                            // 延迟初始化，确保DOM已渲染
-                            setTimeout(initializeMarkdownEditor, 100);
-                        }
-                    });
-                });
+            // 简化的编辑器初始化
+            window.addEventListener('load', function() {
+                console.log('页面完全加载，开始初始化Vditor编辑器...');
 
-                // 如果默认显示需求录入页面，立即初始化
-                const activeTab = document.querySelector('[data-tab-content="requirement-entry"]:not(.hidden)');
-                if (activeTab) {
-                    setTimeout(initializeMarkdownEditor, 100);
-                }
+                // 等待一段时间确保所有资源都加载完成
+                setTimeout(function() {
+                    initializeMarkdownEditor();
+                }, 2000);
             });
 
             // 优先级按钮切换

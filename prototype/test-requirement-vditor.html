@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试需求管理 - Vditor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/styles.css">
+    <!-- Vditor CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/vditor@latest/dist/index.css">
+    <!-- Vditor JS -->
+    <script src="https://unpkg.com/vditor@latest/dist/index.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        border: "hsl(var(--border))",
+                        input: "hsl(var(--input))",
+                        ring: "hsl(var(--ring))",
+                        background: "hsl(var(--background))",
+                        foreground: "hsl(var(--foreground))",
+                        primary: {
+                            DEFAULT: "hsl(var(--primary))",
+                            foreground: "hsl(var(--primary-foreground))"
+                        },
+                        secondary: {
+                            DEFAULT: "hsl(var(--secondary))",
+                            foreground: "hsl(var(--secondary-foreground))"
+                        },
+                        muted: {
+                            DEFAULT: "hsl(var(--muted))",
+                            foreground: "hsl(var(--muted-foreground))"
+                        },
+                        accent: {
+                            DEFAULT: "hsl(var(--accent))",
+                            foreground: "hsl(var(--accent-foreground))"
+                        },
+                        card: {
+                            DEFAULT: "hsl(var(--card))",
+                            foreground: "hsl(var(--card-foreground))"
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Vditor编辑器自定义样式 */
+        .vditor {
+            border: none !important;
+        }
+        
+        .vditor .vditor-toolbar {
+            background-color: hsl(var(--muted)) !important;
+            border-bottom: 1px solid hsl(var(--border)) !important;
+        }
+        
+        .vditor .vditor-content .vditor-sv {
+            background-color: hsl(var(--background)) !important;
+            color: hsl(var(--foreground)) !important;
+        }
+        
+        .vditor .vditor-preview {
+            background-color: hsl(var(--background)) !important;
+            color: hsl(var(--foreground)) !important;
+        }
+    </style>
+</head>
+<body class="bg-background text-foreground">
+    <div class="container mx-auto p-6">
+        <h1 class="text-2xl font-bold mb-6">测试需求管理 - Vditor编辑器</h1>
+        
+        <div class="bg-card border border-border rounded-lg p-4">
+            <h3 class="text-base font-medium mb-4 text-foreground">需求描述</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-3">详细描述 <span class="text-muted-foreground">(支持Markdown格式)</span></label>
+                    <div id="vditor-editor" class="border border-border rounded-md overflow-hidden">
+                    </div>
+                    <!-- 编辑器底部状态栏 -->
+                    <div class="bg-muted border border-t-0 border-border px-3 py-2 flex items-center justify-between text-xs text-muted-foreground rounded-b-md">
+                        <div class="flex items-center space-x-4">
+                            <span id="char-count">字符数: 0</span>
+                            <span id="word-count">单词数: 0</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span>支持Markdown语法</span>
+                            <button class="text-primary hover:underline" onclick="showMarkdownHelp()">
+                                语法帮助
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let vditorEditor = null;
+
+        const defaultContent = `## 功能概述
+简要说明需求的核心功能
+
+## 详细需求
+- 功能点1：具体描述
+- 功能点2：具体描述
+
+## 使用场景
+描述具体的使用场景和用户故事
+
+## 验收标准
+- [ ] 验收条件1
+- [ ] 验收条件2
+
+## 技术要求
+如有特殊技术要求请在此说明
+
+## 参考资料
+相关的参考链接或文档`;
+
+        function updateWordCount(content) {
+            const charCount = content.length;
+            const wordCount = content.trim() ? content.trim().split(/\s+/).length : 0;
+            
+            const charCountEl = document.getElementById('char-count');
+            const wordCountEl = document.getElementById('word-count');
+            
+            if (charCountEl) charCountEl.textContent = `字符数: ${charCount}`;
+            if (wordCountEl) wordCountEl.textContent = `单词数: ${wordCount}`;
+        }
+
+        function autoSave(content) {
+            if (content) {
+                localStorage.setItem('requirement-draft', content);
+            }
+        }
+
+        function showMarkdownHelp() {
+            alert('Markdown语法帮助\n\n## 标题\n# 一级标题\n## 二级标题\n\n## 文本格式\n**粗体**\n*斜体*\n\n## 列表\n- 列表项1\n- 列表项2');
+        }
+
+        // 初始化Vditor编辑器
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof Vditor === 'undefined') {
+                console.error('Vditor未加载');
+                return;
+            }
+
+            try {
+                vditorEditor = new Vditor('vditor-editor', {
+                    height: 400,
+                    mode: 'sv',
+                    placeholder: '请详细描述您的需求...',
+                    value: defaultContent,
+                    theme: 'classic',
+                    toolbar: [
+                        'emoji',
+                        'headings',
+                        'bold',
+                        'italic',
+                        'strike',
+                        '|',
+                        'line',
+                        'quote',
+                        'list',
+                        'ordered-list',
+                        'check',
+                        '|',
+                        'code',
+                        'inline-code',
+                        '|',
+                        'link',
+                        'table',
+                        '|',
+                        'undo',
+                        'redo',
+                        '|',
+                        'edit-mode',
+                        'preview',
+                        'fullscreen'
+                    ],
+                    cache: { enable: false },
+                    counter: { enable: false },
+                    input: function(value) {
+                        updateWordCount(value);
+                        autoSave(value);
+                    },
+                    after: function() {
+                        console.log('Vditor编辑器初始化成功');
+                        updateWordCount(defaultContent);
+                    }
+                });
+            } catch (error) {
+                console.error('Vditor编辑器初始化失败:', error);
+            }
+        });
+    </script>
+</body>
+</html>

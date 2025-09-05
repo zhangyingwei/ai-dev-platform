@@ -2583,13 +2583,15 @@ class AIAgentManager {
 
         try {
             const config = JSON.parse(saved);
-            config.agents.forEach(savedAgent => {
-                const agent = this.agents.find(a => a.id === savedAgent.id);
-                if (agent) {
-                    agent.status = savedAgent.status;
-                    agent.config = { ...agent.config, ...savedAgent.config };
-                }
-            });
+            if (config && config.agents && Array.isArray(config.agents)) {
+                config.agents.forEach(savedAgent => {
+                    const agent = this.agents.find(a => a.id === savedAgent.id);
+                    if (agent) {
+                        agent.status = savedAgent.status;
+                        agent.config = { ...agent.config, ...savedAgent.config };
+                    }
+                });
+            }
         } catch (error) {
             console.error('Failed to load config:', error);
         }
