@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>需求拆分功能测试</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-2xl font-bold text-gray-900 mb-6">需求拆分功能测试</h1>
+        
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">测试步骤</h2>
+            <ol class="text-sm text-gray-600 space-y-2">
+                <li>1. 打开主系统 (index.html)</li>
+                <li>2. 点击"项目管理"进入项目页面</li>
+                <li>3. 点击任意项目卡片进入项目详情</li>
+                <li>4. 点击"需求"标签页</li>
+                <li>5. 点击需求列表中的"查看"按钮</li>
+                <li>6. 在需求详情页面测试以下功能：</li>
+                <ul class="ml-4 mt-2 space-y-1">
+                    <li>• 查看左侧原始需求信息</li>
+                    <li>• 查看右侧子需求列表</li>
+                    <li>• 点击"AI辅助拆分"按钮</li>
+                    <li>• 点击"采用建议"按钮</li>
+                    <li>• 点击"手动添加"按钮</li>
+                    <li>• 点击返回按钮回到需求列表</li>
+                </ul>
+            </ol>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">预期结果</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <h3 class="font-medium text-gray-900 mb-2">界面布局</h3>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• 左右分栏布局正确显示</li>
+                        <li>• 左侧显示原始需求信息</li>
+                        <li>• 右侧显示子需求列表</li>
+                        <li>• 返回按钮正常工作</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-medium text-gray-900 mb-2">功能交互</h3>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• AI拆分按钮显示加载状态</li>
+                        <li>• AI拆分结果正确显示</li>
+                        <li>• 采用建议功能正常</li>
+                        <li>• 手动添加功能正常</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">已知功能</h2>
+            <div class="space-y-3">
+                <div class="p-3 bg-green-50 border border-green-200 rounded">
+                    <h4 class="font-medium text-green-900">✅ 已实现功能</h4>
+                    <ul class="text-sm text-green-800 mt-2 space-y-1">
+                        <li>• 需求列表视图和详情视图切换</li>
+                        <li>• 左右分栏布局</li>
+                        <li>• 原始需求信息显示</li>
+                        <li>• 子需求列表显示</li>
+                        <li>• AI辅助拆分功能</li>
+                        <li>• 手动添加子需求功能</li>
+                        <li>• 返回需求列表功能</li>
+                    </ul>
+                </div>
+                
+                <div class="p-3 bg-blue-50 border border-blue-200 rounded">
+                    <h4 class="font-medium text-blue-900">🔧 技术特点</h4>
+                    <ul class="text-sm text-blue-800 mt-2 space-y-1">
+                        <li>• 响应式左右分栏布局</li>
+                        <li>• 模拟AI分析过程（2秒延迟）</li>
+                        <li>• 动态生成拆分建议</li>
+                        <li>• 实时更新子需求列表</li>
+                        <li>• 优先级和状态标签显示</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">测试数据</h2>
+            <div class="space-y-4">
+                <div>
+                    <h4 class="font-medium text-gray-900">需求1: 用户登录功能优化</h4>
+                    <p class="text-sm text-gray-600">已有3个子需求，可以测试AI拆分和手动添加</p>
+                </div>
+                <div>
+                    <h4 class="font-medium text-gray-900">需求2: 支付模块重构</h4>
+                    <p class="text-sm text-gray-600">已有5个子需求，可以测试完整的拆分流程</p>
+                </div>
+                <div>
+                    <h4 class="font-medium text-gray-900">需求3: 商品推荐算法</h4>
+                    <p class="text-sm text-gray-600">无子需求，可以测试从零开始的拆分</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-8">
+            <a href="index.html" class="bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                开始测试
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // 简单的测试辅助脚本
+        console.log('需求拆分功能测试页面已加载');
+        console.log('请按照测试步骤进行功能验证');
+        
+        // 检查是否有必要的元素
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('页面加载完成，可以开始测试');
+        });
+    </script>
+</body>
+</html>

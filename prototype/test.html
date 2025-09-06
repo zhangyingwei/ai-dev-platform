@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI开发平台 - 快速测试</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen p-8">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-gray-900 mb-4">AI开发平台原型测试</h1>
+                <p class="text-gray-600">快速体验各个功能模块</p>
+            </div>
+
+            <!-- 快速体验 -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">角色切换演示</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                    <div class="p-4 border border-gray-200 rounded-lg text-center">
+                        <div class="text-2xl mb-2">👔</div>
+                        <h3 class="font-medium text-gray-900">销售/售前</h3>
+                        <p class="text-xs text-gray-600 mt-1">需求收集专用</p>
+                    </div>
+
+                    <div class="p-4 border border-gray-200 rounded-lg text-center bg-blue-50">
+                        <div class="text-2xl mb-2">👑</div>
+                        <h3 class="font-medium text-gray-900">领导</h3>
+                        <p class="text-xs text-gray-600 mt-1">全功能访问（默认）</p>
+                    </div>
+
+                    <div class="p-4 border border-gray-200 rounded-lg text-center">
+                        <div class="text-2xl mb-2">🎯</div>
+                        <h3 class="font-medium text-gray-900">研发管理</h3>
+                        <p class="text-xs text-gray-600 mt-1">项目管理专用</p>
+                    </div>
+
+                    <div class="p-4 border border-gray-200 rounded-lg text-center">
+                        <div class="text-2xl mb-2">🔬</div>
+                        <h3 class="font-medium text-gray-900">研发人员</h3>
+                        <p class="text-xs text-gray-600 mt-1">技术决策</p>
+                    </div>
+
+                    <div class="p-4 border border-gray-200 rounded-lg text-center">
+                        <div class="text-2xl mb-2">💻</div>
+                        <h3 class="font-medium text-gray-900">开发人员</h3>
+                        <p class="text-xs text-gray-600 mt-1">代码开发</p>
+                    </div>
+                </div>
+                <div class="mt-4 p-4 bg-blue-50 rounded-lg">
+                    <p class="text-sm text-blue-800">
+                        <strong>新特性：</strong> 系统已移除登录页面，默认以"领导"角色进入。可在系统右上角的角色选择器中实时切换不同角色体验各种功能权限。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 功能特色 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <div class="text-center mb-4">
+                        <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="text-red-600 text-xl">🎤</span>
+                        </div>
+                        <h3 class="font-semibold text-gray-900">录音转文字</h3>
+                    </div>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• 实时语音录制</li>
+                        <li>• 自动转换文字</li>
+                        <li>• 支持多种语言</li>
+                        <li>• 智能标点符号</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <div class="text-center mb-4">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="text-blue-600 text-xl">🤖</span>
+                        </div>
+                        <h3 class="font-semibold text-gray-900">AI需求拆分</h3>
+                    </div>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• 智能需求分析</li>
+                        <li>• 自动拆分建议</li>
+                        <li>• 优先级评估</li>
+                        <li>• 工时预估</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <div class="text-center mb-4">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="text-green-600 text-xl">🏗️</span>
+                        </div>
+                        <h3 class="font-semibold text-gray-900">项目一体化</h3>
+                    </div>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• 需求管理与拆分</li>
+                        <li>• 代码仓库</li>
+                        <li>• 自动部署</li>
+                        <li>• 实时监控</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <div class="text-center mb-4">
+                        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="text-purple-600 text-xl">🔧</span>
+                        </div>
+                        <h3 class="font-semibold text-gray-900">需求拆分</h3>
+                    </div>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• 左右分栏布局</li>
+                        <li>• AI智能拆分</li>
+                        <li>• 手动添加子需求</li>
+                        <li>• 状态优先级管理</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <div class="text-center mb-4">
+                        <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="text-indigo-600 text-xl">⚡</span>
+                        </div>
+                        <h3 class="font-semibold text-gray-900">开发流程</h3>
+                    </div>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• 需求转开发任务</li>
+                        <li>• AI/手动Prompt生成</li>
+                        <li>• 多工具配置支持</li>
+                        <li>• 实时开发监控</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 技术架构 -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">技术架构</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="text-center p-4 border border-gray-200 rounded-lg">
+                        <div class="text-2xl mb-2">🎨</div>
+                        <h3 class="font-medium text-gray-900">前端技术</h3>
+                        <p class="text-xs text-gray-600 mt-1">HTML5 + TailwindCSS</p>
+                    </div>
+                    
+                    <div class="text-center p-4 border border-gray-200 rounded-lg">
+                        <div class="text-2xl mb-2">⚡</div>
+                        <h3 class="font-medium text-gray-900">交互逻辑</h3>
+                        <p class="text-xs text-gray-600 mt-1">Vanilla JavaScript</p>
+                    </div>
+                    
+                    <div class="text-center p-4 border border-gray-200 rounded-lg">
+                        <div class="text-2xl mb-2">💾</div>
+                        <h3 class="font-medium text-gray-900">数据存储</h3>
+                        <p class="text-xs text-gray-600 mt-1">IndexedDB</p>
+                    </div>
+                    
+                    <div class="text-center p-4 border border-gray-200 rounded-lg">
+                        <div class="text-2xl mb-2">🎙️</div>
+                        <h3 class="font-medium text-gray-900">音频处理</h3>
+                        <p class="text-xs text-gray-600 mt-1">Web Audio API</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 使用说明 -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">使用说明</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-medium text-gray-900 mb-3">基本操作</h3>
+                        <ol class="text-sm text-gray-600 space-y-2">
+                            <li>1. 系统自动以"领导"角色进入</li>
+                            <li>2. 浏览仪表板了解概况和快捷操作</li>
+                            <li>3. 使用右上角角色选择器切换角色</li>
+                            <li>4. 进入项目管理查看项目</li>
+                            <li>5. 点击项目卡片进入详情页面</li>
+                            <li>6. 切换标签页体验不同功能模块</li>
+                        </ol>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-medium text-gray-900 mb-3">特色功能</h3>
+                        <ol class="text-sm text-gray-600 space-y-2">
+                            <li>1. 仪表板 → 快捷操作 → 角色相关功能</li>
+                            <li>2. 角色切换 → 实时权限变更</li>
+                            <li>3. 需求管理 → 新建需求 → 录音功能</li>
+                            <li>4. 输入需求描述 → AI辅助拆分</li>
+                            <li>5. 项目详情 → 开发页面 → 需求+任务双模块</li>
+                            <li>6. 子需求转换 → 开发任务 → 配置开发环境</li>
+                            <li>7. 开发详情 → 代码编辑器 → 实时监控</li>
+                            <li>8. 代码/部署/监控 → 项目集成管理</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 底部链接 -->
+            <div class="text-center mt-8 space-x-4">
+                <a href="index.html" class="bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                    进入主系统
+                </a>
+                <a href="development-workflow-demo.html" class="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition-colors">
+                    开发流程演示
+                </a>
+                <a href="test-project-tabs.html" class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors">
+                    标签页测试
+                </a>
+                <a href="requirement-split-demo.html" class="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition-colors">
+                    需求拆分演示
+                </a>
+                <a href="demo.html" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                    查看演示指南
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 简单的点击统计
+        document.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function() {
+                console.log('点击了:', this.textContent.trim());
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI开发平台演示指南</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <div class="min-h-screen p-8">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-gray-900 mb-4">AI开发平台演示指南</h1>
+                <p class="text-lg text-gray-600">完整的功能演示和操作说明</p>
+            </div>
+
+            <!-- 快速开始 -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">🚀 快速开始</h2>
+                <div class="space-y-3">
+                    <div class="flex items-center space-x-3">
+                        <span class="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm">1</span>
+                        <span>打开 <code class="bg-gray-100 px-2 py-1 rounded text-sm">index.html</code> 文件</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <span class="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm">2</span>
+                        <span>选择角色登录（推荐先选择"领导"角色体验完整功能）</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <span class="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm">3</span>
+                        <span>按照下面的演示流程体验各个功能模块</span>
+                    </div>
+                </div>
+                <div class="mt-4 p-4 bg-blue-50 rounded-lg">
+                    <p class="text-sm text-blue-800">
+                        <strong>提示：</strong> 用户名和密码可以任意输入，系统会自动登录。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 角色演示流程 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <!-- 销售角色 -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">👔 销售/售前角色演示</h3>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex items-start space-x-2">
+                            <span class="text-blue-600">•</span>
+                            <span>登录时选择"销售/售前"角色</span>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="text-blue-600">•</span>
+                            <span>进入需求管理页面</span>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="text-blue-600">•</span>
+                            <span>点击"新建需求"按钮</span>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="text-blue-600">•</span>
+                            <span>体验录音功能（需要麦克风权限）</span>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="text-blue-600">•</span>
+                            <span>查看语音转文字效果</span>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="text-blue-600">•</span>
+                            <span>使用AI辅助拆分需求功能</span>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="text-blue-600">•</span>
+                            <span>保存需求并查看需求列表</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 领导角色 -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">👑 领导角色演示</h3>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex items-start space-x-2">
+                            <span class="text-green-600">•</span>
+                            <span>登录时选择"领导"角色</span>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="text-green-600">•</span>
+                            <span>查看仪表板全局概览</span>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="text-green-600">•</span>
+                            <span>进入需求管理审批需求</span>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="text-green-600">•</span>
+                            <span>进入项目管理查看项目状态</span>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="text-green-600">•</span>
+                            <span>点击项目卡片进入项目详情</span>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="text-green-600">•</span>
+                            <span>切换不同标签页查看项目各方面信息</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 项目详情演示 -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">🏗️ 项目详情功能演示</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="p-4 border border-gray-200 rounded-lg">
+                        <h4 class="font-medium text-gray-900 mb-2">概览标签页</h4>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li>• 项目进度可视化</li>
+                            <li>• 最近活动时间线</li>
+                            <li>• 项目统计数据</li>
+                            <li>• 团队成员信息</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="p-4 border border-gray-200 rounded-lg">
+                        <h4 class="font-medium text-gray-900 mb-2">代码标签页</h4>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li>• Git仓库管理</li>
+                            <li>• AI编程工具集成</li>
+                            <li>• 代码活动记录</li>
+                            <li>• 工具连接状态</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="p-4 border border-gray-200 rounded-lg">
+                        <h4 class="font-medium text-gray-900 mb-2">部署标签页</h4>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li>• 多环境状态监控</li>
+                            <li>• 部署历史记录</li>
+                            <li>• 一键部署操作</li>
+                            <li>• 发布策略配置</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="p-4 border border-gray-200 rounded-lg">
+                        <h4 class="font-medium text-gray-900 mb-2">监控标签页</h4>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li>• 系统关键指标</li>
+                            <li>• 资源使用率</li>
+                            <li>• 实时告警信息</li>
+                            <li>• 性能监控图表</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="p-4 border border-gray-200 rounded-lg">
+                        <h4 class="font-medium text-gray-900 mb-2">需求标签页</h4>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li>• 项目需求列表</li>
+                            <li>• 需求状态跟踪</li>
+                            <li>• 优先级管理</li>
+                            <li>• 工时统计</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="p-4 border border-gray-200 rounded-lg">
+                        <h4 class="font-medium text-gray-900 mb-2">团队标签页</h4>
+                        <ul class="text-sm text-gray-600 space-y-1">
+                            <li>• 团队成员详情</li>
+                            <li>• 工作量统计</li>
+                            <li>• 任务完成情况</li>
+                            <li>• 成员管理操作</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 特色功能 -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">✨ 特色功能体验</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="font-medium text-gray-900 mb-3">🎤 录音转文字</h4>
+                        <div class="space-y-2 text-sm text-gray-600">
+                            <p>1. 在需求收集页面点击"开始录音"</p>
+                            <p>2. 允许浏览器访问麦克风权限</p>
+                            <p>3. 说话录制需求内容</p>
+                            <p>4. 点击"停止录音"查看转换结果</p>
+                            <p class="text-blue-600">💡 系统会自动将语音转换为文字并填入需求描述</p>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-medium text-gray-900 mb-3">🤖 AI需求拆分</h4>
+                        <div class="space-y-2 text-sm text-gray-600">
+                            <p>1. 在需求描述中输入详细需求</p>
+                            <p>2. 点击"AI辅助拆分"按钮</p>
+                            <p>3. 查看AI分析的拆分建议</p>
+                            <p>4. 每个子需求包含优先级和工时估算</p>
+                            <p class="text-blue-600">💡 AI会智能分析需求并提供专业的拆分建议</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 技术特点 -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">🔧 技术特点</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="text-center p-4">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="text-blue-600 text-xl">📱</span>
+                        </div>
+                        <h4 class="font-medium text-gray-900 mb-2">响应式设计</h4>
+                        <p class="text-sm text-gray-600">适配桌面端和移动端，提供一致的用户体验</p>
+                    </div>
+                    
+                    <div class="text-center p-4">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="text-green-600 text-xl">💾</span>
+                        </div>
+                        <h4 class="font-medium text-gray-900 mb-2">本地存储</h4>
+                        <p class="text-sm text-gray-600">使用IndexedDB实现数据持久化，支持离线操作</p>
+                    </div>
+                    
+                    <div class="text-center p-4">
+                        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="text-purple-600 text-xl">🎨</span>
+                        </div>
+                        <h4 class="font-medium text-gray-900 mb-2">现代UI</h4>
+                        <p class="text-sm text-gray-600">基于TailwindCSS的黑白色系设计，简洁专业</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 操作提示 -->
+            <div class="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <h4 class="font-medium text-yellow-900 mb-2">💡 操作提示</h4>
+                <ul class="text-sm text-yellow-800 space-y-1">
+                    <li>• 所有数据都存储在浏览器本地，刷新页面数据不会丢失</li>
+                    <li>• 录音功能需要HTTPS环境或localhost才能正常工作</li>
+                    <li>• 不同角色登录会看到不同的功能菜单</li>
+                    <li>• 项目详情页面集成了代码、部署、监控等所有功能</li>
+                    <li>• 可以尝试切换不同角色体验不同的功能权限</li>
+                </ul>
+            </div>
+
+            <!-- 返回按钮 -->
+            <div class="text-center mt-8">
+                <a href="index.html" class="bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                    开始体验原型系统
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

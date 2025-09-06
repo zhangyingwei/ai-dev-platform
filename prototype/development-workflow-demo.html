@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开发流程重构演示 - AI开发平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen p-8">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-gray-900 mb-4">开发流程重构演示</h1>
+                <p class="text-gray-600">体验AI开发平台的全新开发流程管理功能</p>
+            </div>
+
+            <!-- 重构概览 -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">🔄 重大重构</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-medium text-gray-900 mb-3">✅ 结构调整</h3>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>• "需求"标签页重命名为"开发"标签页</li>
+                            <li>• 创建两个子模块：项目需求 + 开发任务</li>
+                            <li>• 需求到开发任务的转换流程</li>
+                            <li>• 完整的开发配置界面</li>
+                            <li>• 集成代码编辑器和执行监控</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-medium text-gray-900 mb-3">🎯 核心功能</h3>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>• 子需求转换为开发任务</li>
+                            <li>• AI/手动Prompt生成</li>
+                            <li>• 多开发工具选择配置</li>
+                            <li>• 实时开发状态监控</li>
+                            <li>• 类VSCode代码编辑界面</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 流程图 -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">开发流程图</h2>
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                    <div class="text-center p-4 border border-gray-200 rounded-lg">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="text-blue-600 font-bold">1</span>
+                        </div>
+                        <h3 class="font-medium text-gray-900 mb-2">需求拆分</h3>
+                        <p class="text-xs text-gray-600">在项目需求模块完成需求拆分</p>
+                    </div>
+                    
+                    <div class="text-center p-4 border border-gray-200 rounded-lg">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="text-green-600 font-bold">2</span>
+                        </div>
+                        <h3 class="font-medium text-gray-900 mb-2">转换任务</h3>
+                        <p class="text-xs text-gray-600">将子需求转换为开发任务</p>
+                    </div>
+                    
+                    <div class="text-center p-4 border border-gray-200 rounded-lg">
+                        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="text-purple-600 font-bold">3</span>
+                        </div>
+                        <h3 class="font-medium text-gray-900 mb-2">开发配置</h3>
+                        <p class="text-xs text-gray-600">配置Prompt和开发工具</p>
+                    </div>
+                    
+                    <div class="text-center p-4 border border-gray-200 rounded-lg">
+                        <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="text-yellow-600 font-bold">4</span>
+                        </div>
+                        <h3 class="font-medium text-gray-900 mb-2">开始开发</h3>
+                        <p class="text-xs text-gray-600">启动AI工具进行开发</p>
+                    </div>
+                    
+                    <div class="text-center p-4 border border-gray-200 rounded-lg">
+                        <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="text-red-600 font-bold">5</span>
+                        </div>
+                        <h3 class="font-medium text-gray-900 mb-2">监控执行</h3>
+                        <p class="text-xs text-gray-600">实时监控开发进度</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 界面预览 -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">界面预览</h2>
+                
+                <!-- 开发标签页预览 -->
+                <div class="border border-gray-300 rounded-lg p-4 bg-gray-50 mb-6">
+                    <h3 class="text-sm font-medium text-gray-900 mb-3">开发标签页 - 子模块导航</h3>
+                    <div class="border-b border-gray-200 mb-4">
+                        <nav class="flex space-x-6">
+                            <button class="py-2 px-1 border-b-2 border-gray-900 text-gray-900 text-xs font-medium">项目需求</button>
+                            <button class="py-2 px-1 border-b-2 border-transparent text-gray-500 text-xs font-medium">开发任务</button>
+                        </nav>
+                    </div>
+                    <p class="text-xs text-gray-600">两个子模块可以独立切换，保持原有需求管理功能的同时新增开发任务管理</p>
+                </div>
+
+                <!-- 开发配置弹窗预览 -->
+                <div class="border border-gray-300 rounded-lg p-4 bg-gray-50 mb-6">
+                    <h3 class="text-sm font-medium text-gray-900 mb-3">开发配置弹窗</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="text-xs font-medium text-gray-700 mb-2">Prompt生成方式</h4>
+                            <div class="space-y-1">
+                                <label class="flex items-center text-xs">
+                                    <input type="radio" name="demo1" class="mr-2" checked>
+                                    <span>手动输入开发prompt</span>
+                                </label>
+                                <label class="flex items-center text-xs">
+                                    <input type="radio" name="demo1" class="mr-2">
+                                    <span>AI自动生成prompt</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-medium text-gray-700 mb-2">开发工具选择</h4>
+                            <div class="grid grid-cols-2 gap-1">
+                                <label class="flex items-center text-xs">
+                                    <input type="checkbox" class="mr-1">
+                                    <span>Claude Code</span>
+                                </label>
+                                <label class="flex items-center text-xs">
+                                    <input type="checkbox" class="mr-1">
+                                    <span>Gemini CLI</span>
+                                </label>
+                                <label class="flex items-center text-xs">
+                                    <input type="checkbox" class="mr-1" checked>
+                                    <span>Cursor</span>
+                                </label>
+                                <label class="flex items-center text-xs">
+                                    <input type="checkbox" class="mr-1">
+                                    <span>Augment Code</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 开发详情页面预览 -->
+                <div class="border border-gray-300 rounded-lg p-4 bg-gray-50">
+                    <h3 class="text-sm font-medium text-gray-900 mb-3">开发详情页面 - 类VSCode界面</h3>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                        <div>
+                            <h4 class="text-xs font-medium text-gray-700 mb-2">需求信息 & 状态监控</h4>
+                            <div class="bg-white border rounded p-2 text-xs">
+                                <div class="space-y-1">
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                                        <span>环境初始化完成</span>
+                                    </div>
+                                    <div class="flex items-center space-x-2">
+                                        <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                                        <span>正在分析代码结构</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="lg:col-span-2">
+                            <h4 class="text-xs font-medium text-gray-700 mb-2">代码编辑器 + 文件树</h4>
+                            <div class="bg-gray-900 text-green-400 p-2 rounded font-mono text-xs">
+                                <div class="flex">
+                                    <div class="w-1/3 border-r border-gray-700 pr-2">
+                                        📁 src<br>
+                                        &nbsp;&nbsp;📁 components<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;📄 Login.jsx<br>
+                                        &nbsp;&nbsp;📁 styles
+                                    </div>
+                                    <div class="flex-1 pl-2">
+                                        import React from 'react';<br>
+                                        <br>
+                                        const Login = () => {<br>
+                                        &nbsp;&nbsp;return (<br>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&lt;div&gt;Login&lt;/div&gt;<br>
+                                        &nbsp;&nbsp;);<br>
+                                        };
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 技术特点 -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">技术特点</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="text-center p-4 border border-gray-200 rounded-lg">
+                        <div class="text-2xl mb-2">🔄</div>
+                        <h3 class="font-medium text-gray-900 mb-2">流程重构</h3>
+                        <p class="text-xs text-gray-600">完整的需求到开发的转换流程</p>
+                    </div>
+                    
+                    <div class="text-center p-4 border border-gray-200 rounded-lg">
+                        <div class="text-2xl mb-2">🤖</div>
+                        <h3 class="font-medium text-gray-900 mb-2">AI集成</h3>
+                        <p class="text-xs text-gray-600">支持多种AI开发工具配置</p>
+                    </div>
+                    
+                    <div class="text-center p-4 border border-gray-200 rounded-lg">
+                        <div class="text-2xl mb-2">💻</div>
+                        <h3 class="font-medium text-gray-900 mb-2">代码编辑</h3>
+                        <p class="text-xs text-gray-600">类VSCode的代码编辑界面</p>
+                    </div>
+                    
+                    <div class="text-center p-4 border border-gray-200 rounded-lg">
+                        <div class="text-2xl mb-2">📊</div>
+                        <h3 class="font-medium text-gray-900 mb-2">实时监控</h3>
+                        <p class="text-xs text-gray-600">开发过程的实时状态监控</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 使用指南 -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">使用指南</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-medium text-gray-900 mb-3">🚀 快速开始</h3>
+                        <ol class="text-sm text-gray-600 space-y-2">
+                            <li>1. 进入系统 → 项目管理 → 选择项目</li>
+                            <li>2. 点击"开发"标签页（原"需求"标签页）</li>
+                            <li>3. 在"项目需求"模块中完成需求拆分</li>
+                            <li>4. 点击子需求的"转为开发任务"按钮</li>
+                            <li>5. 切换到"开发任务"模块查看任务</li>
+                            <li>6. 点击"开始开发"进行配置</li>
+                            <li>7. 配置完成后启动开发流程</li>
+                        </ol>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-medium text-gray-900 mb-3">🎯 功能亮点</h3>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>• 保留所有原有需求管理功能</li>
+                            <li>• 新增完整的开发任务管理</li>
+                            <li>• AI/手动双重Prompt生成方式</li>
+                            <li>• 支持多种主流开发工具</li>
+                            <li>• 实时开发过程监控</li>
+                            <li>• 类VSCode的代码编辑体验</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 底部操作 -->
+            <div class="text-center space-x-4">
+                <a href="index.html" class="bg-gray-900 text-white px-8 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                    体验完整功能
+                </a>
+                <a href="requirement-split-demo.html" class="bg-purple-600 text-white px-8 py-3 rounded-lg hover:bg-purple-700 transition-colors">
+                    需求拆分演示
+                </a>
+            </div>
+
+            <!-- 注意事项 -->
+            <div class="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <h4 class="font-medium text-yellow-900 mb-2">💡 重要说明</h4>
+                <ul class="text-sm text-yellow-800 space-y-1">
+                    <li>• 原"需求"标签页已重命名为"开发"标签页，功能更加丰富</li>
+                    <li>• 所有原有的需求管理功能都保留在"项目需求"子模块中</li>
+                    <li>• 新增的"开发任务"子模块提供完整的开发流程管理</li>
+                    <li>• 代码编辑器为演示版本，实际集成需要Monaco Editor等组件</li>
+                    <li>• AI工具执行为模拟过程，实际使用需要对接真实的AI开发工具</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

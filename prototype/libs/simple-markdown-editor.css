@@ -1,0 +1,338 @@
+/* Simple Markdown Editor Styles */
+.markdown-editor-container {
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    overflow: hidden;
+    background: white;
+}
+
+.markdown-toolbar {
+    background: #f9fafb;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 8px 12px;
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.markdown-toolbar button {
+    background: none;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 12px;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.markdown-toolbar button:hover {
+    background: #e5e7eb;
+    border-color: #9ca3af;
+}
+
+.markdown-toolbar button:active {
+    background: #d1d5db;
+}
+
+.markdown-toolbar .separator {
+    width: 1px;
+    height: 24px;
+    background: #d1d5db;
+    margin: 0 4px;
+}
+
+.markdown-editor-wrapper {
+    display: flex;
+    min-height: 400px;
+}
+
+.markdown-editor-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 16px;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    resize: none;
+    background: white;
+}
+
+.markdown-editor-preview {
+    flex: 1;
+    padding: 16px;
+    border-left: 1px solid #e5e7eb;
+    background: #fafafa;
+    overflow-y: auto;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+}
+
+.markdown-editor-preview.hidden {
+    display: none;
+}
+
+.markdown-editor-input.fullwidth {
+    flex: 1;
+}
+
+/* WYSIWYG Editor Styles */
+.markdown-wysiwyg-editor {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    background: white;
+    min-height: 400px;
+    overflow-y: auto;
+}
+
+.markdown-wysiwyg-editor.hidden {
+    display: none;
+}
+
+.markdown-wysiwyg-editor:focus {
+    outline: none;
+}
+
+.markdown-wysiwyg-editor h1,
+.markdown-wysiwyg-editor h2,
+.markdown-wysiwyg-editor h3,
+.markdown-wysiwyg-editor h4,
+.markdown-wysiwyg-editor h5,
+.markdown-wysiwyg-editor h6 {
+    color: #1f2937;
+    margin-top: 24px;
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+
+.markdown-wysiwyg-editor h1 {
+    font-size: 2em;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 8px;
+}
+
+.markdown-wysiwyg-editor h2 {
+    font-size: 1.5em;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 4px;
+}
+
+.markdown-wysiwyg-editor h3 {
+    font-size: 1.25em;
+}
+
+.markdown-wysiwyg-editor p {
+    margin-bottom: 16px;
+}
+
+.markdown-wysiwyg-editor ul,
+.markdown-wysiwyg-editor ol {
+    margin-bottom: 16px;
+    padding-left: 24px;
+}
+
+.markdown-wysiwyg-editor li {
+    margin-bottom: 4px;
+}
+
+.markdown-wysiwyg-editor blockquote {
+    border-left: 4px solid #d1d5db;
+    margin: 16px 0;
+    padding-left: 16px;
+    color: #6b7280;
+    font-style: italic;
+}
+
+.markdown-wysiwyg-editor code {
+    background: #f3f4f6;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 13px;
+}
+
+.markdown-wysiwyg-editor pre {
+    background: #f3f4f6;
+    padding: 16px;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 16px 0;
+}
+
+.markdown-wysiwyg-editor pre code {
+    background: none;
+    padding: 0;
+}
+
+.markdown-wysiwyg-editor a {
+    color: #3b82f6;
+    text-decoration: underline;
+}
+
+.markdown-wysiwyg-editor a:hover {
+    color: #1d4ed8;
+}
+
+.markdown-wysiwyg-editor img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin: 8px 0;
+}
+
+.markdown-wysiwyg-editor strong {
+    font-weight: 600;
+}
+
+.markdown-wysiwyg-editor em {
+    font-style: italic;
+}
+
+/* Markdown Preview Styles */
+.markdown-editor-preview h1,
+.markdown-editor-preview h2,
+.markdown-editor-preview h3,
+.markdown-editor-preview h4,
+.markdown-editor-preview h5,
+.markdown-editor-preview h6 {
+    color: #1f2937;
+    margin-top: 24px;
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+
+.markdown-editor-preview h1 {
+    font-size: 2em;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 8px;
+}
+
+.markdown-editor-preview h2 {
+    font-size: 1.5em;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 4px;
+}
+
+.markdown-editor-preview h3 {
+    font-size: 1.25em;
+}
+
+.markdown-editor-preview p {
+    margin-bottom: 16px;
+}
+
+.markdown-editor-preview ul,
+.markdown-editor-preview ol {
+    margin-bottom: 16px;
+    padding-left: 24px;
+}
+
+.markdown-editor-preview li {
+    margin-bottom: 4px;
+}
+
+.markdown-editor-preview blockquote {
+    border-left: 4px solid #d1d5db;
+    margin: 16px 0;
+    padding-left: 16px;
+    color: #6b7280;
+    font-style: italic;
+}
+
+.markdown-editor-preview code {
+    background: #f3f4f6;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 13px;
+}
+
+.markdown-editor-preview pre {
+    background: #f3f4f6;
+    padding: 16px;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 16px 0;
+}
+
+.markdown-editor-preview pre code {
+    background: none;
+    padding: 0;
+}
+
+.markdown-editor-preview table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 16px 0;
+}
+
+.markdown-editor-preview th,
+.markdown-editor-preview td {
+    border: 1px solid #d1d5db;
+    padding: 8px 12px;
+    text-align: left;
+}
+
+.markdown-editor-preview th {
+    background: #f9fafb;
+    font-weight: 600;
+}
+
+.markdown-editor-preview a {
+    color: #3b82f6;
+    text-decoration: underline;
+}
+
+.markdown-editor-preview a:hover {
+    color: #1d4ed8;
+}
+
+.markdown-editor-preview img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin: 8px 0;
+}
+
+.markdown-editor-preview hr {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 24px 0;
+}
+
+/* Status bar */
+.markdown-status-bar {
+    background: #f9fafb;
+    border-top: 1px solid #e5e7eb;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #6b7280;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .markdown-editor-wrapper {
+        flex-direction: column;
+    }
+    
+    .markdown-editor-preview {
+        border-left: none;
+        border-top: 1px solid #e5e7eb;
+        min-height: 200px;
+    }
+    
+    .markdown-toolbar {
+        flex-wrap: wrap;
+    }
+}

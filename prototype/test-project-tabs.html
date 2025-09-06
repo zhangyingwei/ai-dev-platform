@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>项目标签页功能测试</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-2xl font-bold text-gray-900 mb-6">项目标签页功能测试</h1>
+        
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">测试步骤</h2>
+            <ol class="text-sm text-gray-600 space-y-2">
+                <li>1. 打开主系统 (index.html)</li>
+                <li>2. 点击"项目管理"进入项目页面</li>
+                <li>3. 点击任意项目卡片进入项目详情</li>
+                <li>4. 逐一测试以下标签页：</li>
+                <ul class="ml-4 mt-2 space-y-1">
+                    <li>• <strong>概览</strong>：应显示项目进度、最近活动等</li>
+                    <li>• <strong>开发</strong>：包含项目需求和开发任务两个子模块</li>
+                    <li>• <strong>代码</strong>：应显示代码仓库、提交历史等</li>
+                    <li>• <strong>部署</strong>：应显示环境状态、部署历史等</li>
+                    <li>• <strong>监控</strong>：应显示系统指标、告警信息等</li>
+                    <li>• <strong>团队</strong>：应显示团队成员信息</li>
+                </ul>
+            </ol>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">修复内容</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <h3 class="font-medium text-gray-900 mb-2">✅ 已修复的标签页</h3>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• <strong>开发任务模块</strong>：添加示例任务数据</li>
+                        <li>• <strong>代码标签页</strong>：显示代码活动和仓库信息</li>
+                        <li>• <strong>部署标签页</strong>：显示环境状态和部署历史</li>
+                        <li>• <strong>监控标签页</strong>：显示系统指标和告警</li>
+                        <li>• <strong>团队标签页</strong>：显示团队成员详情</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-medium text-gray-900 mb-2">🔧 修复方法</h3>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• 实现了数据加载函数</li>
+                        <li>• 添加了模拟数据</li>
+                        <li>• 修复了DOM选择器</li>
+                        <li>• 更新了界面内容</li>
+                        <li>• 保持了设计风格一致性</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">各标签页预期内容</h2>
+            <div class="space-y-4">
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <h4 class="font-medium text-gray-900 mb-2">📊 概览标签页</h4>
+                    <p class="text-sm text-gray-600">项目进度、最近活动、统计数据、团队成员概览</p>
+                </div>
+                
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <h4 class="font-medium text-gray-900 mb-2">⚡ 开发标签页</h4>
+                    <p class="text-sm text-gray-600">
+                        <strong>项目需求模块</strong>：需求列表、需求详情、需求拆分功能<br>
+                        <strong>开发任务模块</strong>：开发任务列表、配置弹窗、开发详情页面
+                    </p>
+                </div>
+                
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <h4 class="font-medium text-gray-900 mb-2">💻 代码标签页</h4>
+                    <p class="text-sm text-gray-600">代码仓库信息、最近提交记录、分支状态、代码活动</p>
+                </div>
+                
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <h4 class="font-medium text-gray-900 mb-2">🚀 部署标签页</h4>
+                    <p class="text-sm text-gray-600">环境状态（开发/测试/生产）、部署历史、版本信息</p>
+                </div>
+                
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <h4 class="font-medium text-gray-900 mb-2">📈 监控标签页</h4>
+                    <p class="text-sm text-gray-600">系统可用性、响应时间、错误率、活跃用户、系统资源、告警信息</p>
+                </div>
+                
+                <div class="border border-gray-200 rounded-lg p-4">
+                    <h4 class="font-medium text-gray-900 mb-2">👥 团队标签页</h4>
+                    <p class="text-sm text-gray-600">团队成员列表、角色信息、工作统计、效率评分、在线状态</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">数据内容示例</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <h3 class="font-medium text-gray-900 mb-2">代码标签页</h3>
+                    <ul class="text-xs text-gray-600 space-y-1">
+                        <li>• 最近提交：优化登录界面UI、修复支付模块bug</li>
+                        <li>• 分支状态：main、develop、feature分支</li>
+                        <li>• 代码活动：提交记录、作者信息、时间戳</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-medium text-gray-900 mb-2">部署标签页</h3>
+                    <ul class="text-xs text-gray-600 space-y-1">
+                        <li>• 环境状态：开发环境v2.1.3-dev、测试环境v2.1.2</li>
+                        <li>• 部署历史：成功/失败状态、部署时间、持续时间</li>
+                        <li>• 部署者信息：张三、李四、王五</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-medium text-gray-900 mb-2">监控标签页</h3>
+                    <ul class="text-xs text-gray-600 space-y-1">
+                        <li>• 关键指标：99.8%可用性、180ms响应时间</li>
+                        <li>• 系统资源：CPU 35%、内存 58%、磁盘 42%</li>
+                        <li>• 告警信息：API响应时间偏高、部署完成通知</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-medium text-gray-900 mb-2">团队标签页</h3>
+                    <ul class="text-xs text-gray-600 space-y-1">
+                        <li>• 团队成员：张三(前端)、李四(后端)、王五(测试)</li>
+                        <li>• 工作统计：完成任务、代码提交、工作时长</li>
+                        <li>• 在线状态：在线、离开、离线状态指示</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">开发任务模块特别说明</h2>
+            <div class="space-y-3">
+                <div class="p-3 bg-blue-50 border border-blue-200 rounded">
+                    <h4 class="font-medium text-blue-900">✅ 已修复问题</h4>
+                    <ul class="text-sm text-blue-800 mt-2 space-y-1">
+                        <li>• 开发任务列表现在显示示例任务数据</li>
+                        <li>• 子需求转换为开发任务功能正常</li>
+                        <li>• 开发配置弹窗正常显示</li>
+                        <li>• 开发详情页面布局完整</li>
+                    </ul>
+                </div>
+                
+                <div class="p-3 bg-green-50 border border-green-200 rounded">
+                    <h4 class="font-medium text-green-900">🎯 测试要点</h4>
+                    <ul class="text-sm text-green-800 mt-2 space-y-1">
+                        <li>• 在项目需求模块中点击子需求的"转为开发任务"按钮</li>
+                        <li>• 切换到开发任务模块查看转换后的任务</li>
+                        <li>• 点击"开始开发"测试配置弹窗</li>
+                        <li>• 测试AI Prompt生成功能</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-8">
+            <a href="index.html" class="bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                开始测试
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // 简单的测试辅助脚本
+        console.log('项目标签页功能测试页面已加载');
+        console.log('请按照测试步骤进行功能验证');
+        
+        // 检查是否有必要的元素
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('页面加载完成，可以开始测试');
+        });
+    </script>
+</body>
+</html>

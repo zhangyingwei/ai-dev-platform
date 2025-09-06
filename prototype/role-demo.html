@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>角色切换演示 - AI开发平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen p-8">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-gray-900 mb-4">角色切换功能演示</h1>
+                <p class="text-gray-600">体验AI开发平台的实时角色切换功能</p>
+            </div>
+
+            <!-- 新功能介绍 -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">🆕 新功能特性</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-medium text-gray-900 mb-3">✅ 已实现</h3>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>• 移除登录页面，直接进入系统</li>
+                            <li>• 默认以"领导"角色启动</li>
+                            <li>• 右上角角色选择器</li>
+                            <li>• 实时角色切换</li>
+                            <li>• 导航菜单权限控制</li>
+                            <li>• 角色相关快捷操作</li>
+                            <li>• 自动页面跳转保护</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-medium text-gray-900 mb-3">🎯 体验要点</h3>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>• 无需登录，直接使用</li>
+                            <li>• 角色切换立即生效</li>
+                            <li>• 不同角色看到不同菜单</li>
+                            <li>• 仪表板快捷操作变化</li>
+                            <li>• 权限保护自动跳转</li>
+                            <li>• 演示更加流畅</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 角色功能对比 -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">角色功能对比</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full">
+                        <thead>
+                            <tr class="border-b border-gray-200">
+                                <th class="text-left py-3 px-4 font-medium text-gray-900">角色</th>
+                                <th class="text-left py-3 px-4 font-medium text-gray-900">可访问页面</th>
+                                <th class="text-left py-3 px-4 font-medium text-gray-900">主要功能</th>
+                                <th class="text-left py-3 px-4 font-medium text-gray-900">快捷操作</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr class="border-b border-gray-100">
+                                <td class="py-3 px-4">
+                                    <div class="flex items-center space-x-2">
+                                        <span>👔</span>
+                                        <span class="font-medium">销售/售前</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-4 text-gray-600">仪表板、需求管理</td>
+                                <td class="py-3 px-4 text-gray-600">需求收集、录音转文字</td>
+                                <td class="py-3 px-4 text-gray-600">录音收集、需求列表、AI分析</td>
+                            </tr>
+                            <tr class="border-b border-gray-100 bg-blue-50">
+                                <td class="py-3 px-4">
+                                    <div class="flex items-center space-x-2">
+                                        <span>👑</span>
+                                        <span class="font-medium">领导</span>
+                                        <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">默认</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-4 text-gray-600">所有页面</td>
+                                <td class="py-3 px-4 text-gray-600">全局管理、决策审批</td>
+                                <td class="py-3 px-4 text-gray-600">项目概览、需求审批、团队管理</td>
+                            </tr>
+                            <tr class="border-b border-gray-100">
+                                <td class="py-3 px-4">
+                                    <div class="flex items-center space-x-2">
+                                        <span>🎯</span>
+                                        <span class="font-medium">研发管理</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-4 text-gray-600">仪表板、项目管理</td>
+                                <td class="py-3 px-4 text-gray-600">项目规划、资源配置</td>
+                                <td class="py-3 px-4 text-gray-600">项目管理、部署管理、监控中心</td>
+                            </tr>
+                            <tr class="border-b border-gray-100">
+                                <td class="py-3 px-4">
+                                    <div class="flex items-center space-x-2">
+                                        <span>🔬</span>
+                                        <span class="font-medium">研发人员</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-4 text-gray-600">仪表板、项目管理</td>
+                                <td class="py-3 px-4 text-gray-600">技术方案、代码审查</td>
+                                <td class="py-3 px-4 text-gray-600">我的项目、代码仓库、技术决策</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3 px-4">
+                                    <div class="flex items-center space-x-2">
+                                        <span>💻</span>
+                                        <span class="font-medium">开发人员</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-4 text-gray-600">仪表板、项目管理</td>
+                                <td class="py-3 px-4 text-gray-600">功能开发、AI编程</td>
+                                <td class="py-3 px-4 text-gray-600">代码开发、AI编程助手、项目详情</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 操作指南 -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">操作指南</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-medium text-gray-900 mb-3">🚀 快速开始</h3>
+                        <ol class="text-sm text-gray-600 space-y-2">
+                            <li>1. 点击下方"进入系统"按钮</li>
+                            <li>2. 系统自动以"领导"角色进入</li>
+                            <li>3. 查看仪表板的快捷操作</li>
+                            <li>4. 使用右上角角色选择器切换</li>
+                            <li>5. 观察导航菜单和快捷操作变化</li>
+                        </ol>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-medium text-gray-900 mb-3">🎯 测试重点</h3>
+                        <ol class="text-sm text-gray-600 space-y-2">
+                            <li>1. 角色切换的即时性</li>
+                            <li>2. 导航菜单权限控制</li>
+                            <li>3. 快捷操作的角色相关性</li>
+                            <li>4. 页面访问权限保护</li>
+                            <li>5. 项目详情页面功能完整性</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 技术改进 -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">技术改进</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="text-center p-4 border border-gray-200 rounded-lg">
+                        <div class="text-2xl mb-2">⚡</div>
+                        <h3 class="font-medium text-gray-900 mb-2">即时切换</h3>
+                        <p class="text-xs text-gray-600">角色切换无需刷新页面，立即生效</p>
+                    </div>
+                    
+                    <div class="text-center p-4 border border-gray-200 rounded-lg">
+                        <div class="text-2xl mb-2">🛡️</div>
+                        <h3 class="font-medium text-gray-900 mb-2">权限保护</h3>
+                        <p class="text-xs text-gray-600">自动检测页面访问权限，智能跳转</p>
+                    </div>
+                    
+                    <div class="text-center p-4 border border-gray-200 rounded-lg">
+                        <div class="text-2xl mb-2">🎨</div>
+                        <h3 class="font-medium text-gray-900 mb-2">动态界面</h3>
+                        <p class="text-xs text-gray-600">根据角色动态调整界面元素</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 底部操作 -->
+            <div class="text-center space-x-4">
+                <a href="index.html" class="bg-gray-900 text-white px-8 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                    进入系统体验
+                </a>
+                <a href="demo.html" class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                    查看完整演示
+                </a>
+            </div>
+
+            <!-- 注意事项 -->
+            <div class="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <h4 class="font-medium text-yellow-900 mb-2">💡 注意事项</h4>
+                <ul class="text-sm text-yellow-800 space-y-1">
+                    <li>• 系统启动时默认以"领导"角色进入，拥有完整功能访问权限</li>
+                    <li>• 角色切换后，如果当前页面对新角色不可见，会自动跳转到仪表板</li>
+                    <li>• 每个角色的快捷操作都经过精心设计，符合实际工作场景</li>
+                    <li>• 所有数据仍然存储在浏览器本地，刷新页面数据不会丢失</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

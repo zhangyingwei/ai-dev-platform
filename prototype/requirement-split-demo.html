@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>需求拆分功能演示 - AI开发平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen p-8">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-gray-900 mb-4">需求拆分功能演示</h1>
+                <p class="text-gray-600">体验AI开发平台的智能需求拆分功能</p>
+            </div>
+
+            <!-- 功能介绍 -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">🆕 新增功能</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h3 class="font-medium text-gray-900 mb-3">✅ 功能特性</h3>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>• 项目详情中的需求页面增强</li>
+                            <li>• 需求详情左右分栏布局</li>
+                            <li>• 左侧显示原始需求信息</li>
+                            <li>• 右侧显示拆分的子需求列表</li>
+                            <li>• AI辅助智能拆分功能</li>
+                            <li>• 手动添加子需求功能</li>
+                            <li>• 子需求状态和优先级管理</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h3 class="font-medium text-gray-900 mb-3">🎯 使用场景</h3>
+                        <ul class="text-sm text-gray-600 space-y-2">
+                            <li>• 复杂需求的细化分解</li>
+                            <li>• 团队任务分配和管理</li>
+                            <li>• 项目进度精细化跟踪</li>
+                            <li>• 工时估算和资源规划</li>
+                            <li>• 需求优先级排序</li>
+                            <li>• 开发任务可视化管理</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 操作流程 -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">操作流程</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="text-center p-4 border border-gray-200 rounded-lg">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="text-blue-600 font-bold">1</span>
+                        </div>
+                        <h3 class="font-medium text-gray-900 mb-2">进入项目详情</h3>
+                        <p class="text-xs text-gray-600">在项目管理页面点击项目卡片</p>
+                    </div>
+                    
+                    <div class="text-center p-4 border border-gray-200 rounded-lg">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="text-blue-600 font-bold">2</span>
+                        </div>
+                        <h3 class="font-medium text-gray-900 mb-2">切换需求标签页</h3>
+                        <p class="text-xs text-gray-600">点击"需求"标签查看需求列表</p>
+                    </div>
+                    
+                    <div class="text-center p-4 border border-gray-200 rounded-lg">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="text-blue-600 font-bold">3</span>
+                        </div>
+                        <h3 class="font-medium text-gray-900 mb-2">查看需求详情</h3>
+                        <p class="text-xs text-gray-600">点击需求行的"查看"按钮</p>
+                    </div>
+                    
+                    <div class="text-center p-4 border border-gray-200 rounded-lg">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span class="text-blue-600 font-bold">4</span>
+                        </div>
+                        <h3 class="font-medium text-gray-900 mb-2">拆分需求</h3>
+                        <p class="text-xs text-gray-600">使用AI拆分或手动添加子需求</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 界面预览 -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">界面预览</h2>
+                
+                <!-- 模拟需求详情界面 -->
+                <div class="border border-gray-300 rounded-lg p-4 bg-gray-50">
+                    <div class="mb-4 flex items-center space-x-3">
+                        <button class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full">
+                            <span class="text-lg">←</span>
+                        </button>
+                        <div class="flex-1">
+                            <h3 class="text-sm font-semibold text-gray-900">用户登录功能优化</h3>
+                            <p class="text-xs text-gray-600">查看和拆分需求</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                        <!-- 左侧：原始需求 -->
+                        <div class="bg-white rounded-lg border border-gray-200 p-4">
+                            <h4 class="text-sm font-semibold text-gray-900 mb-3">原始需求</h4>
+                            <div class="space-y-3">
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-700 mb-1">需求标题</label>
+                                    <div class="text-xs text-gray-900 p-2 bg-gray-50 rounded border">
+                                        用户登录功能优化
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-700 mb-1">需求描述</label>
+                                    <div class="text-xs text-gray-900 p-2 bg-gray-50 rounded border min-h-16">
+                                        优化现有的用户登录流程，提升用户体验。包括登录界面美化、登录速度优化、错误提示改进、记住密码功能等...
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-700 mb-1">优先级</label>
+                                        <span class="px-1.5 py-0.5 text-xs bg-red-100 text-red-800 rounded-full">高</span>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-medium text-gray-700 mb-1">状态</label>
+                                        <span class="px-1.5 py-0.5 text-xs bg-green-100 text-green-800 rounded-full">已完成</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 右侧：拆分需求 -->
+                        <div class="bg-white rounded-lg border border-gray-200 p-4">
+                            <div class="flex justify-between items-center mb-3">
+                                <h4 class="text-sm font-semibold text-gray-900">拆分需求</h4>
+                                <div class="space-x-2">
+                                    <button class="bg-blue-600 text-white px-3 py-1.5 rounded-md text-xs">AI辅助拆分</button>
+                                    <button class="bg-gray-600 text-white px-3 py-1.5 rounded-md text-xs">手动添加</button>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-2">
+                                <div class="border border-gray-200 rounded-lg p-3">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <h5 class="text-xs font-medium text-gray-900">登录界面UI优化</h5>
+                                        <div class="flex space-x-1">
+                                            <span class="px-1.5 py-0.5 text-xs bg-yellow-100 text-yellow-800 rounded-full">中</span>
+                                            <span class="px-1.5 py-0.5 text-xs bg-green-100 text-green-800 rounded-full">已完成</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-xs text-gray-600 mb-2">美化登录页面设计，提升视觉效果</p>
+                                    <div class="flex justify-between items-center text-xs text-gray-500">
+                                        <span>预估工时: 4h</span>
+                                        <div class="space-x-2">
+                                            <button class="text-blue-600">编辑</button>
+                                            <button class="text-red-600">删除</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="border border-gray-200 rounded-lg p-3">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <h5 class="text-xs font-medium text-gray-900">登录速度优化</h5>
+                                        <div class="flex space-x-1">
+                                            <span class="px-1.5 py-0.5 text-xs bg-red-100 text-red-800 rounded-full">高</span>
+                                            <span class="px-1.5 py-0.5 text-xs bg-green-100 text-green-800 rounded-full">已完成</span>
+                                        </div>
+                                    </div>
+                                    <p class="text-xs text-gray-600 mb-2">优化登录接口响应速度，减少等待时间</p>
+                                    <div class="flex justify-between items-center text-xs text-gray-500">
+                                        <span>预估工时: 6h</span>
+                                        <div class="space-x-2">
+                                            <button class="text-blue-600">编辑</button>
+                                            <button class="text-red-600">删除</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI拆分示例 -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">AI拆分示例</h2>
+                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <h4 class="text-sm font-medium text-blue-900 mb-3">AI拆分建议</h4>
+                    <div class="space-y-2">
+                        <div class="border border-blue-200 rounded p-2 bg-white">
+                            <div class="flex justify-between items-start mb-1">
+                                <h6 class="text-xs font-medium text-blue-900">前端界面开发</h6>
+                                <div class="flex space-x-1">
+                                    <span class="text-xs px-1.5 py-0.5 bg-red-100 text-red-800 rounded">高</span>
+                                    <span class="text-xs px-1.5 py-0.5 bg-blue-100 text-blue-800 rounded">8h</span>
+                                </div>
+                            </div>
+                            <p class="text-xs text-blue-700">开发用户界面相关功能，包括页面布局、交互效果等</p>
+                        </div>
+                        
+                        <div class="border border-blue-200 rounded p-2 bg-white">
+                            <div class="flex justify-between items-start mb-1">
+                                <h6 class="text-xs font-medium text-blue-900">后端接口开发</h6>
+                                <div class="flex space-x-1">
+                                    <span class="text-xs px-1.5 py-0.5 bg-red-100 text-red-800 rounded">高</span>
+                                    <span class="text-xs px-1.5 py-0.5 bg-blue-100 text-blue-800 rounded">12h</span>
+                                </div>
+                            </div>
+                            <p class="text-xs text-blue-700">开发服务端API接口，处理业务逻辑</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3 flex space-x-2">
+                        <button class="bg-blue-600 text-white px-3 py-1.5 rounded-md text-xs">采用建议</button>
+                        <button class="bg-gray-300 text-gray-700 px-3 py-1.5 rounded-md text-xs">取消</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 技术特点 -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">技术特点</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="text-center p-4 border border-gray-200 rounded-lg">
+                        <div class="text-2xl mb-2">🤖</div>
+                        <h3 class="font-medium text-gray-900 mb-2">AI智能拆分</h3>
+                        <p class="text-xs text-gray-600">基于需求描述智能生成拆分建议</p>
+                    </div>
+                    
+                    <div class="text-center p-4 border border-gray-200 rounded-lg">
+                        <div class="text-2xl mb-2">📱</div>
+                        <h3 class="font-medium text-gray-900 mb-2">响应式布局</h3>
+                        <p class="text-xs text-gray-600">左右分栏自适应不同屏幕尺寸</p>
+                    </div>
+                    
+                    <div class="text-center p-4 border border-gray-200 rounded-lg">
+                        <div class="text-2xl mb-2">⚡</div>
+                        <h3 class="font-medium text-gray-900 mb-2">实时交互</h3>
+                        <p class="text-xs text-gray-600">即时添加、编辑和删除子需求</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 底部操作 -->
+            <div class="text-center space-x-4">
+                <a href="index.html" class="bg-gray-900 text-white px-8 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                    体验完整功能
+                </a>
+                <a href="demo.html" class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                    查看演示指南
+                </a>
+            </div>
+
+            <!-- 使用提示 -->
+            <div class="mt-8 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <h4 class="font-medium text-yellow-900 mb-2">💡 使用提示</h4>
+                <ul class="text-sm text-yellow-800 space-y-1">
+                    <li>• 进入系统后，点击"项目管理"，然后点击任意项目卡片进入项目详情</li>
+                    <li>• 在项目详情页面，点击"需求"标签页，然后点击需求列表中的"查看"按钮</li>
+                    <li>• 在需求详情页面，可以使用"AI辅助拆分"快速生成子需求建议</li>
+                    <li>• 也可以使用"手动添加"按钮自定义添加子需求</li>
+                    <li>• 每个子需求都有独立的优先级、状态和工时估算</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

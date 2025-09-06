@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开发流程功能测试</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-2xl font-bold text-gray-900 mb-6">开发流程功能测试</h1>
+        
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">测试步骤</h2>
+            <ol class="text-sm text-gray-600 space-y-2">
+                <li>1. 打开主系统 (index.html)</li>
+                <li>2. 点击"项目管理"进入项目页面</li>
+                <li>3. 点击任意项目卡片进入项目详情</li>
+                <li>4. 点击"开发"标签页（原"需求"标签页）</li>
+                <li>5. 验证双子模块导航：</li>
+                <ul class="ml-4 mt-2 space-y-1">
+                    <li>• 默认显示"项目需求"模块</li>
+                    <li>• 点击"开发任务"切换到任务模块</li>
+                    <li>• 验证模块间切换正常</li>
+                </ul>
+                <li>6. 在项目需求模块中：</li>
+                <ul class="ml-4 mt-2 space-y-1">
+                    <li>• 点击需求的"查看"按钮进入需求详情</li>
+                    <li>• 验证子需求列表中的"转为开发任务"按钮</li>
+                    <li>• 点击"转为开发任务"按钮</li>
+                </ul>
+                <li>7. 在开发任务模块中：</li>
+                <ul class="ml-4 mt-2 space-y-1">
+                    <li>• 验证转换后的开发任务出现在列表中</li>
+                    <li>• 点击"开始开发"按钮打开配置弹窗</li>
+                    <li>• 测试Prompt生成方式切换</li>
+                    <li>• 测试AI自动生成Prompt功能</li>
+                    <li>• 选择开发工具并配置环境</li>
+                    <li>• 点击"开始开发"启动流程</li>
+                </ul>
+                <li>8. 在开发详情页面中：</li>
+                <ul class="ml-4 mt-2 space-y-1">
+                    <li>• 验证左侧需求信息和状态监控</li>
+                    <li>• 验证右侧代码编辑器界面</li>
+                    <li>• 验证文件树和代码显示</li>
+                    <li>• 验证AI工具执行日志</li>
+                    <li>• 测试操作控制按钮</li>
+                </ul>
+            </ol>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">预期结果</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <h3 class="font-medium text-gray-900 mb-2">界面结构</h3>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• "需求"标签页已重命名为"开发"</li>
+                        <li>• 双子模块导航正常工作</li>
+                        <li>• 项目需求模块保留所有原功能</li>
+                        <li>• 开发任务模块显示转换的任务</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-medium text-gray-900 mb-2">功能交互</h3>
+                    <ul class="text-sm text-gray-600 space-y-1">
+                        <li>• 子需求转换为开发任务成功</li>
+                        <li>• 开发配置弹窗正常显示</li>
+                        <li>• AI Prompt生成功能正常</li>
+                        <li>• 开发详情页面布局正确</li>
+                        <li>• 代码编辑器界面完整</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">重构功能清单</h2>
+            <div class="space-y-3">
+                <div class="p-3 bg-green-50 border border-green-200 rounded">
+                    <h4 class="font-medium text-green-900">✅ 已实现功能</h4>
+                    <ul class="text-sm text-green-800 mt-2 space-y-1">
+                        <li>• 标签页重命名：需求 → 开发</li>
+                        <li>• 双子模块结构：项目需求 + 开发任务</li>
+                        <li>• 子需求转换为开发任务</li>
+                        <li>• 开发配置弹窗界面</li>
+                        <li>• AI/手动Prompt生成</li>
+                        <li>• 多开发工具选择配置</li>
+                        <li>• 开发详情页面布局</li>
+                        <li>• 类VSCode代码编辑器界面</li>
+                        <li>• AI工具执行日志显示</li>
+                        <li>• 开发状态监控</li>
+                        <li>• 操作控制功能</li>
+                    </ul>
+                </div>
+                
+                <div class="p-3 bg-blue-50 border border-blue-200 rounded">
+                    <h4 class="font-medium text-blue-900">🔧 技术特点</h4>
+                    <ul class="text-sm text-blue-800 mt-2 space-y-1">
+                        <li>• 保持响应式设计和精细化UI风格</li>
+                        <li>• 使用模拟数据展示开发过程</li>
+                        <li>• 兼容现有角色权限系统</li>
+                        <li>• 模拟AI分析过程（2秒延迟）</li>
+                        <li>• 动态生成开发配置和任务详情</li>
+                        <li>• 实时状态更新和监控</li>
+                    </ul>
+                </div>
+                
+                <div class="p-3 bg-yellow-50 border border-yellow-200 rounded">
+                    <h4 class="font-medium text-yellow-900">🚧 模拟功能</h4>
+                    <ul class="text-sm text-yellow-800 mt-2 space-y-1">
+                        <li>• AI Prompt生成为预设模板</li>
+                        <li>• 代码编辑器为静态展示</li>
+                        <li>• 开发工具执行为模拟过程</li>
+                        <li>• 文件树和代码为示例数据</li>
+                        <li>• 实际集成需要Monaco Editor等组件</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">状态管理</h2>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
+                <div class="text-center p-3 border border-gray-200 rounded">
+                    <div class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <span class="text-xs">1</span>
+                    </div>
+                    <p class="text-xs font-medium">待开始</p>
+                </div>
+                <div class="text-center p-3 border border-purple-200 rounded bg-purple-50">
+                    <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <span class="text-xs">2</span>
+                    </div>
+                    <p class="text-xs font-medium">配置中</p>
+                </div>
+                <div class="text-center p-3 border border-blue-200 rounded bg-blue-50">
+                    <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <span class="text-xs">3</span>
+                    </div>
+                    <p class="text-xs font-medium">开发中</p>
+                </div>
+                <div class="text-center p-3 border border-green-200 rounded bg-green-50">
+                    <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <span class="text-xs">4</span>
+                    </div>
+                    <p class="text-xs font-medium">已完成</p>
+                </div>
+                <div class="text-center p-3 border border-red-200 rounded bg-red-50">
+                    <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <span class="text-xs">5</span>
+                    </div>
+                    <p class="text-xs font-medium">失败</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">开发工具支持</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="text-center p-3 border border-gray-200 rounded">
+                    <div class="text-2xl mb-2">🤖</div>
+                    <h3 class="font-medium text-gray-900 text-sm">Claude Code</h3>
+                    <p class="text-xs text-gray-600">Anthropic AI编程助手</p>
+                </div>
+                <div class="text-center p-3 border border-gray-200 rounded">
+                    <div class="text-2xl mb-2">💎</div>
+                    <h3 class="font-medium text-gray-900 text-sm">Gemini CLI</h3>
+                    <p class="text-xs text-gray-600">Google AI命令行工具</p>
+                </div>
+                <div class="text-center p-3 border border-gray-200 rounded">
+                    <div class="text-2xl mb-2">⚡</div>
+                    <h3 class="font-medium text-gray-900 text-sm">Cursor</h3>
+                    <p class="text-xs text-gray-600">AI代码编辑器</p>
+                </div>
+                <div class="text-center p-3 border border-gray-200 rounded">
+                    <div class="text-2xl mb-2">🚀</div>
+                    <h3 class="font-medium text-gray-900 text-sm">Augment Code</h3>
+                    <p class="text-xs text-gray-600">智能编程平台</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-8">
+            <a href="index.html" class="bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors">
+                开始测试
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // 简单的测试辅助脚本
+        console.log('开发流程功能测试页面已加载');
+        console.log('请按照测试步骤进行功能验证');
+        
+        // 检查是否有必要的元素
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('页面加载完成，可以开始测试');
+        });
+    </script>
+</body>
+</html>
